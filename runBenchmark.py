@@ -9,12 +9,11 @@ import colorama
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.option('-t', '--test', default="all", help="Name of the test, if all run all benchmarks")
-@click.option('-r', '--release', default=None, help="Run the test for this release")
-def runTests_click(test, release, **kwargs):
+def runTests_click(test, **kwargs):
     '''
     Run the benchmarks available in the current folder
     '''
-    runTests(test, release)
+    runTests(test)
 
 def runTests(test, release=None):
 
