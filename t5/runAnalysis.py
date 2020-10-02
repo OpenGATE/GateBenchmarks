@@ -47,20 +47,25 @@ def analyse_pet(output_folder, ax, i):
         return
     filename = os.path.join(output_folder, "pet.root")
     print('Filename', filename)
-    f = uproot.open(filename)
-    #print("List of keys: \n", f.keys())
+    coinc = []
+    delays = []
+    if os.path.isfile(filename):
 
-    # get timing
-    singles = f[b'Singles']
-    times = tget(singles, b'time')
-    start_time = min(times)
-    end_time = max(times)
-    slice_time = (end_time-start_time)/2
-    print(f'Times : {start_time} {slice_time} {end_time}')
-    
-    n_events = 1
-    start_simulation_time = 0
-    stop_simulation_time = 240
+        f = uproot.open(filename)
+        #print("List of keys: \n", f.keys())
+
+        # get timing
+        singles = f[b'Singles']
+        times = tget(singles, b'time')
+
+        singles = f[b'Singles']
+        print('nb of singles ', len(singles))
+
+        coinc = f[b'Coincidences']
+        print('nb of coincidences', len(coinc))
+
+        delays = f[b'delay']
+        print('nb of delays', len(delays))
     try:
         stat_filename = os.path.join(Path(filename).parent, 'stat.txt')
         print('Open stat file', stat_filename)
@@ -72,18 +77,16 @@ def analyse_pet(output_folder, ax, i):
         print('nope')
         
 
-    singles = f[b'Singles']
-    print('nb of singles ', len(singles))
-
-    coinc = f[b'Coincidences']
-    print('nb of coincidences', len(coinc))
-
-    delays = f[b'delay']
-    print('nb of delays', len(delays))
-
     #
+    n_events = 1
+    start_simulation_time = 0
+    stop_simulation_time = 240
     print("Detector positions by run")
     times = getValues(os.path.join(os.path.join(filename + "_times.npy")), coinc, b'time1')
+    start_time = min(times)
+    end_time = max(times)
+    slice_time = (end_time-start_time)/2
+    print(f'Times : {start_time} {slice_time} {end_time}')
     runID = getValues(os.path.join(os.path.join(filename + "_runID.npy")), coinc, b'runID')
     gpx1 = getValues(os.path.join(os.path.join(filename + "_globalPosX1.npy")), coinc, b'globalPosX1')
     gpx2 = getValues(os.path.join(os.path.join(filename + "_globalPosX2.npy")), coinc, b'globalPosX2')
@@ -212,7 +215,7 @@ def analyse_pet(output_folder, ax, i):
     ntrue = len(tuc)
     absolute_sensitivity = ntrue/n_events
     line1 = 'Number of events {:.0f}'.format(n_events)
-    line1 = line1+'\nNumber of singles {:.0f}'.format(len(singles))
+    #line1 = line1+'\nNumber of singles {:.0f}'.format(len(singles))
     line1 = line1+'\nNumber of coincidences {:.0f}'.format(len(coinc))
     line1 = line1+'\nNumber of true {:.0f}'.format(len(tuc))
     line1 = line1+'\nNumber of randoms {:.0f}'.format(len(randoms))
