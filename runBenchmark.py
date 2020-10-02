@@ -22,7 +22,8 @@ def runTests(test, release=None):
     currentDirectory = os.getcwd()
     for dir in os.listdir(currentDirectory):
         if os.path.isdir(dir) and test == "all" or test == dir:
-            testFolders += [dir]
+            if not dir.startswith('.git'):
+                testFolders += [dir]
     print(testFolders)
 
     command = 'which Gate'
@@ -41,6 +42,7 @@ def runTests(test, release=None):
 
     #Go inside folders and run the tests:
     for testFolder in testFolders:
+        print("Run test: " + testFolder)
         os.chdir(testFolder)
         if os.path.isdir("output"):
             shutil.rmtree("output")
@@ -53,6 +55,7 @@ def runTests(test, release=None):
 
     #Go inside folders and run the analysis:
     for testFolder in testFolders:
+        print("Run analysis: " + testFolder)
         os.chdir(testFolder)
         command = 'python ./runAnalysis.py output*'
         os.system(command)
