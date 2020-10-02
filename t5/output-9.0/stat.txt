@@ -1,0 +1,11 @@
+# NumberOfRun = 5
+# NumberOfEvents = 36810476
+# NumberOfTracks = 112306088
+# NumberOfSteps = 736789166
+# NumberOfGeometricalSteps = 256230617
+# NumberOfPhysicalSteps = 480558549
+# ElapsedTimeWoInit = 4285.35
+# ElapsedTime = 4296.467
+# StartDate = Fri Mar 13 10:34:08 2020
+# EndDate = Fri Mar 13 10:51:21 2020
+# Speedup = 4.1592129719264275
