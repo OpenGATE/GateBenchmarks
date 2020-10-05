@@ -1,3 +1,3 @@
-# GateBenchmark
+# GateBenchmarks
 
 Towards automated Gate Benchmarks
