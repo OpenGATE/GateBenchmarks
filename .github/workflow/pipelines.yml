@@ -1,0 +1,78 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+
+jobs:
+- job: Linux
+  timeoutInMinutes: 360 # how long to run the job before automatically cancelling
+
+  strategy:
+    matrix:
+      t1:
+        STRATEGY_NAME: 't1'
+        imageName: 'ubuntu-latest'
+      t2:
+        STRATEGY_NAME: 't2'
+        imageName: 'ubuntu-latest'
+      t5:
+        STRATEGY_NAME: 't5'
+        imageName: 'ubuntu-latest'
+
+  pool:
+    vmImage: $(imageName)
+
+  variables:
+    GEANT4_VERSION: 'v10.6.1'
+    ITK_VERSION: 'v5.1.0'
+    OSVERSION: 0
+
+  steps:
+  - checkout: self
+    submodules: recursive
+    path: software/GateBenchmarks
+
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.7'
+
+  - script: |
+      sudo apt-get update -qq
+      sudo apt-get install -y gcc \
+                              g++ \
+                              make \
+                              binutils \
+                              libx11-dev \
+                              libxpm-dev \
+                              libxft-dev \
+                              libxext-dev \
+                              qt5-default \
+                              git \
+                              cmake \
+                              python3.7-dev \
+                              ccache \
+                              fftw3-dev
+      gcc -v
+      cd $(Pipeline.Workspace)
+      mkdir software
+      cmake --version
+    displayName: 'Install dependencies'
+
+  - script: |
+      OSRELEASE=`lsb_release -rs`
+      echo "OSVERSION:"
+      echo $OSRELEASE
+      echo "##vso[task.setvariable variable=OSVERSION]$OSRELEASE"
+      
+    displayName: "Set variable values"
+
+  - bash: |
+      docker run --rm -e "TEST=${STRATEGY_NAME}" -v /software:/home tbaudier/gatebenchmarks /home/GateBenchmarks/ci/runTest.sh
+      ls $(Pipeline.Workspace)/software
+      ls $(Pipeline.Workspace)/software/GateBenchmarks
+    displayName: 'Run the test in docker'
+
