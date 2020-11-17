@@ -1,0 +1,51 @@
+
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        strategy_name: [t1, t2, t5]
+
+    steps:
+    - name: Checkout github repo
+      uses: actions/checkout@v2
+      with:
+          lfs: true
+    - name: Checkout LFS objects
+      run: git lfs checkout
+    - name: Install dependencies
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y gcc \
+                                g++ \
+                                make \
+                                binutils \
+                                libx11-dev \
+                                libxpm-dev \
+                                libxft-dev \
+                                libxext-dev \
+                                qt5-default \
+                                git \
+                                cmake \
+                                python3.7-dev \
+                                ccache \
+                                fftw3-dev
+        gcc -v
+        cd
+    - name: Run the test in docker
+      run: |
+        ls $GITHUB_WORKSPACE
+        docker run --rm -e "TEST=${{ matrix.strategy_name }}" -v $GITHUB_WORKSPACE:/home tbaudier/gatebenchmarks:9.0 /home/.github/workflows/runTest.sh
+
