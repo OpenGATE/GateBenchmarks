@@ -8,7 +8,7 @@ import scipy
 import numpy as np
 import os
 from pathlib import Path
-import uproot
+import uproot3 as uproot
 import re
 import click
 import gatetools as gt
