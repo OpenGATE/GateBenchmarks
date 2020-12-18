@@ -4,6 +4,7 @@ import os
 import click
 import shutil
 import colorama
+import subprocess
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -27,7 +28,7 @@ def runTests(test, release=None):
     print(testFolders)
 
     command = 'which Gate'
-    os.system(command)
+    subprocess.run(command, shell=True, check=True)
 
     if release is not None:
         print(colorama.Fore.RED + 'Are you sure to use Gate release: ' + str(release) + ' ? (y/n) ' + colorama.Style.RESET_ALL)
@@ -48,7 +49,7 @@ def runTests(test, release=None):
             shutil.rmtree("output")
         os.makedirs("output")
         command = 'bash ./runTest.sh'
-        os.system(command)
+        subprocess.run(command, shell=True, check=True)
         if release is not None:
             shutil.move("output", "output-" + str(release))
         os.chdir(currentDirectory)
@@ -57,8 +58,8 @@ def runTests(test, release=None):
     for testFolder in testFolders:
         print("Run analysis: " + testFolder)
         os.chdir(testFolder)
-        command = 'python ./runAnalysis.py output*'
-        os.system(command)
+        command = 'python3 ./runAnalysis.py output*'
+        subprocess.run(command, shell=True, check=True)
         os.chdir(currentDirectory)
 
 # -----------------------------------------------------------------------------

@@ -21,7 +21,7 @@ def plot(output_folder, a, filename):
         x, y = np.loadtxt(os.path.join(output_folder, filename + ".npy"), unpack=True)
     elif os.path.isfile(os.path.join(output_folder, filename)):
         f = os.path.join(output_folder, filename)
-        logger.info(f'Load {f}')
+        logger.info('Load ' + f)
         img = itk.imread(f)
 
         # img spacing
