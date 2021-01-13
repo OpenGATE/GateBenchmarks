@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        strategy_name: [t1, t2, t5]
+        strategy_name: [t1, t2, t4_necr, t5]
 
     steps:
     - name: Checkout github repo
