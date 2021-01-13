@@ -23,7 +23,7 @@ def runTests(test, release=None):
     currentDirectory = os.getcwd()
     for dir in os.listdir(currentDirectory):
         if os.path.isdir(dir) and test == "all" or test == dir:
-            if not dir.startswith('.git'):
+            if not dir.startswith('.git') and not dir == "gatebenchmarks_data":
                 testFolders += [dir]
     print(testFolders)
 
