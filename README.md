@@ -12,6 +12,12 @@ Note the you can run all tests at once with `./runBenchmark.py` (without argumen
 
 **STILL WORK IN PROGRESS**
 
+# How to deal with LFS:
+* To avoid to exceed Github LFS quota, the binary data are pointers (symbolic links) to a Gitlab subdirectory (https://gitlab.in2p3.fr/opengate/gatebenchmarks_data)
+* If you clone the repository for the first time, use `--recursive` option to download the subdirectory
+* To pull new commits of the subdirectory, you can do: `git submodule update --recursive --remote`
+* If you already have the repository without the subdirectory, you can do: `git submodule update --init --recursive`
+
 # How to propose a new test ?
 
 * Create a Gate macro in a folder, with the subfolders `data`, `mac`and `output` (see folder `t1` for example)
