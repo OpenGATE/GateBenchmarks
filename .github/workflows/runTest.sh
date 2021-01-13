@@ -14,6 +14,7 @@ cd /software
 git clone https://github.com/OpenGATE/GateTools.git gatetools
 cd gatetools
 pip3 install -e .
+pip3 install xxhash
 echo "export PATH=/software/gatetools/clustertools/:$PATH" >> /etc/mybashrc
 
 cd /software/gate
