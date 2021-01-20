@@ -1,1 +1,12 @@
-*/output/
+
+.DS_Store
+
+*~
+
+*/output/*raw
+*/output/*root
+*/output/*mhd
+*/output/*txt
+
+
+

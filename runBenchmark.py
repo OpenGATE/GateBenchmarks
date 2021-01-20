@@ -5,6 +5,7 @@ import click
 import shutil
 import colorama
 import subprocess
+import sys
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -14,7 +15,8 @@ def runTests_click(test, **kwargs):
     '''
     Run the benchmarks available in the current folder
     '''
-    runTests(test)
+    returnedTest = runTests(test)
+    print(returnedTest)
 
 def runTests(test, release=None):
 
@@ -55,12 +57,22 @@ def runTests(test, release=None):
         os.chdir(currentDirectory)
 
     #Go inside folders and run the analysis:
+    analyseOutput = 0
     for testFolder in testFolders:
         print("Run analysis: " + testFolder)
         os.chdir(testFolder)
-        command = 'python3 ./runAnalysis.py output*'
-        subprocess.run(command, shell=True, check=True)
+        outputFolders = []
+        for dir in os.listdir(path='.'):
+          if os.path.isdir(dir) and dir.startswith("output"):
+              outputFolders.append(dir)
+        sys.path.insert(1, '.')
+        import runAnalysis
+        analyseOutput = runAnalysis.analyse_all_folders(outputFolders)
         os.chdir(currentDirectory)
+    if len(testFolders) == 1:
+        return analyseOutput
+    else:
+        return 1
 
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
