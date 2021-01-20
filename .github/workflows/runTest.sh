@@ -34,5 +34,10 @@ python3 --version
 export LC_ALL=en_US.utf8
 export LANG=en_US.utf8
 pip3 install click colorama
-python3 runBenchmark.py -t ${TEST}
+OutputTest=$(python3 runBenchmark.py -t ${TEST} | tail -1)
+if [ $OutputTest = 0 ]; then
+    exit -1
+else
+    exit 0
+fi
 
