@@ -114,8 +114,8 @@ def analyse_one_folder(ax, folder, previous_folder):
     rc = analyse_one_curve(ax, 2, folder, previous_folder, 'output-carbon-Edep.mhd')
     # return error if one is failed
     if rg == 0 or rp == 0 or rc == 0:
-        return 0
-    return 1
+        return 1
+    return 0
 
 
 # -----------------------------------------------------------------------------
