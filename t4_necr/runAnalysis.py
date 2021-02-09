@@ -9,14 +9,9 @@ import numpy as np
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
-# -----------------------------------------------------------------------------
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
-
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.argument('output_folders',
-                nargs=-1,
-                required=True,
+@click.argument('output_folders', nargs=-1, required=True,
                 type=click.Path(exists=True, file_okay=True, dir_okay=True))
 @gt.add_options(gt.common_options)
 def analysis_all_click(output_folders, **kwargs):
@@ -26,14 +21,16 @@ def analysis_all_click(output_folders, **kwargs):
 def analysis_all(output_folders, **kwargs):
     # logger
     gt.logging_conf(**kwargs)
+    # loop over folders
     for output_folder in output_folders:
         fn = os.path.join(output_folder, 'output.root')
         f = uproot.open(fn)
-        analysis(f)
+        r = analysis(f)
+    # return only last analysis
+    return r
 
 
 def analysis(root_file):
-
     # Compute the types of events
     data = gt.get_pet_counts(root_file)
 
@@ -50,11 +47,11 @@ def analysis(root_file):
     print(f'Scattered events {data.scatter_count}')
     print(f'Trues events     {data.trues_count}')
 
-    print(f'Prompt rate    {data.prompts_count/duration} counts.s-1')
-    print(f'Delayed rate   {data.delays_count/duration}  counts.s-1')
-    print(f'Random rate    {data.randoms_count/duration} counts.s-1')
-    print(f'Scattered rate {data.scatter_count/duration} counts.s-1')
-    print(f'Trues rate     {data.trues_count/duration} counts.s-1')
+    print(f'Prompt rate    {data.prompts_count / duration} counts.s-1')
+    print(f'Delayed rate   {data.delays_count / duration}  counts.s-1')
+    print(f'Random rate    {data.randoms_count / duration} counts.s-1')
+    print(f'Scattered rate {data.scatter_count / duration} counts.s-1')
+    print(f'Trues rate     {data.trues_count / duration} counts.s-1')
 
     # reference NECR (Salvadori2020)
     # obtained for 1787914158 Bq -> ~78 kBq.mL-1
@@ -87,9 +84,11 @@ def analysis(root_file):
     print(f'NECR                       = {necr:.2f} <-> {ref_necr} counts.s-1')
 
     # difference with reference
-    diff = (necr-ref_necr)/ref_necr
+    diff = (necr - ref_necr) / ref_necr * 100.0
     print()
-    print(f'NECR Difference is         = {diff*100:.2f} %')
+    print(f'NECR Difference is         = {diff:.2f} %')
+
+    return abs(diff) < 10.0
 
 
 # --------------------------------------------------------------------------
