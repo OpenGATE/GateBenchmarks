@@ -24,14 +24,11 @@
 # MODULE (each module has 4x5 stacks)
 /gate/cylindricalPET/daughters/name module
 /gate/cylindricalPET/daughters/insert box
-#/gate/module/placement/setTranslation {t} 0 0 mm
 /gate/module/placement/setTranslation 391.5 0 0 mm
-#/gate/module/geometry/setXLength {l} mm
 /gate/module/geometry/setXLength 19 mm
 /gate/module/geometry/setYLength 131.4 mm 
 /gate/module/geometry/setZLength 164.0 mm
 /gate/module/setMaterial ABS
-#/gate/module/setMaterial Air
 /gate/module/vis/setColor blue
 /gate/module/vis/forceWireframe
 /gate/module/vis/setVisible 1
@@ -40,7 +37,6 @@
 /gate/module/daughters/name stack
 /gate/module/daughters/insert box
 /gate/stack/placement/setTranslation 0.0 0.0 0.0 mm
-#/gate/stack/geometry/setXLength {l} mm
 /gate/stack/geometry/setXLength 19 mm
 /gate/stack/geometry/setYLength 32.6 mm
 /gate/stack/geometry/setZLength 32.6 mm
@@ -53,10 +49,9 @@
 /gate/stack/daughters/name die
 /gate/stack/daughters/insert box
 /gate/die/placement/setTranslation 0.0 0.0 0.0 mm
-#/gate/die/geometry/setXLength {l} mm
 /gate/die/geometry/setXLength 19 mm
-/gate/die/geometry/setYLength 7.930 mm
-/gate/die/geometry/setZLength 7.930 mm
+/gate/die/geometry/setYLength 8.0 mm
+/gate/die/geometry/setZLength 8.0 mm
 /gate/die/setMaterial Air
 /gate/die/vis/setColor red
 /gate/die/vis/setVisible 0
@@ -66,11 +61,9 @@
 /gate/die/daughters/name crystal
 /gate/die/daughters/insert box
 /gate/crystal/placement/setTranslation 0.0 0.0 0.0 mm
-#/gate/crystal/geometry/setXLength {l} mm
 /gate/crystal/geometry/setXLength 19 mm
-/gate/crystal/geometry/setYLength 3.860 mm
-/gate/crystal/geometry/setZLength 3.860 mm
-#/gate/crystal/setMaterial {mat}
+/gate/crystal/geometry/setYLength 4.0 mm
+/gate/crystal/geometry/setZLength 4.0 mm
 /gate/crystal/setMaterial LYSO
 /gate/crystal/vis/setColor cyan
 /gate/crystal/vis/forceSolid
@@ -119,16 +112,14 @@
 /gate/crystal/cubicArray/setRepeatNumberX 1
 /gate/crystal/cubicArray/setRepeatNumberY 2
 /gate/crystal/cubicArray/setRepeatNumberZ 2
-#/gate/crystal/cubicArray/setRepeatVector {l} 3.965 3.965 mm
-/gate/crystal/cubicArray/setRepeatVector 19 3.965 3.965 mm
+/gate/crystal/cubicArray/setRepeatVector 19 4.0 4.0 mm
 
 # REPEAT DIE TO GET A 8x8 ARRAY
 /gate/die/repeaters/insert cubicArray
 /gate/die/cubicArray/setRepeatNumberX 1
 /gate/die/cubicArray/setRepeatNumberY 4
 /gate/die/cubicArray/setRepeatNumberZ 4
-#/gate/die/cubicArray/setRepeatVector {l} 7.931 7.931 mm
-/gate/die/cubicArray/setRepeatVector 19 7.931 7.931 mm
+/gate/die/cubicArray/setRepeatVector 19 8.0 8.0 mm
 
 # REPEAT STACK TO GET A MODULE WITH 4x5 STACKS
 /gate/stack/repeaters/insert cubicArray
@@ -153,15 +144,9 @@
 /gate/housing/ring/setFirstAngle 190 deg
 /gate/housing/ring/setRepeatNumber 18
 
-#/gate/housing/ring/setPoint1 0. 0. 0. mm
-#/gate/housing/ring/setPoint1 0. 0. -1. mm
-
 /gate/coolingplate/repeaters/insert ring
 /gate/coolingplate/ring/setFirstAngle 190 deg
 /gate/coolingplate/ring/setRepeatNumber 18
-
-#/gate/coolingplate/ring/setPoint1 0. 0. 0. mm
-#/gate/coolingplate/ring/setPoint1 0. 0. -1. mm
 
 
 # END SHIELDING 1

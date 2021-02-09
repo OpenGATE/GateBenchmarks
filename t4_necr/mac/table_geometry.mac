@@ -9,8 +9,7 @@
 /gate/bed/geometry/setDeltaPhi 70 deg
 /gate/bed/placement/setRotationAxis 0 0 1
 /gate/bed/placement/setRotationAngle -125 deg
-#/gate/bed/placement/setTranslation 0.0 24 0.0 cm
-/gate/bed/placement/setTranslation 0.0 29.8 0.0 cm
+/gate/bed/placement/setTranslation 0.0 25 0.0 cm
 /gate/bed/setMaterial CarbonFiber
 /gate/bed/vis/setColor white
 /gate/bed/vis/forceSolid

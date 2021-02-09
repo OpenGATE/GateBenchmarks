@@ -68,13 +68,13 @@ def analysis(root_file):
     cyl_V = cyl_V * 0.001  # in mL
     print(f'Cylindrical phantom radius = {cyl_radius} mm')
     print(f'Cylindrical phantom height = {cyl_h} mm')
-    print(f'Cylindrical phantom volume = {cyl_V} mL')
+    print(f'Cylindrical phantom volume = {cyl_V:.2f} mL')
 
     # Total activity (see excel file)
     a = 1787914158  # in Bq
     ac = a / cyl_V
-    print(f'Total activity             = {a / 1e6} MBq')
-    print(f'Activity concentration     = {ac / 1e3} kBq.mL-1')
+    print(f'Total activity             = {a / 1e6:.2f} MBq')
+    print(f'Activity concentration     = {ac / 1e3:.3f} kBq.mL-1')
 
     # Compute NECR (Noise Equivalent Count Rate)
     Rt = data.trues_count / duration
@@ -84,12 +84,12 @@ def analysis(root_file):
     sf = Rsc / (Rt + Rsc)
     print(f'Simulation duration        = {duration} sec')
     print(f'ScatterFraction            = {sf * 100.0} %')
-    print(f'NECR                       = {necr} <-> {ref_necr} counts.s-1')
+    print(f'NECR                       = {necr:.2f} <-> {ref_necr} counts.s-1')
 
     # difference with reference
     diff = (necr-ref_necr)/ref_necr
     print()
-    print(f'NECR Difference is         = {diff*100} %')
+    print(f'NECR Difference is         = {diff*100:.2f} %')
 
 
 # --------------------------------------------------------------------------
