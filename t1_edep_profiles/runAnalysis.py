@@ -62,7 +62,7 @@ def analyse_all_folders(output_folders):
     output_folders = list(output_folders)
     if 'output' in output_folders:
         output_folders.pop(output_folders.index('output'))
-        output_folders.append('output')
+    output_folders.append('output')
     for folder in output_folders:
         if not os.path.isdir(folder):
             continue

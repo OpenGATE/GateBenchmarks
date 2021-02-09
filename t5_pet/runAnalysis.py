@@ -250,9 +250,9 @@ def analyse_click(output_folders, **kwargs):
     '''
     TODO
     '''
-    analyse(output_folders)
+    analyse_all_folders(output_folders)
 
-def analyse(output_folders, **kwargs):
+def analyse_all_folders(output_folders, **kwargs):
     # logger
     gt.logging_conf(**kwargs)
     

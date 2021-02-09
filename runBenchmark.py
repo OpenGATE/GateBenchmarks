@@ -65,6 +65,10 @@ def runTests(test, release=None):
         for dir in os.listdir(path='.'):
           if os.path.isdir(dir) and dir.startswith("output"):
               outputFolders.append(dir)
+        outputFolders = list(outputFolders)
+        if 'output' in outputFolders:
+            outputFolders.pop(outputFolders.index('output'))
+        outputFolders.append('output')
         sys.path.insert(1, '.')
         import runAnalysis
         analyseOutput = runAnalysis.analyse_all_folders(outputFolders)
