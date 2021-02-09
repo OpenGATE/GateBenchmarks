@@ -25,7 +25,7 @@
 
 /gate/distributions/name dt_distrib 
 /gate/distributions/insert Exponential 
-/gate/distributions/dt_distrib/setLambda 2.193 us
+/gate/distributions/dt_distrib/setLambda 2.1701 us
 
 /gate/digitizer/Singles/insert noise 
 /gate/digitizer/Singles/noise/setDeltaTDistribution dt_distrib 
@@ -36,7 +36,7 @@
 /gate/digitizer/Singles/insert crystalblurring 
 /gate/digitizer/Singles/crystalblurring/setCrystalResolutionMin 0.112
 /gate/digitizer/Singles/crystalblurring/setCrystalResolutionMax 0.112
-/gate/digitizer/Singles/crystalblurring/setCrystalQE 0.864
+/gate/digitizer/Singles/crystalblurring/setCrystalQE 0.865
 /gate/digitizer/Singles/crystalblurring/setCrystalEnergyOfReference 511. keV 
 
 
@@ -46,27 +46,24 @@
 /gate/digitizer/Singles/timeResolution/verbose 0
 
 
-# PILES-UP should be 5.3 ns
-# /gate/digitizer/Singles/insert pileup 
-# /gate/digitizer/Singles/pileup/setDepth 1
-# /gate/digitizer/Singles/pileup/setPileup 5.3 ns
+# PILES-UP
+/gate/digitizer/Singles/insert pileup 
+/gate/digitizer/Singles/pileup/setDepth 1
+/gate/digitizer/Singles/pileup/setPileup 5.9 ns
 
 
-# DEADTIME should be 5.3 ns
-# /gate/digitizer/Singles/insert deadtime  
-# /gate/digitizer/Singles/deadtime/setDeadTime 5.3 ns
-# /gate/digitizer/Singles/deadtime/setMode paralysable
-# /gate/digitizer/Singles/deadtime/chooseDTVolume module
+# DEADTIME
+/gate/digitizer/Singles/insert deadtime  
+/gate/digitizer/Singles/deadtime/setDeadTime 5.9 ns
+/gate/digitizer/Singles/deadtime/setMode paralysable
+/gate/digitizer/Singles/deadtime/chooseDTVolume module
 
 
 # HIGH ENERGY CUT  
 /gate/digitizer/Singles/insert thresholder  
 /gate/digitizer/Singles/thresholder/setThreshold 0.44968 MeV
-#/gate/digitizer/Singles/thresholder/setThreshold 0.43546 MeV
 /gate/digitizer/Singles/insert upholder  
 /gate/digitizer/Singles/upholder/setUphold 0.61320 MeV
-#/gate/digitizer/Singles/upholder/setUphold 0.66430  MeV
-
 
 
 # COINCIDENCES SORTER
