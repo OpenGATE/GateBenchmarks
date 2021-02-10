@@ -17,15 +17,36 @@ pip3 install -e .
 pip3 install uproot uproot3 xxhash lz4
 echo "export PATH=/software/gatetools/clustertools/:$PATH" >> /etc/mybashrc
 
+#Install dependencies according the test
+compile_torch=false
+compile_rtk=false
+if [ "$TEST" = "t3" ]; then
+   compile_torch=true
+fi
+export GATE_USE_TORCH=OFF
+if [ "$compile_torch" = true ] ; then
+    cd /software
+    mkdir torch
+    cd torch
+    wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-1.4.0%2Bcpu.zip
+    unzip libtorch-cxx11-abi-shared-with-deps-1.4.0+cpu.zip
+    export GATE_USE_TORCH=OFF
+    export TORCH_DIR=/software/torch/libtorch/share/cmake/Torch
+fi
+
+# Compile master versio of Gate
 cd /software/gate
 git clone https://github.com/OpenGATE/Gate.git src
 cd bin
-cmake ../src
+cmake -DGATE_USE_TORCH=$GATE_USE_TORCH \
+      -DTorch_DIR=$TORCH_DIR \
+      ../src
 make -j4
 source /etc/mybashrc
 echo "export PATH=/software/gate/bin:$PATH" >> /etc/mybashrc
 source /etc/mybashrc
 
+# Go to execute the test
 cd /home/
 rm /usr/bin/python
 ln -s /usr/bin/python3 /usr/bin/python
