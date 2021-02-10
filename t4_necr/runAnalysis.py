@@ -15,10 +15,10 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
                 type=click.Path(exists=True, file_okay=True, dir_okay=True))
 @gt.add_options(gt.common_options)
 def analysis_all_click(output_folders, **kwargs):
-    analysis_all(output_folders)
+    analyse_all_folders(output_folders)
 
 
-def analysis_all(output_folders, **kwargs):
+def analyse_all_folders(output_folders, **kwargs):
     # logger
     gt.logging_conf(**kwargs)
     # loop over folders
