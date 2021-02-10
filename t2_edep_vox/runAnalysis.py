@@ -11,15 +11,16 @@ import logging
 import matplotlib.pyplot as plt
 logger=logging.getLogger(__name__)
 
+# Tolerance
+TOL = 1
+
 # -----------------------------------------------------------------------------
 def plot(output_folder, a, filename, axis1, axis2):
 
     if not os.path.isdir(output_folder):
         return
     
-    if os.path.isfile(os.path.join(output_folder, filename + "_" + str(axis1) + "_"+ str(axis2) + ".npy")):
-        x, y = np.loadtxt(os.path.join(output_folder, filename + "_" + str(axis1) + "_"+ str(axis2) + ".npy"), unpack=True)
-    elif os.path.isfile(os.path.join(output_folder, filename)):
+    if os.path.isfile(os.path.join(output_folder, filename)):
         f = os.path.join(output_folder, filename)
         logger.info('Load ' + f)
         img = itk.imread(f)
@@ -34,8 +35,6 @@ def plot(output_folder, a, filename, axis1, axis2):
         y = np.sum(y, axis=axis2)
         x = np.arange(len(y)) * spacing[2]
 
-        # saving:
-        np.savetxt(os.path.join(output_folder, filename + "_" + str(axis1) + "_"+ str(axis2) + ".npy"), np.array([x, y]).T)
     else:
         return
 
@@ -69,11 +68,21 @@ def analyse_click(output_folders, **kwargs):
     '''
     TODO
     '''
-    analyse_all_folders(output_folders)
+    r = analyse_all_folders(output_folders)
+    print(f'Last test return is: {r}')
 
 def analyse_all_folders(output_folders, **kwargs):
     # logger
     gt.logging_conf(**kwargs)
+    
+    #Analyze folder
+    previous_folder = None
+    r = None
+    for folder in output_folders:
+        if not os.path.isdir(folder):
+            continue
+        r = analyse_one_folder(folder, previous_folder)
+        previous_folder = folder
 
     # plot
     ncols=3
@@ -88,7 +97,42 @@ def analyse_all_folders(output_folders, **kwargs):
     
     plt.savefig('output.pdf')
     plt.show()
+    return r
 
+
+def gamma_index(filename, ref_filename):
+    img = itk.imread(filename)
+    img_ref = itk.imread(ref_filename)
+    gi = gt.gamma_index_3d_equal_geometry(img_ref, img, dta=3, dd=3, ddpercent=True)
+    data = itk.GetArrayViewFromImage(gi)
+    y = data[:, 0, 0]
+    # total
+    max = y.max()
+    print(f'Max gamma index {ref_filename} {filename}: {max}')
+    if max > TOL:
+        return 0
+    return 1
+
+
+def analyse_one_file(folder, previous_folder, filename):
+    f = os.path.join(folder, filename)
+    if previous_folder:
+        previous_filename = os.path.join(previous_folder, filename)
+        r = gamma_index(f, previous_filename)
+        return r
+    return 1
+
+
+def analyse_one_folder(folder, previous_folder):
+    # gi
+    rnpv1 = analyse_one_file(folder, previous_folder, 'dose-photon-NPV1-Edep.mhd')
+    rnpv2 = analyse_one_file(folder, previous_folder, 'dose-photon-NPV2-Edep.mhd')
+    rrv1 = analyse_one_file(folder, previous_folder, 'dose-photon-RV1-Edep.mhd')
+    rrv2 = analyse_one_file(folder, previous_folder, 'dose-photon-RV2-Edep.mhd')
+    # return error if one is failed
+    if rnpv1 == 0 or rnpv2 == 0 or rrv1 == 0 or rrv2 == 0:
+        return 0
+    return 1
 
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
