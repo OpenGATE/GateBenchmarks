@@ -37,7 +37,6 @@ def analyse_command_line(output_folders, **kwargs):
     # the return code is 0 (fail) or 1 (success)
     r = analyse_all_folders(output_folders)
     print(f'Last test return is: {r}')
-    return r
 
 
 def plot_edep(filename, a):
@@ -92,8 +91,8 @@ def gamma_index(a, filename, ref_filename):
     ax.plot(x, y, '--', alpha=0.5, label=f'G.I. {ref_filename} vs {filename} max={max:.2f}')
     ax.legend()
     if max > TOL:
-        return 0
-    return 1
+        return False
+    return True
 
 
 def analyse_one_curve(ax, i, folder, previous_folder, filename):
@@ -104,7 +103,7 @@ def analyse_one_curve(ax, i, folder, previous_folder, filename):
         previous_filename = os.path.join(previous_folder, filename)
         r = gamma_index(a, f, previous_filename)
         return r
-    return 1
+    return True
 
 
 def analyse_one_folder(ax, folder, previous_folder):
@@ -113,9 +112,9 @@ def analyse_one_folder(ax, folder, previous_folder):
     rp = analyse_one_curve(ax, 1, folder, previous_folder, 'output-proton-Edep.mhd')
     rc = analyse_one_curve(ax, 2, folder, previous_folder, 'output-carbon-Edep.mhd')
     # return error if one is failed
-    if rg == 0 or rp == 0 or rc == 0:
-        return 0
-    return 1
+    if not rg or not rp or not rc :
+        return False
+    return True
 
 
 # -----------------------------------------------------------------------------

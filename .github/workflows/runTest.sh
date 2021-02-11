@@ -58,7 +58,7 @@ pip3 install click colorama
 OutputTest=$(python3 runBenchmark.py -t ${TEST})
 echo "$OutputTest"
 OutputTest=$(echo "$OutputTest" | tail -1)
-if [ "$OutputTest" != "1" ]; then
+if [ "$OutputTest" != "True" ]; then
     exit -1
 else
     exit 0

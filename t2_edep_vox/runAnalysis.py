@@ -110,8 +110,8 @@ def gamma_index(filename, ref_filename):
     max = y.max()
     print(f'Max gamma index {ref_filename} {filename}: {max}')
     if max > TOL:
-        return 0
-    return 1
+        return False
+    return True
 
 
 def analyse_one_file(folder, previous_folder, filename):
@@ -120,7 +120,7 @@ def analyse_one_file(folder, previous_folder, filename):
         previous_filename = os.path.join(previous_folder, filename)
         r = gamma_index(f, previous_filename)
         return r
-    return 1
+    return True
 
 
 def analyse_one_folder(folder, previous_folder):
@@ -130,9 +130,9 @@ def analyse_one_folder(folder, previous_folder):
     rrv1 = analyse_one_file(folder, previous_folder, 'dose-photon-RV1-Edep.mhd')
     rrv2 = analyse_one_file(folder, previous_folder, 'dose-photon-RV2-Edep.mhd')
     # return error if one is failed
-    if rnpv1 == 0 or rnpv2 == 0 or rrv1 == 0 or rrv2 == 0:
-        return 0
-    return 1
+    if not rnpv1 or not rnpv2 or not rrv1 or not rrv2:
+        return False
+    return True
 
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
