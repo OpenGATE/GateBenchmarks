@@ -20,7 +20,7 @@ echo "export PATH=/software/gatetools/clustertools/:$PATH" >> /etc/mybashrc
 #Install dependencies according the test
 compile_torch=false
 compile_rtk=false
-if [ "$TEST" = "t3" ]; then
+if [ "$TEST" = "t7_garf" ]; then
    compile_torch=true
 fi
 export GATE_USE_TORCH=OFF
@@ -28,13 +28,13 @@ if [ "$compile_torch" = true ] ; then
     cd /software
     mkdir torch
     cd torch
-    wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-1.4.0%2Bcpu.zip
-    unzip libtorch-cxx11-abi-shared-with-deps-1.4.0+cpu.zip
-    export GATE_USE_TORCH=OFF
+    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.4.0%2Bcpu.zip
+    unzip libtorch-shared-with-deps-1.4.0+cpu.zip
+    export GATE_USE_TORCH=ON
     export TORCH_DIR=/software/torch/libtorch/share/cmake/Torch
 fi
 
-# Compile master versio of Gate
+# Compile master version of Gate
 cd /software/gate
 git clone https://github.com/OpenGATE/Gate.git src
 cd bin
