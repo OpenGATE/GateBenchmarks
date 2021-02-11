@@ -1,0 +1,60 @@
+#/control/execute mac/visu.mac
+
+# World 
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+/gate/world/geometry/setXLength 1 m
+/gate/world/geometry/setYLength 1 m
+/gate/world/geometry/setZLength 1 m
+/gate/world/setMaterial Air
+
+
+#  Water sphere
+/gate/world/daughters/name wsphere
+/gate/world/daughters/insert sphere
+/gate/wsphere/setMaterial G4_WATER
+/gate/wsphere/geometry/setRmin   0. mm
+/gate/wsphere/geometry/setRmax   300. mm
+
+
+# Physics
+/gate/physics/addPhysicsList emstandard_opt4
+#/gate/physics/addPhysicsList emlivermore
+/gate/physics/addProcess RadioactiveDecay
+/gate/physics/addProcess Decay
+
+# Actors
+/gate/actor/addActor  SimulationStatisticActor stat
+/gate/actor/stat/save output/stats.txt
+
+/gate/actor/addActor AnnihilationRangeActor range_actor
+/gate/actor/range_actor/save  output/range.root
+
+# Init
+/gate/run/initialize
+
+# Source (http://www.nucleide.org)
+/gate/source/addSource pointsource gps
+/gate/source/pointsource/gps/particle ion 
+#/gate/source/pointsource/gps/ion 53 124 0 0       # Iodine 124
+/gate/source/pointsource/gps/ion 9 18 0 0          # Fluorine 18 
+/gate/source/pointsource/gps/ene/mono 0. keV 
+/gate/source/pointsource/gps/ang/type iso
+/gate/source/pointsource/gps/pos/centre 0 0 0 mm
+/gate/source/pointsource/visualize 1000 yellow 
+/gate/source/pointsource/setActivity 100 kBq
+
+
+# Pseudo random engine
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+
+# Start
+/gate/application/setTimeStart 0 s
+/gate/application/setTimeSlice 1 s
+/gate/application/setTimeStop  1 s
+/gate/application/startDAQ
+
+
+
+
+
