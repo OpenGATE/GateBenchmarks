@@ -6,6 +6,10 @@
 # Need alias N             => ion activity in Bq 
 # Need alias SPECT_RADIUS  => in cm (25 for example)
 
+/control/alias RADIONUCLIDE Lu177
+/control/alias SPECT_RADIUS 25
+/control/alias N 2e5
+
 /control/alias HEAD_NB 1
 /control/execute mac/alias.mac
 
