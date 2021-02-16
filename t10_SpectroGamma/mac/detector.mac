@@ -1,0 +1,24 @@
+/gate/world/daughters/name             detector1
+/gate/world/daughters/insert           cylinder
+/gate/detector1/geometry/setRmin 0. cm 
+/gate/detector1/geometry/setRmax 3.81 cm
+/gate/detector1/geometry/setHeight 7.62 cm
+/gate/detector1/setMaterial             NaI
+/gate/detector1/placement/setRotationAxis        1 0 0
+/gate/detector1/placement/setRotationAngle       90 deg
+/gate/detector1/placement/setTranslation  00 0 5 cm
+/gate/detector1/vis/setVisible              1
+/gate/detector1/vis/setColor                yellow
+/gate/detector1/vis/forceSolid
+
+/gate/world/daughters/name             coating
+/gate/world/daughters/insert           cylinder
+/gate/coating/geometry/setRmin 3.81 cm 
+/gate/coating/geometry/setRmax 4.31 cm
+/gate/coating/geometry/setHeight 7.62 cm
+/gate/coating/setMaterial             Aluminium
+/gate/coating/placement/setRotationAxis       1 0 0
+/gate/coating/placement/setRotationAngle       90 deg
+/gate/coating/placement/setTranslation  00 0 5 cm
+/gate/coating/vis/setVisible              1
+/gate/coating/vis/setColor                red

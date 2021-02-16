@@ -1,0 +1,65 @@
+#==============================================================================================
+# Visualization
+#==============================================================================================
+
+#/control/execute mac/visu.mac
+
+#==============================================================================================
+# World
+#==============================================================================================
+
+/gate/geometry/setMaterialDatabase  data/GateMaterials.db
+/gate/world/setMaterial             Air 
+/gate/world/geometry/setXLength     5. m 
+/gate/world/geometry/setYLength     5. m 
+/gate/world/geometry/setZLength     5. m 
+
+#============================================================================================
+# NaI detector
+#============================================================================================
+
+/control/execute mac/detector.mac
+
+#============================================================================================
+# Actor (energy spectrum)
+#============================================================================================
+
+/control/execute mac/actor.mac
+
+#==============================================================================================
+# Physics
+#==============================================================================================
+
+/gate/physics/addPhysicsList emstandard_opt3
+/gate/physics/addProcess RadioactiveDecay 
+
+/gate/physics/Gamma/SetCutInRegion      world 10 mm
+/gate/physics/Electron/SetCutInRegion   world 10 mm
+/gate/physics/Positron/SetCutInRegion   world 10 mm
+/gate/physics/Proton/SetCutInRegion     world 10 mm
+
+/gate/physics/Gamma/SetCutInRegion      detector1 1 mm
+/gate/physics/Electron/SetCutInRegion   detector1 1 mm
+/gate/physics/Positron/SetCutInRegion   detector1 1 mm
+/gate/physics/Proton/SetCutInRegion     detector1 1 mm
+
+#==============================================================================================
+# Initialization 
+#==============================================================================================
+/gate/run/initialize
+
+#==============================================================================================
+# Source 
+#==============================================================================================
+
+/control/execute mac/{type}_137Cs.mac		 
+
+#==============================================================================================
+# Start simulation
+#==============================================================================================
+
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+
+/gate/application/setTotalNumberOfPrimaries 1000000
+/gate/application/start

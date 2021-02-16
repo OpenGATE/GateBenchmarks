@@ -1,0 +1,9 @@
+/gate/source/addSource 137Cs gps
+/gate/source/137Cs/gps/particle gamma
+/gate/source/137Cs/gps/energytype UserSpectrum
+/gate/source/137Cs/gps/setSpectrumFile data/137Cs.txt
+/gate/source/137Cs/setIntensity 100
+/gate/source/137Cs/gps/type Point
+/gate/source/137Cs/gps/angtype iso
+/gate/source/137Cs/gps/centre 0. 0. 0. cm
+
