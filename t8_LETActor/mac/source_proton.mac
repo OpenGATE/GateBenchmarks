@@ -1,0 +1,14 @@
+/gate/source/addSource mybeam gps
+
+/gate/source/mybeam/gps/particle proton
+/gate/source/mybeam/gps/pos/type Beam
+/gate/source/mybeam/gps/pos/rot1 0 1 0
+/gate/source/mybeam/gps/pos/rot2 1 0 0
+/gate/source/mybeam/gps/pos/shape Circle
+/gate/source/mybeam/gps/pos/centre 0 0 0 mm
+/gate/source/mybeam/gps/pos/sigma_x 3 mm
+/gate/source/mybeam/gps/pos/sigma_y 3 mm
+/gate/source/mybeam/gps/ene/mono 150 MeV
+/gate/source/mybeam/gps/ene/type Gauss
+/gate/source/mybeam/gps/ene/sigma 2.0 MeV
+/gate/source/mybeam/gps/direction 0 0 1
