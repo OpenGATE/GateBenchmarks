@@ -1,9 +1,0 @@
-
-
-
-./go.sh 9.0
-
-# gaga 1e7  full 1e8 --> times x10 (but not as good)
-
-gaga-phsp/plot_err.py gaga-phsp/reference_data/results.ref.part1/ -s 1 gaga-phsp/reference_data/results.ref.part2/ -s 1 output-9.0 -s 1 -f 0
-
