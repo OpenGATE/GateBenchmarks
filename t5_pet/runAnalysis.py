@@ -8,7 +8,7 @@ import scipy
 import numpy as np
 import os
 from pathlib import Path
-import uproot3 as uproot
+import uproot
 import re
 import click
 import gatetools as gt
@@ -23,7 +23,7 @@ sys.settrace
 # --------------------------------------------------------------------------
 # it is faster to access to root array like this dont know exactly why
 def tget(t, array_name):
-    return t.arrays([array_name])[array_name][:10000]
+    return t.arrays([array_name], library="numpy")[array_name][:10000]
 
 # --------------------------------------------------------------------------
 def get_stat_value(s, v):
@@ -34,12 +34,8 @@ def get_stat_value(s, v):
     a = a.group(0)[len(v):]
     return float(a)
     
-def getValues(filename, array, key):
-    if os.path.isfile(filename):
-        values = np.loadtxt(filename, unpack=True)
-    else:
-        values = tget(array, key)
-        np.savetxt(filename, values)
+def getValues(array, key):
+    values = tget(array, key)
     return values
 
 def analyse_pet(output_folder, ax, i):
@@ -55,16 +51,16 @@ def analyse_pet(output_folder, ax, i):
         #print("List of keys: \n", f.keys())
 
         # get timing
-        singles = f[b'Singles']
-        times = tget(singles, b'time')
+        singles = f['Singles']
+        times = tget(singles, 'time')
 
-        singles = f[b'Singles']
+        singles = f['Singles']
         print('nb of singles ', len(singles))
 
-        coinc = f[b'Coincidences']
+        coinc = f['Coincidences']
         print('nb of coincidences', len(coinc))
 
-        delays = f[b'delay']
+        delays = f['delay']
         print('nb of delays', len(delays))
     try:
         stat_filename = os.path.join(Path(filename).parent, 'stat.txt')
@@ -82,16 +78,16 @@ def analyse_pet(output_folder, ax, i):
     start_simulation_time = 0
     stop_simulation_time = 240
     print("Detector positions by run")
-    times = getValues(os.path.join(os.path.join(filename + "_times.npy")), coinc, b'time1')
+    times = getValues(coinc, 'time1')
     start_time = min(times)
     end_time = max(times)
     slice_time = (end_time-start_time)/2
     print(f'Times : {start_time} {slice_time} {end_time}')
-    runID = getValues(os.path.join(os.path.join(filename + "_runID.npy")), coinc, b'runID')
-    gpx1 = getValues(os.path.join(os.path.join(filename + "_globalPosX1.npy")), coinc, b'globalPosX1')
-    gpx2 = getValues(os.path.join(os.path.join(filename + "_globalPosX2.npy")), coinc, b'globalPosX2')
-    gpy1 = getValues(os.path.join(os.path.join(filename + "_globalPosY1.npy")), coinc, b'globalPosY1')
-    gpy2 = getValues(os.path.join(os.path.join(filename + "_globalPosY2.npy")), coinc, b'globalPosY2')
+    runID = getValues(coinc, 'runID')
+    gpx1 = getValues(coinc, 'globalPosX1')
+    gpx2 = getValues(coinc, 'globalPosX2')
+    gpy1 = getValues(coinc, 'globalPosY1')
+    gpy2 = getValues(coinc, 'globalPosY2')
     # only consider coincidences  with time lower than time_slice
     # (assuming 2 time slices only)
     mask = (times < slice_time)
@@ -120,8 +116,8 @@ def analyse_pet(output_folder, ax, i):
 
     # Axial Detection
     print('Axial Detection')
-    ad1 = getValues(os.path.join(os.path.join(filename + "_globalPosZ1.npy")), coinc, b'globalPosZ1')
-    ad2 = getValues(os.path.join(os.path.join(filename + "_globalPosZ2.npy")), coinc, b'globalPosZ2')
+    ad1 = getValues(coinc, 'globalPosZ1')
+    ad2 = getValues(coinc, 'globalPosZ2')
     print(len(ad1))
     ad = np.concatenate((ad1, ad2))
     a = ax[(i+0,1)]
@@ -136,10 +132,10 @@ def analyse_pet(output_folder, ax, i):
     # True scattered coincindences (tsc)
     print('True scattered and unscattered coincindences')
     z = (ad1+ad2)*0.5
-    compt1 = getValues(os.path.join(os.path.join(filename + "_comptonPhantom1.npy")), coinc, b'comptonPhantom1')
-    compt2 = getValues(os.path.join(os.path.join(filename + "_comptonPhantom2.npy")), coinc, b'comptonPhantom2')
-    rayl1 = getValues(os.path.join(os.path.join(filename + "_RayleighPhantom1.npy")), coinc, b'RayleighPhantom1')
-    rayl2 = getValues(os.path.join(os.path.join(filename + "_RayleighPhantom2.npy")), coinc, b'RayleighPhantom2')
+    compt1 = getValues(coinc, 'comptonPhantom1')
+    compt2 = getValues(coinc, 'comptonPhantom2')
+    rayl1 = getValues(coinc, 'RayleighPhantom1')
+    rayl2 = getValues(coinc, 'RayleighPhantom2')
     mask =  ((compt1==0) & (compt2==0) & (rayl1==0) & (rayl2==0))
     tuc = z[mask]
     tsc = z[~mask]
@@ -160,9 +156,9 @@ def analyse_pet(output_folder, ax, i):
 
     # Delays and Randoms
     print("Delays and Randoms")
-    time = getValues(os.path.join(os.path.join(filename + "_time1.npy")), coinc, b'time1')
-    sourceID1 = getValues(os.path.join(os.path.join(filename + "_sourceID1.npy")), coinc, b'sourceID1')
-    sourceID2 = getValues(os.path.join(os.path.join(filename + "_sourceID2.npy")), coinc, b'sourceID2')
+    time = getValues(coinc, 'time1')
+    sourceID1 = getValues(coinc, 'sourceID1')
+    sourceID2 = getValues(coinc, 'sourceID2')
     mask = (sourceID1==0) & (sourceID2==0)
     decayF18 = time[mask]
     mask = (sourceID1==1) & (sourceID2==1)
@@ -196,11 +192,11 @@ def analyse_pet(output_folder, ax, i):
     a.set_title('Rad decays')
 
     # Randoms
-    eventID1 = getValues(os.path.join(os.path.join(filename + "_eventID1.npy")), coinc, b'eventID1')
-    eventID2 = getValues(os.path.join(os.path.join(filename + "_eventID2.npy")), coinc, b'eventID2')
+    eventID1 = getValues(coinc, 'eventID1')
+    eventID2 = getValues(coinc, 'eventID2')
     randoms = time[eventID1 != eventID2]
     print(len(delays))
-    t1 = getValues(os.path.join(os.path.join(filename + "_time1.npy")), delays, b'time1')
+    t1 = getValues(delays, 'time1')
     print('nb of randoms', len(randoms))
     print('nb of delays', len(delays))
     a = ax[i+1,2]
@@ -232,11 +228,40 @@ def analyse_pet(output_folder, ax, i):
     a.axis('off')
     a.text(0.2, 0.5, line1)
 
+    dictTest = {
+        "coincidences": len(coinc),
+        "true":         len(tuc),
+        "random":       len(randoms),
+        "scatter":      len(tsc),
+        "delay":        len(delays),
+        "hl":           hl
+    }
+
+    return dictTest
+
 
 # -----------------------------------------------------------------------------
 def plot_all(output_folders, ax):
+    test = False
+    previousDictTest = {
+        "coincidences": 0,
+        "true":         0,
+        "random":       0,
+        "scatter":      0,
+        "delay":        0,
+        "hl":           0
+    }
     for o, i in zip(output_folders, range(len(output_folders))):
-        analyse_pet(o, ax, 3*i)
+        dictTest = analyse_pet(o, ax, 3*i)
+        print(dictTest)
+        print(previousDictTest)
+        test = (0.99*previousDictTest["coincidences"] <= dictTest["coincidences"] <= 1.01*previousDictTest["coincidences"]) and \
+               (0.95*previousDictTest["true"]         <= dictTest["true"]         <= 1.05*previousDictTest["true"]) and \
+               (0.80*previousDictTest["random"]       <= dictTest["random"]       <= 1.20*previousDictTest["random"]) and \
+               (0.95*previousDictTest["scatter"]      <= dictTest["scatter"]      <= 1.05*previousDictTest["scatter"]) and \
+               (0.90*previousDictTest["delay"]        <= dictTest["delay"]        <= 1.10*previousDictTest["delay"])
+        previousDictTest = dictTest
+    return test
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -250,7 +275,8 @@ def analyse_click(output_folders, **kwargs):
     '''
     TODO
     '''
-    analyse_all_folders(output_folders)
+    r = analyse_all_folders(output_folders)
+    print("Last test return: " + str(r))
 
 def analyse_all_folders(output_folders, **kwargs):
     # logger
@@ -267,7 +293,7 @@ def analyse_all_folders(output_folders, **kwargs):
     nrows=3*len(outputFolders)
     fig, ax = plt.subplots(ncols=ncols, nrows=nrows, figsize=(15, 10))
 
-    plot_all(outputFolders, ax)
+    r = plot_all(outputFolders, ax)
 
     for o in range(len(outputFolders)):
       fig.delaxes(ax[3*o+2][1])
@@ -275,6 +301,8 @@ def analyse_all_folders(output_folders, **kwargs):
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.savefig('output.pdf')
     plt.show()
+    print(outputFolders)
+    return r
 
 
 # --------------------------------------------------------------------------
