@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 logger=logging.getLogger(__name__)
 
 # Tolerance
-TOL = 1
+TOL = 14
 
 # -----------------------------------------------------------------------------
 def plot(output_folder, a, filename, axis1, axis2):
@@ -105,9 +105,8 @@ def gamma_index(filename, ref_filename):
     img_ref = itk.imread(ref_filename)
     gi = gt.gamma_index_3d_equal_geometry(img_ref, img, dta=3, dd=3, ddpercent=True)
     data = itk.GetArrayViewFromImage(gi)
-    y = data[:, 0, 0]
     # total
-    max = y.max()
+    max = np.amax(data)
     print(f'Max gamma index {ref_filename} {filename}: {max}')
     if max > TOL:
         return False
