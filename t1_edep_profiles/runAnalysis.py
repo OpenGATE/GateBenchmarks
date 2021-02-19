@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 logger = logging.getLogger(__name__)
 
 # Tolerance
-TOL = 5
+TOL = 4
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -82,7 +82,7 @@ def gamma_index(a, filename, ref_filename):
     y = data[:, 0, 0]
     x = np.arange(len(y)) * spacing[2]
     # total
-    max = y.max()
+    max = np.amax(gi)
     print(f'Max gamma index {ref_filename} {filename}: {max}')
     # get shared axis if already exist
     ax = a.get_shared_x_axes().get_siblings(a)[0]
