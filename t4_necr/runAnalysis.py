@@ -55,8 +55,11 @@ def analysis(root_file):
 
     # reference NECR (Salvadori2020)
     # obtained for 1787914158 Bq -> ~78 kBq.mL-1
-    # (see below for volume computation)
-    ref_necr = 170000
+    # WARNING : in the paper:
+    #    1) only LOR <120mm are considered
+    #    2) delays are used, not randoms
+    # ref_necr = 170000
+    ref_necr = 75216
 
     # Cylindrical volume (in mm)
     cyl_radius = 102
@@ -85,7 +88,6 @@ def analysis(root_file):
 
     # difference with reference
     diff = (necr - ref_necr) / ref_necr * 100.0
-    print()
     print(f'NECR Difference is         = {diff:.2f} %')
 
     return abs(diff) < 10.0
