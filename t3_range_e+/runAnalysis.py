@@ -107,6 +107,10 @@ def analyse(f):
     rho = 1  # water
     Rmean_model = 0.108 * Emax ** (1.14) / rho * 10  # in mm
 
+    # historical values
+    Rmean_histo = 0.42
+    Rmax_histo = 2.7
+
     # Rmax model
     if Emax < 2.5:
         Rmax_model = (412 * np.power(Emax, (1.265 - 0.0954 * np.log(Emax)))) / rho / 100
@@ -117,26 +121,37 @@ def analyse(f):
     Rmean = distance.mean()
     diff_Rmean_model = (Rmean - Rmean_model) / Rmean_model * 100
     diff_Rmean_nist = (Rmean - Rmean_nist) / Rmean_nist * 100
+    diff_Rmean_histo = (Rmean - Rmean_histo) / Rmean_histo * 100
 
     # Rmax (Practical range Rp = max of all distances)
     Rmax = distance.max()
-    diff_Rmax_model = (Rmax_model - Rmax) / Rmax_model * 100
-    diff_Rmax_nist = (Rmax_nist - Rmax) / Rmax_nist * 100
+    diff_Rmax_model = (Rmax - Rmax_model) / Rmax_model * 100
+    diff_Rmax_nist = (Rmax - Rmax_nist) / Rmax_nist * 100
+    diff_Rmax_histo = (Rmax - Rmax_histo) / Rmax_histo * 100
 
     # print
     print(f'Number of events = {len(x)}')
     print(f'Rmean (nist)     = {Rmean_nist:.2f} mm')
     print(f'Rmean (model)    = {Rmean_model:.2f} mm')
-    print(f'Rmean (gate)     = {Rmean:.2f} mm {diff_Rmean_nist:.2f} %   {diff_Rmean_model:.2f} %')
+    print(f'Rmean (historic) = {Rmean_histo:.2f} mm')
+    print(f'Rmean (gate)     = {Rmean:.2f} mm     nist {diff_Rmean_nist:.2f} %   '
+          f'model {diff_Rmean_model:.2f} %    '
+          f'historic {diff_Rmean_histo:.2f} %')
     print(f'Rmax (nist)      = {Rmax_nist:.2f} mm')
     print(f'Rmax (model)     = {Rmax_model:.2f} mm')
-    print(f'Rmax (gate)      = {Rmax:.2f} mm {diff_Rmax_nist:.2f} %    {diff_Rmax_model:.2f} %')
+    print(f'Rmax (gate)      = {Rmax:.2f} mm     nist {diff_Rmax_nist:.2f} %    '
+          f'model {diff_Rmax_model:.2f} %    '
+          f'historic {diff_Rmax_histo:.2f} %')
 
     # fig, ax = plt.subplots()
     plt.hist(distance, 200, density=True, histtype=u'step', facecolor='g', alpha=0.75)
     plt.title('Positron range')
     plt.savefig('range.pdf')
-    plt.show()
+    # plt.show()
+
+    # return value (only compare with historical version)
+    tolerance = 5  # %
+    return diff_Rmax_histo < tolerance and diff_Rmean_histo < tolerance
 
 
 # --------------------------------------------------------------------------
