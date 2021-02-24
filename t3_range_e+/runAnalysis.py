@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 
-import matplotlib
-
-matplotlib.use('TkAgg')  # (required on osx)
 import matplotlib.pyplot as plt
 
 import numpy as np
 import gatetools as gt
-import uproot4 as uproot
+import uproot
 import click
 import os
 
@@ -21,7 +18,8 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
                 type=click.Path(exists=True, file_okay=True, dir_okay=True))
 @gt.add_options(gt.common_options)
 def analyse_click(output_folders, **kwargs):
-    analyse_all_folders(output_folders)
+    r = analyse_all_folders(output_folders)
+    print("Last return: " + str(r))
 
 
 def analyse_all_folders(output_folders):
@@ -32,7 +30,8 @@ def analyse_all_folders(output_folders):
         except Exception:
             print(f'Not a root file ? {f}')
             exit(-1)
-        analyse(f)
+        r = analyse(f)
+    return r
 
 
 def analyse(f):
@@ -142,6 +141,8 @@ def analyse(f):
     print(f'Rmax (gate)      = {Rmax:.2f} mm     nist {diff_Rmax_nist:.2f} %    '
           f'model {diff_Rmax_model:.2f} %    '
           f'historic {diff_Rmax_histo:.2f} %')
+    print(f'Diff Rmax histo  = {diff_Rmax_histo:.2f} mm')
+    print(f'Diff Rmean histo = {diff_Rmean_histo:.2f} mm')
 
     # fig, ax = plt.subplots()
     plt.hist(distance, 200, density=True, histtype=u'step', facecolor='g', alpha=0.75)
@@ -150,8 +151,9 @@ def analyse(f):
     # plt.show()
 
     # return value (only compare with historical version)
-    tolerance = 5  # %
-    return diff_Rmax_histo < tolerance and diff_Rmean_histo < tolerance
+    tolerance_max = 6  # %
+    tolerance_mean = 1  # %
+    return diff_Rmax_histo < tolerance_max and diff_Rmean_histo < tolerance_mean
 
 
 # --------------------------------------------------------------------------
