@@ -7,8 +7,6 @@ import scipy.stats as ss
 import scipy
 import numpy as np
 import os
-from pathlib import Path
-import uproot3 as uproot
 import re
 import click
 import gatetools as gt
@@ -16,227 +14,131 @@ import gatetools.phsp as phsp
 import itk
 import sys
 import logging
-logger=logging.getLogger(__name__)
-sys.settrace
+logger = logging.getLogger(__name__)
 
 
-# --------------------------------------------------------------------------
-# it is faster to access to root array like this dont know exactly why
-def tget(t, array_name):
-    return t.arrays([array_name])[array_name][:10000]
+def read_images(folder, scale):
+    print(folder)
+    f = os.path.join(folder, 'dose-Edep.mhd')
+    img = itk.imread(f)
+    data = itk.array_from_image(img)
+    data = data * scale
 
-# --------------------------------------------------------------------------
-def get_stat_value(s, v):
-    g = r''+v+'\w+'
-    a = re.search(g, s)
-    if a == None:
-        return -1
-    a = a.group(0)[len(v):]
-    return float(a)
+    f = os.path.join(folder, 'dose-Edep-Uncertainty.mhd')
+    img_s = itk.imread(f)
+    data_s = itk.array_from_image(img_s)
+
+    return img, data, data_s
+
+def relative_uncertainty(folders, scale, factor):
+    img1, data1, uncert1 = read_images(folders[0], float(scale[0]))
+    img2, data2, uncert2 = read_images(folders[1], float(scale[1]))
+
+    myfontsize = 22
+    myfontsize_tic = 17
+    myfontsize_title = 17
     
-def getValues(filename, array, key):
-    if os.path.isfile(filename):
-        values = np.loadtxt(filename, unpack=True)
-    else:
-        values = tget(array, key)
-        np.savetxt(filename, values)
-    return values
+    # param
+    f = float(factor)  # 0.05
 
-def analyse_pet(output_folder, ax, i):
-    if not os.path.isdir(output_folder):
-        return
-    filename = os.path.join(output_folder, "pet.root")
-    print('Filename', filename)
-    coinc = []
-    delays = []
-    if os.path.isfile(filename):
+    # detect the max with quantile to be a bit more robust
+    mask = np.ones_like(data2)
+    mi = np.amin(data2[mask == 1])
+    ma = np.amax(data2[mask == 1])
+    mean = np.mean(data2[mask == 1])
+    med = np.median(data2[mask == 1])
+    print('Data (no mask): min max mean med', mi, ma, mean, med)
+    q = np.amax(data2)
+    print('Data max = ', q)
+    q = np.quantile(data2, 0.99999)
+    print('Data maxQ = ', q)
+    print('Data maxQ*f = ', q * f,
+          ' <-- only pixels with value larger than this value are considered (below is "noise")')
+    mask = np.where(data2 < q * f, 0, mask)
+    
+    # compute uncert
+    uncert2 = uncert2 * data2
 
-        f = uproot.open(filename)
-        #print("List of keys: \n", f.keys())
+    # compute sigma
+    sigma1 = np.sqrt(uncert1 * uncert1 + uncert2 * uncert2)
+    sigma1 = sigma1[mask == 1]
 
-        # get timing
-        singles = f[b'Singles']
-        times = tget(singles, b'time')
+    print('Nb pixels before mask: ', data1.size)
+    print('Nb pixels after mask :', len(sigma1))
 
-        singles = f[b'Singles']
-        print('nb of singles ', len(singles))
+    # compute relative difference
+    def compute_diff(data1, data2):
+        diff = (data1 - data2)  # /data1
+        print('Min and max relative difference: ', np.amin(diff), np.amax(diff))
+        return diff
 
-        coinc = f[b'Coincidences']
-        print('nb of coincidences', len(coinc))
+    d1 = data1[mask == 1]
+    d2 = data2[mask == 1]
+    amax = np.quantile(d1, 0.999)
+    print('For normalisation use max value', amax)
+    amean = np.mean(d1)
+    amean = amax
+    diff1 = compute_diff(d1, d2) / amean
 
-        delays = f[b'delay']
-        print('nb of delays', len(delays))
-    try:
-        stat_filename = os.path.join(Path(filename).parent, 'stat.txt')
-        print('Open stat file', stat_filename)
-        fs = open(stat_filename, 'r').read()
-        n_events = get_stat_value(fs, '# NumberOfEvents = ')
-        start_simulation_time = get_stat_value(fs, '# StartSimulationTime        = ')
-        stop_simulation_time = get_stat_value(fs, '# StopSimulationTime         = ')
-    except:
-        print('nope')
-        
+    u1 = uncert1[mask == 1]
+    u2 = uncert2[mask == 1]
+    print('Mean uncert {}% {}%'.format(np.mean(u1) * 100,
+                                       np.mean(u2) * 100))
+    print('Mean sigma  {}%'.format(np.mean(sigma1) / np.mean(d1)))
 
-    #
-    n_events = 1
-    start_simulation_time = 0
-    stop_simulation_time = 240
-    print("Detector positions by run")
-    times = getValues(os.path.join(os.path.join(filename + "_times.npy")), coinc, b'time1')
-    start_time = min(times)
-    end_time = max(times)
-    slice_time = (end_time-start_time)/2
-    print(f'Times : {start_time} {slice_time} {end_time}')
-    runID = getValues(os.path.join(os.path.join(filename + "_runID.npy")), coinc, b'runID')
-    gpx1 = getValues(os.path.join(os.path.join(filename + "_globalPosX1.npy")), coinc, b'globalPosX1')
-    gpx2 = getValues(os.path.join(os.path.join(filename + "_globalPosX2.npy")), coinc, b'globalPosX2')
-    gpy1 = getValues(os.path.join(os.path.join(filename + "_globalPosY1.npy")), coinc, b'globalPosY1')
-    gpy2 = getValues(os.path.join(os.path.join(filename + "_globalPosY2.npy")), coinc, b'globalPosY2')
-    # only consider coincidences  with time lower than time_slice
-    # (assuming 2 time slices only)
-    mask = (times < slice_time)
-    n = 1000 # restrict to the n first values
-    r0_gpx1 = gpx1[mask][:n]
-    r0_gpx2 = gpx2[mask][:n]
-    r0_gpy1 = gpy1[mask][:n]
-    r0_gpy2 = gpy2[mask][:n]
-    r0x = np.concatenate((r0_gpx1,r0_gpx2, r0_gpx1))
-    r0y = np.concatenate((r0_gpy1,r0_gpy2, r0_gpy1))
-    a = ax[(i+0,0)]
-    a.scatter(r0x, r0y, s=1)
-    mask = (times > slice_time)
-    r1_gpx1 = gpx1[mask][:n]
-    r1_gpx2 = gpx2[mask][:n]
-    r1_gpy1 = gpy1[mask][:n]
-    r1_gpy2 = gpy2[mask][:n]
-    r1x = np.concatenate((r1_gpx1,r1_gpx2, r1_gpx1))
-    r1y = np.concatenate((r1_gpy1,r1_gpy2, r1_gpy1))
-    a = ax[(i+0,0)]
-    a.scatter(r1x, r1y, s=1)
-    a.set_aspect('equal', adjustable='box')
-    a.set_xlabel('mm')
-    a.set_ylabel('mm')
-    a.set_title('Transaxial detection position ({} first events only)'.format(n))
+    # plot histo
+    fig, ax = plt.subplots(1, 2, figsize=(15, 8))
+    fs = myfontsize
+    a = ax[0]
+    q1 = np.quantile(diff1, 0.01)
+    q2 = np.quantile(diff1, 0.99)
+    print('Quantile for H', q1, q2)
+    l1 = f'PHSP1 vs GAN $\mu=${np.mean(diff1) * 100.0:.2f}% '
+    a.hist(diff1, 200, range=(q1, q2),
+           density=False, facecolor='g', alpha=0.3,
+           label=l1)
+    # a.legend(prop={'family':'monospace', 'size': 10})
+    a.legend(loc='center left', prop={'size': myfontsize_title})
+    vals = a.get_xticks()
+    a.set_xticklabels(['{:,.1%}'.format(x) for x in vals])
+    x1 = np.mean(diff1)
+    a.axvline(x=x1, color='k')
+    a.set_xlabel('Difference %', fontsize=fs)
+    a.set_ylabel('Counts', fontsize=fs)
+    a.tick_params(labelsize=myfontsize_tic)
+    print('----> PHSP1 vs GAN mean diff1 = ', x1 * 100.0)
+    
+    a = ax[1]
+    x = (d1 - d2) / sigma1
+    l1 = '{:} $\mu=${:.2f} $\sigma=${:.2f}'.format('PHSP1 vs GAN', np.mean(x), np.std(x))
+    l1 = f'PHSP1 vs GAN $\mu=${np.mean(x):.2f} $\sigma=${np.std(x):.2f}'
+    a.hist(x, 200, range=(-3, 3),
+           density=False, facecolor='g', alpha=0.3,
+           label=l1)
+    print('PHSP1 vs GAN mu et sigma = ', np.mean(x), np.std(x))
+    vals = a.get_xticks()
+    a.set_xlabel('Nb of sigma', fontsize=fs)
+    a.set_ylabel('Counts', fontsize=fs)
+    a.tick_params(labelsize=myfontsize_tic)
+    # a.legend(prop={'family':'monospace', 'size': 10})
+    a.legend(loc='center left', prop={'size': myfontsize_title})
+ 
+    img = itk.image_from_array((data1 - data2) / np.mean(d1))
+    img.CopyInformation(img1)
+    itk.imwrite(img, 'diff1.mhd')
 
-    # Axial Detection
-    print('Axial Detection')
-    ad1 = getValues(os.path.join(os.path.join(filename + "_globalPosZ1.npy")), coinc, b'globalPosZ1')
-    ad2 = getValues(os.path.join(os.path.join(filename + "_globalPosZ2.npy")), coinc, b'globalPosZ2')
-    print(len(ad1))
-    ad = np.concatenate((ad1, ad2))
-    a = ax[(i+0,1)]
+    img = itk.image_from_array(mask)
+    img.CopyInformation(img1)
+    itk.imwrite(img, 'mask.mhd')
 
-    a.hist(ad, histtype='step', bins=100)
-    print(len(ad1))
-    a.set_xlabel('mm')
-    a.set_ylabel('counts')
-    a.set_title('Axial coincidences detection position')
+    plt.tight_layout()
+    plt.savefig('a.pdf', dpi=fig.dpi)
+    plt.show()
 
-    # True unscattered coincidences (tuc)
-    # True scattered coincindences (tsc)
-    print('True scattered and unscattered coincindences')
-    z = (ad1+ad2)*0.5
-    compt1 = getValues(os.path.join(os.path.join(filename + "_comptonPhantom1.npy")), coinc, b'comptonPhantom1')
-    compt2 = getValues(os.path.join(os.path.join(filename + "_comptonPhantom2.npy")), coinc, b'comptonPhantom2')
-    rayl1 = getValues(os.path.join(os.path.join(filename + "_RayleighPhantom1.npy")), coinc, b'RayleighPhantom1')
-    rayl2 = getValues(os.path.join(os.path.join(filename + "_RayleighPhantom2.npy")), coinc, b'RayleighPhantom2')
-    mask =  ((compt1==0) & (compt2==0) & (rayl1==0) & (rayl2==0))
-    tuc = z[mask]
-    tsc = z[~mask]
-    print("\tscattered", len(tsc))
-    print("\tunscattered", len(tuc))
-    a = ax[i+0,2]
-    a.hist(tuc, bins=100)
-    a.set_xlabel('mm')
-    a.set_ylabel('counts')
-    a.set_title('Axial Sensitivity Detection')
-    a = ax[i+1,0]
-    countsa, binsa = np.histogram(tsc, bins=100)
-    countsr, binsr = np.histogram(z, bins=100)
-    a.hist(binsa[:-1], bins=100, weights=countsa/countsr)
-    a.set_xlabel('mm')
-    a.set_ylabel('%')
-    a.set_title('Axial Scatter fraction')
+    if np.abs(np.mean(x)) < 0.2 and np.fabs(np.std(x)-1) < 0.2:
+        return True
+    return False
 
-    # Delays and Randoms
-    print("Delays and Randoms")
-    time = getValues(os.path.join(os.path.join(filename + "_time1.npy")), coinc, b'time1')
-    sourceID1 = getValues(os.path.join(os.path.join(filename + "_sourceID1.npy")), coinc, b'sourceID1')
-    sourceID2 = getValues(os.path.join(os.path.join(filename + "_sourceID2.npy")), coinc, b'sourceID2')
-    mask = (sourceID1==0) & (sourceID2==0)
-    decayF18 = time[mask]
-    mask = (sourceID1==1) & (sourceID2==1)
-    decayO15 = time[mask]
-
-    ## FIXME -> measured and expected HL
-    # F18 109.771(20) minutes 6586.2 sec
-    # O15 122.24 seconds
-
-    # histogram of decayO15
-    bin_heights, bin_borders = np.histogram(np.array(decayO15), bins='auto', density=True)
-    bin_widths = np.diff(bin_borders)
-    bin_centers = bin_borders[:-1] + bin_widths / 2
-
-    # expo fit
-    def exponenial_func(x, a, b):
-        return a*np.exp(-b*x)
-    popt, pcov = scipy.optimize.curve_fit(exponenial_func, bin_centers, bin_heights)
-    xx = np.linspace(0, end_time, int(end_time))
-    yy = exponenial_func(xx, *popt)
-    hl = np.log(2)/popt[1]
-
-    # plot
-    a = ax[i+1,1]
-    a.hist(decayO15, bins=100, label='O15 HL = 122.24 sec', histtype='stepfilled', alpha=0.5, density=True)
-    a.hist(decayF18, bins=100, label='F18 HL = 6586.2 sec', histtype='stepfilled', alpha=0.5, density=True)
-    a.plot(xx, yy, label='O15 fit HL = {:.2f} sec'.format(hl))
-    a.legend()
-    a.set_xlabel('time (s)')
-    a.set_ylabel('decay')
-    a.set_title('Rad decays')
-
-    # Randoms
-    eventID1 = getValues(os.path.join(os.path.join(filename + "_eventID1.npy")), coinc, b'eventID1')
-    eventID2 = getValues(os.path.join(os.path.join(filename + "_eventID2.npy")), coinc, b'eventID2')
-    randoms = time[eventID1 != eventID2]
-    print(len(delays))
-    t1 = getValues(os.path.join(os.path.join(filename + "_time1.npy")), delays, b'time1')
-    print('nb of randoms', len(randoms))
-    print('nb of delays', len(delays))
-    a = ax[i+1,2]
-    a.hist(randoms, bins=100, histtype='stepfilled', alpha=0.6, label='Random = {}'.format(len(randoms)))
-    a.hist(t1, bins=100, histtype='step', label="Delays with coinc sorter = {}".format(len(delays)))
-    a.legend()
-    a.set_xlabel('time (s)')
-    a.set_ylabel('events')
-    a.set_title('Randoms')
-
-    # info
-    ntrue = len(tuc)
-    absolute_sensitivity = ntrue/n_events
-    line1 = 'Number of events {:.0f}'.format(n_events)
-    #line1 = line1+'\nNumber of singles {:.0f}'.format(len(singles))
-    line1 = line1+'\nNumber of coincidences {:.0f}'.format(len(coinc))
-    line1 = line1+'\nNumber of true {:.0f}'.format(len(tuc))
-    line1 = line1+'\nNumber of randoms {:.0f}'.format(len(randoms))
-    line1 = line1+'\nNumber of scatter {:.0f}'.format(len(tsc))
-    line1 = line1+'\nAbsolute sensibility {:.2f} %'.format(absolute_sensitivity*100.0)
-    line1 = line1+'\nStart time {:.1f} s'.format(start_time)
-    line1 = line1+'\nSlice time {:.1f} s'.format(slice_time)
-    line1 = line1+'\nStop time {:.1f} s'.format(end_time)
-    a = ax[i+2,0]
-    a.plot([0], [0], '')
-    a.plot([1], [1], '')
-    a.set_xticks([])
-    a.set_yticks([])
-    a.axis('off')
-    a.text(0.2, 0.5, line1)
-
-
-# -----------------------------------------------------------------------------
-def plot_all(output_folders, ax):
-    for o, i in zip(output_folders, range(len(output_folders))):
-        analyse_pet(o, ax, 3*i)
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -247,10 +149,8 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
                 type=click.Path(exists=True, file_okay=True, dir_okay=True))
 @gt.add_options(gt.common_options)
 def analyse_click(output_folders, **kwargs):
-    '''
-    TODO
-    '''
-    analyse_all_folders(output_folders)
+    r = analyse_all_folders(output_folders)
+    print("Last return: " + str(r))
 
 def analyse_all_folders(output_folders, **kwargs):
     # logger
@@ -262,21 +162,12 @@ def analyse_all_folders(output_folders, **kwargs):
         if os.path.isdir(o):
             outputFolders.append(o)
 
-    # plot
-    ncols=3
-    nrows=3*len(outputFolders)
-    fig, ax = plt.subplots(ncols=ncols, nrows=nrows, figsize=(15, 10))
+    for o in outputFolders:
+        r = relative_uncertainty(['reference_data', o], [1, 10], 0.05)
 
-    plot_all(outputFolders, ax)
-
-    for o in range(len(outputFolders)):
-      fig.delaxes(ax[3*o+2][1])
-      fig.delaxes(ax[3*o+2][2])
-    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-    plt.savefig('output.pdf')
-    plt.show()
-
+    return r
 
 # --------------------------------------------------------------------------
 if __name__ == '__main__':
     analyse_click()
+
