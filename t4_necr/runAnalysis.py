@@ -90,7 +90,7 @@ def analysis(root_file):
     diff = (necr - ref_necr) / ref_necr * 100.0
     print(f'NECR Difference is         = {diff:.2f} %')
 
-    return abs(diff) < 10.0
+    return abs(diff) < 15.0
 
 
 # --------------------------------------------------------------------------
