@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 logger = logging.getLogger(__name__)
 
 # Tolerance
-TOL = 4
+TOL = 2
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -82,15 +82,15 @@ def gamma_index(a, filename, ref_filename):
     y = data[:, 0, 0]
     x = np.arange(len(y)) * spacing[2]
     # total
-    max = np.amax(gi)
-    print(f'Max gamma index {ref_filename} {filename}: {max}')
+    percentile95 = np.percentile(data[data > 0.0], 95)
+    print(f'95percentile gamma index {ref_filename} {filename}: {percentile95}')
     # get shared axis if already exist
     ax = a.get_shared_x_axes().get_siblings(a)[0]
     if ax == a:
         ax = a.twinx()
-    ax.plot(x, y, '--', alpha=0.5, label=f'G.I. {ref_filename} vs {filename} max={max:.2f}')
+    ax.plot(x, y, '--', alpha=0.5, label=f'G.I. {ref_filename} vs {filename} 95percentile={percentile95:.2f}')
     ax.legend()
-    if max > TOL:
+    if percentile95 > TOL:
         return False
     return True
 
