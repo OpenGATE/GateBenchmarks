@@ -83,11 +83,11 @@ def analyze_137Cs(type, file10M, file):
     ratio_peak_error = ratio_peak*(error_efficiency_peak/efficiency_peak)
     print("Benchmark peak efficiency : %.2f \u00B1 %.2f" % (ratio_peak,ratio_peak_error))
 
-    efficiecyTest = False
+    efficiencyTest = False
     peakTest = False
     if(np.abs(efficiency_full-reference_efficiency_full) <= 2*error_efficiency_full):
         print("Test of full efficiency is OK for " + type)
-        efficiecyTest = True
+        efficiencyTest = True
     else:
         print("Problem with test of full efficiency for " + type)
 
@@ -108,7 +108,7 @@ def analyze_137Cs(type, file10M, file):
     plt.savefig('output_' + type + '.pdf')
     plt.show()
 
-    return(efficiecyTest and efficiecyTest)
+    return(efficiencyTest and peakTest)
 
 
 # -----------------------------------------------------------------------------
