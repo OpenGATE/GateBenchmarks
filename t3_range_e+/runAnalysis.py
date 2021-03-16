@@ -99,22 +99,22 @@ def analyse(f):
 
     # Ref for 18F
     Rmean_nist = 0.6
-    Rmax_nist = 2.4
+    Rpercentile95_nist = 2.4
 
     # Rmean model
-    Emax = 0.634  # MeV for 18F
+    Epercentile95 = 0.634  # MeV for 18F
     rho = 1  # water
-    Rmean_model = 0.108 * Emax ** (1.14) / rho * 10  # in mm
+    Rmean_model = 0.108 * Epercentile95 ** (1.14) / rho * 10  # in mm
 
     # historical values
     Rmean_histo = 0.42
-    Rmax_histo = 2.7
+    Rpercentile95_histo = 2.7
 
     # Rmax model
-    if Emax < 2.5:
-        Rmax_model = (412 * np.power(Emax, (1.265 - 0.0954 * np.log(Emax)))) / rho / 100
+    if Epercentile95 < 2.5:
+        Rpercentile95_model = (412 * np.power(Epercentile95, (1.265 - 0.0954 * np.log(Epercentile95)))) / rho / 100
     else:
-        Rmax_model = (530 * Emax - 106) / rho / 100
+        Rpercentile95_model = (530 * Epercentile95 - 106) / rho / 100
 
     # Rmean
     Rmean = distance.mean()
@@ -123,10 +123,10 @@ def analyse(f):
     diff_Rmean_histo = (Rmean - Rmean_histo) / Rmean_histo * 100
 
     # Rmax (Practical range Rp = max of all distances)
-    Rmax = distance.max()
-    diff_Rmax_model = (Rmax - Rmax_model) / Rmax_model * 100
-    diff_Rmax_nist = (Rmax - Rmax_nist) / Rmax_nist * 100
-    diff_Rmax_histo = (Rmax - Rmax_histo) / Rmax_histo * 100
+    Rpercentile95 = np.percentile(distance, 95)
+    diff_Rpercentile95_model = (Rpercentile95 - Rpercentile95_model) / Rpercentile95_model * 100
+    diff_Rpercentile95_nist = (Rpercentile95 - Rpercentile95_nist) / Rpercentile95_nist * 100
+    diff_Rpercentile95_histo = (Rpercentile95 - Rpercentile95_histo) / Rpercentile95_histo * 100
 
     # print
     print(f'Number of events = {len(x)}')
@@ -136,12 +136,12 @@ def analyse(f):
     print(f'Rmean (gate)     = {Rmean:.2f} mm     nist {diff_Rmean_nist:.2f} %   '
           f'model {diff_Rmean_model:.2f} %    '
           f'historic {diff_Rmean_histo:.2f} %')
-    print(f'Rmax (nist)      = {Rmax_nist:.2f} mm')
-    print(f'Rmax (model)     = {Rmax_model:.2f} mm')
-    print(f'Rmax (gate)      = {Rmax:.2f} mm     nist {diff_Rmax_nist:.2f} %    '
-          f'model {diff_Rmax_model:.2f} %    '
-          f'historic {diff_Rmax_histo:.2f} %')
-    print(f'Diff Rmax histo  = {diff_Rmax_histo:.2f} mm')
+    print(f'Rpercentile95 (nist)      = {Rpercentile95_nist:.2f} mm')
+    print(f'Rpercentile95 (model)     = {Rpercentile95_model:.2f} mm')
+    print(f'Rpercentile95 (gate)      = {Rpercentile95:.2f} mm     nist {diff_Rpercentile95_nist:.2f} %    '
+          f'model {diff_Rpercentile95_model:.2f} %    '
+          f'historic {diff_Rpercentile95_histo:.2f} %')
+    print(f'Diff Rpercentile95 histo  = {diff_Rpercentile95_histo:.2f} mm')
     print(f'Diff Rmean histo = {diff_Rmean_histo:.2f} mm')
 
     # fig, ax = plt.subplots()
@@ -151,9 +151,9 @@ def analyse(f):
     # plt.show()
 
     # return value (only compare with historical version)
-    tolerance_max = 6  # %
+    tolerance_percentile95 = 6  # %
     tolerance_mean = 1  # %
-    return diff_Rmax_histo < tolerance_max and diff_Rmean_histo < tolerance_mean
+    return diff_Rpercentile95_histo < tolerance_percentile95 and diff_Rmean_histo < tolerance_mean
 
 
 # --------------------------------------------------------------------------
