@@ -151,7 +151,7 @@ def analyse(f):
     # plt.show()
 
     # return value (only compare with historical version)
-    tolerance_max = 6  # %
+    tolerance_max = 10  # %
     tolerance_mean = 1  # %
     return diff_Rmax_histo < tolerance_max and diff_Rmean_histo < tolerance_mean
 
