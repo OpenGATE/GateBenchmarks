@@ -123,8 +123,8 @@ def analyse_one_folder(folder, ax1, is_first):
     d = diff_rel[1:17]
     # print(d)
     d95 = np.percentile(d, 95)
-    print(f'95percentile difference {d95:.3f}% ; tolerance is 8.0%')
-    return d95 < 8.0
+    print(f'95percentile difference {d95:.3f}% ; tolerance is 10.0%')
+    return d95 < 10.0
 
 
 # -----------------------------------------------------------------------------
