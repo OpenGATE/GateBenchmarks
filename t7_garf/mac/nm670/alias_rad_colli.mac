@@ -1,0 +1,70 @@
+
+# INPUT alias:
+#        RADIONUCLIDE : Tc99m In111 Lu177 I131 singleE
+#        ACTIVITY_BQ : input activity in Bq
+
+# The input activity is in Bq, so in decay
+# Because we use gamma spectrum source (and not an ion source)
+# the input activity N is converted into gamma GAMMA_ACTIVITY thanks
+# to the GAMMA_FACTOR 
+
+# OUTPUT alias:
+#        COLLIMATOR : hegp megp lehr
+#        RADIONUCLIDE_HALF_LIFE_SEC: try to guess
+#        GAMMA_ACTIVITY : in Bq of gamma
+#        GAMMA_FACTOR : how many gamma per ion decay
+#        SPECT_LENGTH_CM : spect head length
+#        SPECT_PSD_POSITION : colli position
+#        SOURCE_MIN_ENERGY_MEV : min source energy for this radionuclide
+#        SOURCE_MAX_ENERGY_MEV : max source energy for this radionuclide
+#        ENERGY_CHANNELS : list of channel names for the spect projection images
+
+/control/alias TECHNETIUM Tc99m
+/control/alias INDIUM In111
+/control/alias LUTETIUM Lu177
+/control/alias IODINE I131
+/control/alias SINGLE singleE
+
+/control/strdoif {RADIONUCLIDE} == {TECHNETIUM} /control/alias GAMMA_FACTOR 0.885
+/control/strdoif {RADIONUCLIDE} == {INDIUM} /control/alias GAMMA_FACTOR 1.847315
+/control/strdoif {RADIONUCLIDE} == {LUTETIUM} /control/alias GAMMA_FACTOR 0.172168
+/control/strdoif {RADIONUCLIDE} == {IODINE} /control/alias GAMMA_FACTOR 1.00246
+/control/strdoif {RADIONUCLIDE} == {SINGLE} /control/alias GAMMA_FACTOR 1.0
+
+/control/strdoif {RADIONUCLIDE} == {TECHNETIUM} /control/alias COLLIMATOR lehr
+/control/strdoif {RADIONUCLIDE} == {INDIUM} /control/alias COLLIMATOR megp
+/control/strdoif {RADIONUCLIDE} == {LUTETIUM} /control/alias COLLIMATOR megp
+/control/strdoif {RADIONUCLIDE} == {IODINE} /control/alias COLLIMATOR hegp
+/control/strdoif {RADIONUCLIDE} == {SINGLE} /control/alias COLLIMATOR megp
+
+/control/strdoif {RADIONUCLIDE} == {TECHNETIUM} /control/alias RADIONUCLIDE_HALF_LIFE_SEC 21624.12
+/control/strdoif {RADIONUCLIDE} == {INDIUM} /control/alias RADIONUCLIDE_HALF_LIFE_SEC 242343.36
+/control/strdoif {RADIONUCLIDE} == {LUTETIUM} /control/alias RADIONUCLIDE_HALF_LIFE_SEC 574344
+/control/strdoif {RADIONUCLIDE} == {IODINE} /control/alias RADIONUCLIDE_HALF_LIFE_SEC 692928
+/control/strdoif {RADIONUCLIDE} == {SINGLE} /control/alias RADIONUCLIDE_HALF_LIFE_SEC 574344
+
+/control/strdoif {COLLIMATOR} == hegp /control/alias SPECT_LENGTH_CM 19
+/control/strdoif {COLLIMATOR} == megp /control/alias SPECT_LENGTH_CM 18
+/control/strdoif {COLLIMATOR} == lehr /control/alias SPECT_LENGTH_CM 16
+
+/control/strdoif {COLLIMATOR} == hegp /control/alias SPECT_PSD_POSITION 9.21
+/control/strdoif {COLLIMATOR} == megp /control/alias SPECT_PSD_POSITION 8.41
+/control/strdoif {COLLIMATOR} == lehr /control/alias SPECT_PSD_POSITION 6.11
+
+/control/strdoif {RADIONUCLIDE} == {TECHNETIUM} /control/alias ENERGY_CHANNELS "scatter peak140"
+/control/strdoif {RADIONUCLIDE} == {INDIUM} /control/alias ENERGY_CHANNELS "scatter1 peak171 scatter2 scatter3 peak245"
+/control/strdoif {RADIONUCLIDE} == {LUTETIUM} /control/alias ENERGY_CHANNELS "scatter1 peak113 scatter2 scatter3 peak208 scatter4"
+/control/strdoif {RADIONUCLIDE} == {SINGLE} /control/alias ENERGY_CHANNELS "scatter1 peak113 scatter2 scatter3 peak208 scatter4"
+/control/strdoif {RADIONUCLIDE} == {IODINE} /control/alias ENERGY_CHANNELS "scatter1 peak364 scatter2 scatter3 scatter4 peak637 peak722"
+
+/control/multiply GAMMA_ACTIVITY_BQ {ACTIVITY_BQ} {GAMMA_FACTOR}
+
+/control/strdoif {RADIONUCLIDE} == {TECHNETIUM} /control/alias SOURCE_MIN_ENERGY_MEV 0.010
+/control/strdoif {RADIONUCLIDE} == {TECHNETIUM} /control/alias SOURCE_MAX_ENERGY_MEV 0.160
+/control/strdoif {RADIONUCLIDE} == {INDIUM} /control/alias SOURCE_MIN_ENERGY_MEV 0.010
+/control/strdoif {RADIONUCLIDE} == {INDIUM} /control/alias SOURCE_MAX_ENERGY_MEV 0.280
+/control/strdoif {RADIONUCLIDE} == {LUTETIUM} /control/alias SOURCE_MIN_ENERGY_MEV 0.010
+/control/strdoif {RADIONUCLIDE} == {LUTETIUM} /control/alias SOURCE_MAX_ENERGY_MEV 0.250
+/control/strdoif {RADIONUCLIDE} == {IODINE} /control/alias SOURCE_MIN_ENERGY_MEV 0.010
+/control/strdoif {RADIONUCLIDE} == {IODINE} /control/alias SOURCE_MAX_ENERGY_MEV 0.770
+

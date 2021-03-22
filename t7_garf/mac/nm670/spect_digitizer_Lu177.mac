@@ -1,0 +1,103 @@
+
+# GE Discovery 670
+# Digitizer for Lutetium-177
+# Primary window: 15% centered around 113 keV (6.4.%)
+# Primary window: 15% centered around 208 keV (11%)
+# Scatter window : 8% centered around 100, 128, 184, 234 kev for TEW scatter correction
+
+# Adder
+/gate/digitizer/Singles/insert adder
+
+# Readout
+/gate/digitizer/Singles/insert readout
+#/gate/digitizer/Singles/readout/setPolicy TakeEnergyCentroid
+/gate/digitizer/Singles/readout/setDepth 1
+
+
+# Intrinsic Spatial Blurring
+/gate/digitizer/Singles/insert spblurring
+/gate/digitizer/Singles/spblurring/setSpresolution 4.37 mm
+/gate/digitizer/Singles/spblurring/verbose 0
+
+# Energy Blurring
+/gate/digitizer/Singles/insert blurring
+/gate/digitizer/Singles/blurring/setLaw linear
+/gate/digitizer/Singles/blurring/linear/setResolution 0.1
+/gate/digitizer/Singles/blurring/linear/setEnergyOfReference 171.0 keV
+/gate/digitizer/Singles/blurring/linear/setSlope -0.0194 1/MeV
+
+# Thresholds Lu177
+/gate/digitizer/Singles/insert thresholder
+/gate/digitizer/Singles/thresholder/setThreshold 3. keV
+/gate/digitizer/Singles/insert upholder
+/gate/digitizer/Singles/upholder/setUphold 515. keV
+
+# Scatter Windows 8% around 100 keV below first peak (113 keV)
+/gate/digitizer/name scatter1
+/gate/digitizer/insert singleChain
+/gate/digitizer/scatter1/setInputName Singles
+/gate/digitizer/scatter1/insert thresholder
+/gate/digitizer/scatter1/thresholder/setThreshold 96 keV
+/gate/digitizer/scatter1/insert upholder
+/gate/digitizer/scatter1/upholder/setUphold 104 keV
+
+# Lu177 : 113 keV windows, width of 15%
+/gate/digitizer/name peak113
+/gate/digitizer/insert singleChain
+/gate/digitizer/peak113/setInputName Singles
+/gate/digitizer/peak113/insert thresholder
+/gate/digitizer/peak113/thresholder/setThreshold 104.52 keV
+/gate/digitizer/peak113/insert upholder
+/gate/digitizer/peak113/upholder/setUphold 121.48 keV
+
+# Scatter Windows 8% around 128 keV above first peak (113 keV)
+/gate/digitizer/name scatter2
+/gate/digitizer/insert singleChain
+/gate/digitizer/scatter2/setInputName Singles
+/gate/digitizer/scatter2/insert thresholder
+/gate/digitizer/scatter2/thresholder/setThreshold 122.88 keV
+/gate/digitizer/scatter2/insert upholder
+/gate/digitizer/scatter2/upholder/setUphold 133.12 keV
+
+# Scatter Windows 8% around 184 keV below second peak (208 keV)
+/gate/digitizer/name scatter3
+/gate/digitizer/insert singleChain
+/gate/digitizer/scatter3/setInputName Singles
+/gate/digitizer/scatter3/insert thresholder
+/gate/digitizer/scatter3/thresholder/setThreshold 176.64 keV
+/gate/digitizer/scatter3/insert upholder
+/gate/digitizer/scatter3/upholder/setUphold 191.36 keV
+
+# Lu177 : 208 keV windows, width of 15%
+/gate/digitizer/name peak208
+/gate/digitizer/insert singleChain
+/gate/digitizer/peak208/setInputName Singles
+/gate/digitizer/peak208/insert thresholder
+/gate/digitizer/peak208/thresholder/setThreshold 192.4 keV
+/gate/digitizer/peak208/insert upholder
+/gate/digitizer/peak208/upholder/setUphold 223.6 keV
+
+# Scatter Windows 8% around 234 keV above second peak (208 keV)
+/gate/digitizer/name scatter4
+/gate/digitizer/insert singleChain
+/gate/digitizer/scatter4/setInputName Singles
+/gate/digitizer/scatter4/insert thresholder
+/gate/digitizer/scatter4/thresholder/setThreshold 224.64 keV
+/gate/digitizer/scatter4/insert upholder
+/gate/digitizer/scatter4/upholder/setUphold 243.36 keV
+
+# total spectrum
+/gate/digitizer/name spectrum
+/gate/digitizer/insert singleChain
+/gate/digitizer/spectrum/setInputName Singles
+/gate/digitizer/spectrum/insert thresholder
+/gate/digitizer/spectrum/thresholder/setThreshold 3. keV
+/gate/digitizer/spectrum/insert upholder
+/gate/digitizer/spectrum/upholder/setUphold 515. keV
+
+# Dead time -> no dead time simulated here
+#/gate/digitizer/Singles/insert deadtime
+#/gate/digitizer/Singles/deadtime/setDeadTime 1662 ns
+#/gate/digitizer/Singles/deadtime/setMode paralysable
+#/gate/digitizer/Singles/deadtime/chooseDTVolume crystal_volume
+

@@ -1,0 +1,16 @@
+# NumberOfRun = 99
+# NumberOfEvents = 18288450980
+# NumberOfTracks = 18293360442
+# NumberOfSteps = 1846913206678
+# NumberOfGeometricalSteps = 1771830627553
+# NumberOfPhysicalSteps = 75082579125
+# ElapsedTimeWoInit = 5744485.799999999
+# ElapsedTime = 5746285.5
+# StartDate = Wed Dec 16 13:28:24 2020
+# EndDate = Thu Dec 17 07:27:48 2020
+# NumberOfMergedJobs = 99
+# MeanPPS = 3182.656166318224
+# MeanElapsedTime = 58043.28787878788
+# MinElapsedTime = 44139.6
+# MaxElapsedTime = 64644.1
+# Speedup = 88.72653789142116
