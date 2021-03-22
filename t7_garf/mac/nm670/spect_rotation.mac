@@ -1,0 +1,8 @@
+
+
+# Rotation 
+
+/gate/SPECThead/moves/insert         orbiting
+/gate/SPECThead/orbiting/setSpeed    {SPEED} deg/s
+/gate/SPECThead/orbiting/setPoint1   0 0 0 cm
+/gate/SPECThead/orbiting/setPoint2   0 1 0 cm

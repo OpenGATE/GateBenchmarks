@@ -1,0 +1,7 @@
+
+
+# need 18 cm for MEGP
+/control/alias COLLIMATOR megp
+/control/alias SPECT_LENGTH_CM  18
+
+

@@ -1,0 +1,12 @@
+# Gamma spectrum for Lutetium 177
+# (first line is 1 0 to say it is a discrete spectrum)
+# Two main lines : 113 KeV and 208 KeV
+# http://www.nucleide.org/DDEP_WG/Nuclides/Lu-177_tables.pdf
+# sum 0.001726+0.0620+0.000470+0.1038+0.002012+0.00216 = 0.172168
+1 0
+0.0716418  0.001726
+0.1129498  0.0620
+0.1367245  0.000470
+0.2083662  0.1038
+0.2496742  0.002012
+0.3213159  0.00216
