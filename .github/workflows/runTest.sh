@@ -36,7 +36,10 @@ fi
 
 # Compile master versio of Gate
 cd /software/gate
-git clone https://github.com/OpenGATE/Gate.git src
+if [ -z "$COMMIT" ]; then
+    COMMIT="develop"
+fi
+git clone --branch ${COMMIT} https://github.com/OpenGATE/Gate.git src
 cd bin
 cmake -DGATE_USE_TORCH=$GATE_USE_TORCH \
       -DTorch_DIR=$TORCH_DIR \
