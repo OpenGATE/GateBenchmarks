@@ -1,5 +1,5 @@
 
-gate_split_and_run.py mac/main.mac --splittime -j 5 -o output
+gate_split_and_run.py mac/main.mac --splittime -j 2 -o output
 
 #Wait Gate pids
 processId=($(ps -ef | grep 'Gate' | grep -v 'grep' | awk '{ print $2 }'))

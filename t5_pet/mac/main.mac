@@ -35,8 +35,8 @@
 
 # Start acquisition
 /gate/application/setTimeStart 0 s
-/gate/application/setTimeSlice 12 s
-/gate/application/setTimeStop  24 s
+/gate/application/setTimeSlice 60 s
+/gate/application/setTimeStop  120 s
 /gate/application/startDAQ
 
 # computation time around 2 min for 10 sec
