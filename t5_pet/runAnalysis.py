@@ -23,7 +23,7 @@ sys.settrace
 # --------------------------------------------------------------------------
 # it is faster to access to root array like this dont know exactly why
 def tget(t, array_name):
-    return t.arrays([array_name], library="numpy")[array_name][:10000]
+    return t.arrays([array_name], library="numpy")[array_name]
 
 # --------------------------------------------------------------------------
 def get_stat_value(s, v):
@@ -256,10 +256,11 @@ def plot_all(output_folders, ax):
         print(dictTest)
         print(previousDictTest)
         test = (0.99*previousDictTest["coincidences"] <= dictTest["coincidences"] <= 1.01*previousDictTest["coincidences"]) and \
-               (0.95*previousDictTest["true"]         <= dictTest["true"]         <= 1.05*previousDictTest["true"]) and \
-               (0.80*previousDictTest["random"]       <= dictTest["random"]       <= 1.20*previousDictTest["random"]) and \
-               (0.95*previousDictTest["scatter"]      <= dictTest["scatter"]      <= 1.05*previousDictTest["scatter"]) and \
-               (0.90*previousDictTest["delay"]        <= dictTest["delay"]        <= 1.10*previousDictTest["delay"])
+               (0.99*previousDictTest["true"]         <= dictTest["true"]         <= 1.01*previousDictTest["true"]) and \
+               (0.95*previousDictTest["random"]       <= dictTest["random"]       <= 1.05*previousDictTest["random"]) and \
+               (0.99*previousDictTest["scatter"]      <= dictTest["scatter"]      <= 1.01*previousDictTest["scatter"]) and \
+               (0.90*previousDictTest["delay"]        <= dictTest["delay"]        <= 1.10*previousDictTest["delay"]) and \
+               (0.95 * 122.24                         <= dictTest["hl"]           <= 1.05 * 122.24)
         previousDictTest = dictTest
     return test
 
