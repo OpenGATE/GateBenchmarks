@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def analyse_one_folder(folder, ax1, is_first):
     print(folder)
     E = 1
-    histories = 1000
+    histories = 5000
     rE = 4.367
     bins = 24
     path = f'{folder}/10000_1MeV_opt4_1um_nostepmax_test.hits.npy.gz'
