@@ -149,5 +149,5 @@
 #=====================================================
 #   M E A S U R E M E N T   S E T T I N G S
 #=====================================================
-/gate/application/setTotalNumberOfPrimaries 1000
+/gate/application/setTotalNumberOfPrimaries 5000
 /gate/application/start
