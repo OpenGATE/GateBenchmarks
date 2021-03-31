@@ -6,6 +6,19 @@ import shutil
 import colorama
 import subprocess
 import sys
+import re
+
+def atoi(text):
+    return int(text) if text.isdigit() else text
+
+
+def natural_keys(text):
+    '''
+    alist.sort(key=natural_keys) sorts in human order
+    http://nedbatchelder.com/blog/200712/human_sorting.html
+    (See Toothy's implementation in the comments)
+    '''
+    return [atoi(c) for c in re.split('(\d+)', text)]
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -65,10 +78,12 @@ def runTests(test, release=None):
         for dir in os.listdir(path='.'):
           if os.path.isdir(dir) and dir.startswith("output"):
               outputFolders.append(dir)
+        outputFolders.sort(key=natural_keys)
         outputFolders = list(outputFolders)
         if 'output' in outputFolders:
             outputFolders.pop(outputFolders.index('output'))
         outputFolders.append('output')
+        print(outputFolders)
         sys.path.insert(1, '.')
         import runAnalysis
         analyseOutput = runAnalysis.analyse_all_folders(outputFolders)

@@ -38,6 +38,7 @@ def analyse_command_line(output_folders, **kwargs):
     r_proton = analyse_all_folders(output_folders, 'proton')
     r_carbon = analyse_all_folders(output_folders, 'carbon')
     print(f'Last test return is: proton {r_proton} and carbon {r_carbon}')
+    return r_proton & r_carbon
 
 
 def plot_edep(filename, a):
@@ -73,6 +74,27 @@ def analyse_all_folders(output_folders, particle_name):
     plt.show()
     return r
 
+def gamma_indexAR(a, filename, ref_filename):
+    img = itk.imread(filename)
+    img_ref = itk.imread(ref_filename)
+    gi = gt.gamma_index_3d_equal_geometry(img_ref, img, dta=3, dd=3, ddpercent=True)
+    # itk.imwrite(gi, 'gi.mhd')
+    spacing = img.GetSpacing()
+    data = itk.GetArrayViewFromImage(gi)
+    y = data[:, 0, 0]
+    x = np.arange(len(y)) * spacing[2]
+    # total
+    max = y.max()
+    print(f'Max gamma index {ref_filename} {filename}: {max}')
+    # get shared axis if already exist
+    ax = a.get_shared_x_axes().get_siblings(a)[0]
+    if ax == a:
+        ax = a.twinx()
+    ax.plot(x, y, '--', alpha=0.5, label=f'G.I. {ref_filename} vs {filename} max={max:.2f}')
+    ax.legend()
+    if max > TOL:
+        return False
+    return True
 
 def gamma_index(a, filename, ref_filename):
     img = itk.imread(filename)
@@ -115,9 +137,9 @@ def analyse_one_folder(ax, folder, previous_folder, particle_name):
     rp = analyse_one_curve(ax, 1, folder, previous_folder, 'LET_primaries-' + particle_name + '-doseAveraged.mhd')
     rc = analyse_one_curve(ax, 2, folder, previous_folder, 'LET_primaries-' + particle_name + '-trackAveraged.mhd')
     # return error if one is failed
-    # if not rg or not rp or not rc :
-        # return False
-    return True
+#    if not rg or not rp or not rc :
+#        return False
+    return rp & rc
 
 
 # -----------------------------------------------------------------------------

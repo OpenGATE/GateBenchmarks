@@ -1,0 +1,153 @@
+#=====================================================
+# VERBOSE
+#=====================================================
+/gate/verbose Physic    2
+/gate/verbose Cuts      2
+/gate/verbose SD        2
+/gate/verbose Actions   2
+/gate/verbose Actor     2
+/gate/verbose Step      2
+/gate/verbose Error     2
+/gate/verbose Warning   2
+/gate/verbose Output    2
+/gate/verbose Beam      0
+/gate/verbose Volume    2
+/gate/verbose Image     2
+/gate/verbose Geometry  2
+/gate/verbose Core      0
+
+/run/verbose            1
+/event/verbose          0
+/tracking/verbose       0
+
+#=====================================================
+# GEOMETRY
+#=====================================================
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+
+#     W O R L D
+/gate/world/geometry/setXLength 1 m
+/gate/world/geometry/setYLength 1 m
+/gate/world/geometry/setZLength 1 m
+/gate/world/setMaterial G4_AIR
+
+#   WATER BOXES
+
+/gate/world/daughters/name scanner
+/gate/world/daughters/insert box
+/gate/scanner/geometry/setXLength 10 cm
+/gate/scanner/geometry/setYLength 10 cm
+/gate/scanner/geometry/setZLength 10 cm
+/gate/scanner/setMaterial G4_AIR
+
+
+/gate/scanner/daughters/name sphere1MeV
+/gate/scanner/daughters/insert sphere
+/gate/sphere1MeV/geometry/setRmin 0 cm
+/gate/sphere1MeV/geometry/setRmax 0.5 cm
+/gate/sphere1MeV/setMaterial G4_WATER
+
+
+#=====================================================
+# PHYSICS
+#=====================================================
+#ELECTROMAGNETIC PHYSICS
+/gate/physics/addPhysicsList emstandard_opt4
+
+
+#=====================================================
+# CUTS
+#=====================================================
+/gate/physics/Gamma/SetCutInRegion      world 100 m
+/gate/physics/Electron/SetCutInRegion   world 100 m
+/gate/physics/Positron/SetCutInRegion   world 100 m
+
+/gate/physics/Gamma/SetCutInRegion      scanner 100 m
+/gate/physics/Electron/SetCutInRegion   scanner 100 m
+/gate/physics/Positron/SetCutInRegion   scanner 100 m
+
+
+/gate/physics/Gamma/SetCutInRegion      sphere1MeV 1 um
+/gate/physics/Electron/SetCutInRegion   sphere1MeV 1 um
+/gate/physics/Positron/SetCutInRegion   sphere1MeV 100 m
+
+#/gate/physics/SetMaxStepSizeInRegion    sphere1MeV 0.1 um
+
+
+#=====================================================
+# RECORD HITS
+#=====================================================
+/gate/systems/scanner/level1/attach sphere1MeV
+
+/gate/sphere1MeV/attachCrystalSD
+
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+/gate/run/initialize
+
+/gate/physics/displayCuts
+
+#=====================================================
+#  P A R T I C L E   S O U R C E
+#=====================================================
+/gate/source/addSource mybeam gps
+/gate/source/mybeam/gps/particle e-
+/gate/source/mybeam/gps/energy 1 MeV
+/gate/source/mybeam/gps/ene/type Mono
+/gate/source/mybeam/gps/position  0 0 0 cm
+/gate/source/mybeam/gps/pos/type Point
+/gate/source/mybeam/gps/ang/type iso
+
+
+#=====================================================
+#  D A T A   O U T P U T (basic ROOT output)
+#=====================================================
+/gate/output/tree/enable
+/gate/output/tree/addFileName output/10000_1MeV_opt4_1um_nostepmax_test.npy
+/gate/output/tree/hits/enable
+/gate/output/tree/hits/branches/PDGEncoding/disable
+/gate/output/tree/hits/branches/trackID/disable
+/gate/output/tree/hits/branches/parentID/disable
+/gate/output/tree/hits/branches/trackLocalTime/disable
+/gate/output/tree/hits/branches/time/disable
+/gate/output/tree/hits/branches/runID/disable
+/gate/output/tree/hits/branches/eventID/disable
+/gate/output/tree/hits/branches/sourceID/disable
+/gate/output/tree/hits/branches/primaryID/disable
+/gate/output/tree/hits/branches/trackLength/disable
+/gate/output/tree/hits/branches/comptVolName/disable
+/gate/output/tree/hits/branches/RayleighVolName/disable
+/gate/output/tree/hits/branches/localPosX/disable
+/gate/output/tree/hits/branches/localPosY/disable
+/gate/output/tree/hits/branches/localPosZ/disable
+/gate/output/tree/hits/branches/momDirX/disable
+/gate/output/tree/hits/branches/momDirY/disable
+/gate/output/tree/hits/branches/momDirZ/disable
+/gate/output/tree/hits/branches/rotationAngle/disable
+/gate/output/tree/hits/branches/axialPos/disable
+/gate/output/tree/hits/branches/sourcePosX/disable
+/gate/output/tree/hits/branches/sourcePosY/disable
+/gate/output/tree/hits/branches/sourcePosZ/disable
+/gate/output/tree/hits/branches/nPhantomCompton/disable
+/gate/output/tree/hits/branches/nCrystalCompton/disable
+/gate/output/tree/hits/branches/nPhantomRayleigh/disable
+/gate/output/tree/hits/branches/nCrystalRayleigh/disable
+/gate/output/tree/hits/branches/photonID/disable
+
+/gate/actor/addActor SimulationStatisticActor stat
+/gate/actor/stat/save output/stat.txt
+
+
+#====================================================
+#  R A N D O M   E N G I N E  A N D  S E E D
+#====================================================
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+
+#=====================================================
+#   M E A S U R E M E N T   S E T T I N G S
+#=====================================================
+/gate/application/setTotalNumberOfPrimaries 5000
+/gate/application/start

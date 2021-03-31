@@ -16,7 +16,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+<<<<<<< HEAD
         strategy_name: [t1_edep_profiles, t2_edep_vox, t5_pet, t8_LETActor]
+=======
+        strategy_name: [t1_edep_profiles, t2_edep_vox, t3_range_e+, t4_necr, t5_pet, t6_dpk, t7_garf]
+>>>>>>> b37e283337bba6286ae09d9882327044265c0ce2
 
     steps:
     - name: Checkout github repo
@@ -41,7 +45,7 @@ jobs:
                                 qt5-default \
                                 git \
                                 cmake \
-                                python3.7-dev \
+                                python3.8-dev \
                                 ccache \
                                 fftw3-dev
         gcc -v
@@ -49,5 +53,5 @@ jobs:
     - name: Run the test in docker
       run: |
         ls $GITHUB_WORKSPACE
-        docker run --rm -e "TEST=${{ matrix.strategy_name }}" -v $GITHUB_WORKSPACE:/home tbaudier/gatebenchmarks:9.0 /home/.github/workflows/runTest.sh
+        docker run --rm -e "TEST=${{ matrix.strategy_name }}" -v $GITHUB_WORKSPACE:/home tbaudier/gatebenchmarks:9.1 /home/.github/workflows/runTest.sh
 

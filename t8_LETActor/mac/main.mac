@@ -157,5 +157,5 @@
 /gate/random/setEngineSeed 123456
 
 /gate/application/noGlobalOutput
-/gate/application/setTotalNumberOfPrimaries 200
+/gate/application/setTotalNumberOfPrimaries 2000
 /gate/application/start
