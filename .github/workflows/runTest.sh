@@ -20,7 +20,7 @@ echo "export PATH=/software/gatetools/clustertools/:$PATH" >> /etc/mybashrc
 #Install dependencies according the test
 compile_torch=false
 compile_rtk=false
-if [ "$TEST" = "t7_garf" ]; then
+if [ "$TEST" = "t7_garf" ] || [ "$TEST" = "t9_gaga_phsp" ]; then
    compile_torch=true
 fi
 export GATE_USE_TORCH=OFF
@@ -30,11 +30,12 @@ if [ "$compile_torch" = true ] ; then
     cd torch
     wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.4.0%2Bcpu.zip
     unzip libtorch-shared-with-deps-1.4.0+cpu.zip
+    rm -rf libtorch-shared-with-deps-1.4.0+cpu.zip
     export GATE_USE_TORCH=ON
     export TORCH_DIR=/software/torch/libtorch/share/cmake/Torch
 fi
 
-# Compile master versio of Gate
+# Compile master version of Gate
 cd /software/gate
 if [ -z "$COMMIT" ]; then
     COMMIT="develop"
@@ -45,6 +46,8 @@ cmake -DGATE_USE_TORCH=$GATE_USE_TORCH \
       -DTorch_DIR=$TORCH_DIR \
       ../src
 make -j4
+cd ..
+rm -rf src
 source /etc/mybashrc
 echo "export PATH=/software/gate/bin:$PATH" >> /etc/mybashrc
 source /etc/mybashrc
