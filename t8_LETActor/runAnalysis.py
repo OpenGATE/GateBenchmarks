@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 logger = logging.getLogger(__name__)
 
 # Tolerance
-TOL = 5
+TOL = 93
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -82,7 +82,7 @@ def analyse_one_particle(output_folders, particle_name):
 def gamma_index(a, filename, ref_filename):
     img = itk.imread(filename)
     img_ref = itk.imread(ref_filename)
-    gi = gt.gamma_index_3d_equal_geometry(img_ref, img, dta=3, dd=3, ddpercent=True)
+    gi = gt.gamma_index_3d_equal_geometry(img_ref, img, dta=1, dd=1, ddpercent=True)
     # itk.imwrite(gi, 'gi.mhd')
     spacing = img.GetSpacing()
     data = itk.GetArrayViewFromImage(gi)
@@ -106,7 +106,11 @@ def gamma_index(a, filename, ref_filename):
     ax.plot(x2, y2, '--', alpha=0.5, label=f'G.I. {ref_filename} vs {filename} max={max:.2f}')
     ax.set_ylabel( 'Gamma' )
     ax.legend()
-    if max > TOL:
+    indexThreshold = np.where(data > 0)
+    index = np.where(data[indexThreshold] <= 1.0)
+    percentageVoxelOk = index[0].size/indexThreshold[0].size*100
+    print(f'%voxel passes gamma index 1%1mm {ref_filename} {filename}: {percentageVoxelOk}')
+    if percentageVoxelOk < TOL:
         return False
     return True
 
