@@ -5,7 +5,8 @@ This repository contains Gate benchmarks used to compare current an previous Gat
 To use it: 
 * Clone the repository: `git clone --recursive https://github.com/OpenGATE/GateBenchmarks.git`
 * Check that the Gate version you want to test is in your PATH: `which Gate` and `Gate --version` (for recent Gate version)
-* Run a given benchmark: `./runBenchmark.py  -t t1` (for test t1)
+* Install the https://github.com/OpenGATE/GateTools : `pip install gatetools`
+* Run a benchmark: `./runBenchmark.py  -t t1` (for test t1)
 * This will create a result in the t1 folder, you can then look at the file `output.pdf`
 
 Note the you can run all tests at once with `./runBenchmark.py` (without argument)
