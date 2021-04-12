@@ -1,0 +1,13 @@
+ObjectType = Image
+NDims = 3
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = False
+TransformMatrix = 1 0 0 0 1 0 0 0 1
+Offset = 0 -199.95 -199.95
+CenterOfRotation = 0 0 0
+ElementSpacing = 400 0.1 0.1
+DimSize = 1 4000 4000
+AnatomicalOrientation = ???
+ElementType = MET_FLOAT
+ElementDataFile = doseInYZ-Dose.raw
