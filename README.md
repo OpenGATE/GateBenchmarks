@@ -11,7 +11,7 @@ To use it:
 
 Note the you can run all tests at once with `./runBenchmark.py` (without argument)
 
-**STILL WORK IN PROGRESS**
+**WARNING** (04/2021) This is a first version of the benchmarks, still incomplete. Some tests (in particular t4 and t7) sometimes still fail due to the stochastic nature of the simulation. It would require a simulation with too long computation time regarding the CPU limits (or a too high tolerance). It will be improved in the future.
 
 # How to deal with LFS:
 * To avoid to exceed Github LFS quota, the binary data are pointers (symbolic links) to a Gitlab subdirectory (https://gitlab.in2p3.fr/opengate/gatebenchmarks_data)
