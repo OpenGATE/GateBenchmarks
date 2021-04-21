@@ -1,0 +1,13 @@
+ObjectType = Image
+NDims = 3
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = False
+TransformMatrix = 1 0 0 0 1 0 0 0 1
+Offset = -196 -196 -196
+CenterOfRotation = 0 0 0
+ElementSpacing = 8 8 8
+DimSize = 50 50 50
+AnatomicalOrientation = ???
+ElementType = MET_INT
+ElementDataFile = proton-3d-NbOfHits.raw
