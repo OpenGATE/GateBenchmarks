@@ -1,5 +1,5 @@
 /gate/actor/addActor  EnergySpectrumActor  MyActor
-/gate/actor/MyActor/save                  output/Energy_{type}.root
+/gate/actor/MyActor/save                  output/Energy_{type}_{physic_list}.root
 /gate/actor/MyActor/attachTo              detector1
 /gate/actor/MyActor/saveAsText		  false
 /gate/actor/MyActor/enableFluenceTrackSpectrum   false

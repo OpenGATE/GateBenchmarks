@@ -30,7 +30,7 @@
 # Physics
 #==============================================================================================
 
-/gate/physics/addPhysicsList emstandard_opt3
+/gate/physics/addPhysicsList {physic_list}
 /gate/physics/addProcess RadioactiveDecay 
 
 /gate/physics/Gamma/SetCutInRegion      world 10 mm

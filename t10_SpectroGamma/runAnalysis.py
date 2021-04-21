@@ -16,6 +16,7 @@ from pathlib import Path
 import numpy as np
 import logging
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 
 logger = logging.getLogger(__name__)
 
@@ -37,29 +38,62 @@ def analyse_command_line(output_folders, **kwargs):
     r = analyse_all_folders(output_folders)
     print(f'Last test return is: {r}')
 
-
+# -----------------------------------------------------------------------------
 def analyse_all_folders(output_folders):
-    r_spectrum = analyze_137Cs("spectrum", "output-9.0/Energy_spectrum_10M.root", "output/Energy_spectrum.root")
-    r_source = analyze_137Cs("source", "output-9.0/Energy_source_10M.root", "output/Energy_source.root")
-    return(r_spectrum and r_source)
+    fig, axs = plt.subplots(2, 2)
+    axs[0, 0].title.set_text("137Cs energy spectrum emstandard_opt4")
+    axs[0, 1].title.set_text("137Cs energy source emstandard_opt4")
+    axs[1, 0].title.set_text("137Cs energy spectrum QGSP_BERT_EMZ")
+    axs[1, 1].title.set_text("137Cs energy source QGSP_BERT_EMZ")
 
-def analyze_137Cs(type, file10M, file):
+    iFolder = 0
+    for output_folder in output_folders:
+        r = analyze_137Cs(output_folder, axs, iFolder)
+        iFolder += 1
+
+    for i in range(2):
+        for j in range(2):
+            axs[i, j].set_xlabel("Energy [MeV]")
+            axs[i, j].set_ylabel("N")
+            axs[i, j].set_yscale('log')
+            axs[i, j].legend()
+    fig.tight_layout()
+    plt.show()
+    plt.savefig('output.pdf')
+    return(r)
+
+# -----------------------------------------------------------------------------
+def analyze_137Cs(output_folder, axs, iFolder):
+    value_spectrum_emstandard_opt4, r_spectrum_emstandard_opt4 = analyze_one_file(os.path.join(output_folder, "Energy_spectrum_emstandard_opt4.root"))
+    value_source_emstandard_opt4, r_source_emstandard_opt4 = analyze_one_file(os.path.join(output_folder, "Energy_source_emstandard_opt4.root"))
+    value_spectrum_QGSP_BERT_EMZ, r_spectrum_QGSP_BERT_EMZ = analyze_one_file(os.path.join(output_folder, "Energy_spectrum_QGSP_BERT_EMZ.root"))
+    value_source_QGSP_BERT_EMZ, r_source_QGSP_BERT_EMZ = analyze_one_file(os.path.join(output_folder, "Energy_source_QGSP_BERT_EMZ.root"))
+
+    scale = 1.
+    colors = cm.rainbow(np.linspace(0, 1, 10))
+    if output_folder != "output":
+        scale = 10.
+    axs[0, 0].plot(value_spectrum_emstandard_opt4/scale, c=colors[iFolder], ls='-', label = output_folder)
+    axs[0, 1].plot(value_source_emstandard_opt4/scale, c=colors[iFolder], ls='-', label = output_folder)
+    axs[1, 0].plot(value_spectrum_QGSP_BERT_EMZ/scale, c=colors[iFolder], ls='-', label = output_folder)
+    axs[1, 1].plot(value_source_QGSP_BERT_EMZ/scale, c=colors[iFolder], ls='-', label = output_folder)
+
+    return(r_spectrum_emstandard_opt4 and r_source_emstandard_opt4 and r_spectrum_QGSP_BERT_EMZ and r_source_QGSP_BERT_EMZ)
+
+# -----------------------------------------------------------------------------
+def analyze_one_file(file):
     # Read test root file
+    print(file)
     root_filename1 = Path(file)
     f1 = uproot.open(root_filename1)
     k1 = f1.keys()
     h1 = f1['edepHisto']
     print('Read object', h1)
 
-    # Read reference root file
-    root_filename2 = Path(file10M)
-    f2 = uproot.open(root_filename2)
-    k2 = f2.keys()
-    h2 = f2['edepHisto']
-    print('Read object', h2)
-
     # Compute efficiency parameters
     nEntries = 1000000 #number of primary particles in GATE
+    if "output-" in file:
+        nEntries *= 10
     h1_full = np.sum(h1.values())
     h1_peak = np.sum(h1.values()[661:663])
     efficiency_full = 100.*h1_full/nEntries
@@ -69,12 +103,12 @@ def analyze_137Cs(type, file10M, file):
     error_efficiency_peak = 100.*np.sqrt(h1_peak)/nEntries
     print("Peak efficiency : %.2f \u00B1 %.2f %%" % (efficiency_peak,error_efficiency_peak))
 
-    # Compare to reference values (Gate 8.2, Geant4 10.5.1, N = 1e7)
-    if type == "spectrum":
-        reference_efficiency_full = 14.83
+    # Compare to reference values (Gate 9, Geant4 10.7, N = 1e7, opt4)
+    if "spectrum" in file:
+        reference_efficiency_full = 14.75
     else:
-        reference_efficiency_full = 14.64
-    reference_efficiency_peak = 7.02
+        reference_efficiency_full = 14.93
+    reference_efficiency_peak = 7.00
 
     ratio_full = efficiency_full/reference_efficiency_full
     ratio_full_error = ratio_full*(error_efficiency_full/efficiency_full)
@@ -85,30 +119,20 @@ def analyze_137Cs(type, file10M, file):
 
     efficiencyTest = False
     peakTest = False
-    if(np.abs(efficiency_full-reference_efficiency_full) <= 2*error_efficiency_full):
-        print("Test of full efficiency is OK for " + type)
+    print(str(efficiency_full) + " " + str(reference_efficiency_full) + " " + str(error_efficiency_full))
+    if(np.abs(efficiency_full-reference_efficiency_full) <= 5*error_efficiency_full):
+        print("Test of full efficiency is OK for " + file)
         efficiencyTest = True
     else:
-        print("Problem with test of full efficiency for " + type)
+        print("Problem with test of full efficiency for " + file)
 
     if(np.abs(efficiency_peak-reference_efficiency_peak) <= 2*error_efficiency_peak):
-        print("Test of spectrum efficiency is OK for " + type)
+        print("Test of spectrum efficiency is OK for " + file)
         peakTest = True
     else:
-        print("Problem with test of peak efficiency for " + type)
+        print("Problem with test of peak efficiency for " + file)
 
-    # Plot 1D histogram
-    plt.title("137Cs energy " + type)
-    plt.plot(h1.values(), "r-", label = "Test")
-    plt.plot(h2.values()/10., "b-", label = "Reference")
-    plt.xlabel("Energy [MeV]")
-    plt.ylabel("N")	
-    plt.yscale('log')
-    plt.legend()
-    plt.savefig('output_' + type + '.pdf')
-    plt.show()
-
-    return(efficiencyTest and peakTest)
+    return (h1.values(), efficiencyTest and peakTest) 
 
 
 # -----------------------------------------------------------------------------
