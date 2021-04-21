@@ -83,9 +83,12 @@ def gamma_index(a, filename, ref_filename):
     x = np.arange(len(y)) * spacing[2]
     # total
     max = np.amax(gi)
-    indexThreshold = np.where(data > 0)
-    index = np.where(data[indexThreshold] <= 1.0)
-    percentageVoxelOk = index[0].size/indexThreshold[0].size*100
+    if max == 0:
+        percentageVoxelOk = 100
+    else:
+        indexThreshold = np.where(data > 0)
+        index = np.where(data[indexThreshold] <= 1.0)
+        percentageVoxelOk = index[0].size/indexThreshold[0].size*100
     print(f'%voxel correct in gamma index {ref_filename} {filename}: {percentageVoxelOk}')
     # get shared axis if already exist
     ax = a.get_shared_x_axes().get_siblings(a)[0]
