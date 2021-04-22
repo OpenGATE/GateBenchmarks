@@ -53,9 +53,13 @@ def gamma_index(filename, ref_filename):
     gi = gt.gamma_index_3d_equal_geometry(img_ref, img, dta=1, dd=1, ddpercent=True)
     data = itk.GetArrayViewFromImage(gi)
     # total
-    indexThreshold = np.where(data > 0)
-    index = np.where(data[indexThreshold] <= 1.0)
-    percentageVoxelOk = index[0].size/indexThreshold[0].size*100
+    max = np.amax(gi)
+    if max == 0:
+        percentageVoxelOk = 100
+    else:
+        indexThreshold = np.where(data > 0)
+        index = np.where(data[indexThreshold] <= 1.0)
+        percentageVoxelOk = index[0].size/indexThreshold[0].size*100
     print(f'%voxel passes gamma index {ref_filename} {filename}: {percentageVoxelOk}')
     if percentageVoxelOk < TOL:
         return False

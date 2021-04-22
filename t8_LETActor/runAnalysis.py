@@ -106,9 +106,13 @@ def gamma_index(a, filename, ref_filename):
     ax.plot(x2, y2, '--', alpha=0.5, label=f'G.I. {ref_filename} vs {filename} max={max:.2f}')
     ax.set_ylabel( 'Gamma' )
     ax.legend()
-    indexThreshold = np.where(data > 0)
-    index = np.where(data[indexThreshold] <= 1.0)
-    percentageVoxelOk = index[0].size/indexThreshold[0].size*100
+    max = np.amax(gi)
+    if max == 0:
+        percentageVoxelOk = 100
+    else:
+        indexThreshold = np.where(data > 0)
+        index = np.where(data[indexThreshold] <= 1.0)
+        percentageVoxelOk = index[0].size/indexThreshold[0].size*100
     print(f'%voxel passes gamma index 1%1mm {ref_filename} {filename}: {percentageVoxelOk}')
     if percentageVoxelOk < TOL:
         return False
