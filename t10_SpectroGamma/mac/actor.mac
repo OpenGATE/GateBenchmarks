@@ -1,0 +1,14 @@
+/gate/actor/addActor  EnergySpectrumActor  MyActor
+/gate/actor/MyActor/save                  output/Energy_{type}_{physic_list}.root
+/gate/actor/MyActor/attachTo              detector1
+/gate/actor/MyActor/saveAsText		  false
+/gate/actor/MyActor/enableFluenceTrackSpectrum   false
+/gate/actor/MyActor/enableEdepSpectrum       false
+/gate/actor/MyActor/enableElossHisto         false
+/gate/actor/MyActor/enableEdepHisto          true
+/gate/actor/MyActor/energyLossHisto/setEdepMin              0 eV
+/gate/actor/MyActor/energyLossHisto/setEdepMax              1500 keV
+/gate/actor/MyActor/energyLossHisto/setNumberOfEdepBins      1500
+/gate/actor/MyActor/energySpectrum/setEmin 0 eV
+/gate/actor/MyActor/energySpectrum/setEmax 1500 keV
+/gate/actor/MyActor/energySpectrum/setNumberOfBins 1500

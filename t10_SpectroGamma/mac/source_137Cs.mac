@@ -1,0 +1,7 @@
+/gate/source/addSource cesium137
+/gate/source/cesium137/gps/particle ion
+/gate/source/cesium137/gps/ion 55 137 0 0 
+/gate/source/cesium137/useDefaultHalfLife
+/gate/source/cesium137/gps/type Point
+/gate/source/cesium137/gps/angtype iso
+/gate/source/cesium137/gps/centre 0. 0. 0. cm 
