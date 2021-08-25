@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 logger = logging.getLogger(__name__)
 
 # Tolerance
-TOL = 93
+TOL = 90
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -100,8 +100,8 @@ def gamma_index(a, filename, ref_filename):
 
     # total
     max = y2.max()
-    print(f'Test for {ref_filename} {filename}')
-    print(f'Max gamma index is {max:.2f}')
+    print(f'- Test for {ref_filename} {filename}')
+    print(f'  Max gamma index is {max:.2f}')
     # get shared axis if already exist
     ax = a.get_shared_x_axes().get_siblings(a)[0]
     if ax == a:
@@ -116,8 +116,9 @@ def gamma_index(a, filename, ref_filename):
         indexThreshold = np.where(data > 0)
         index = np.where(data[indexThreshold] <= 1.0)
         percentageVoxelOk = index[0].size / indexThreshold[0].size * 100
-    print(f'Voxels that passes gamma index 1%1mm: {percentageVoxelOk:.2f}%')
+    print(f'  Voxels that passes gamma index 1%1mm: {percentageVoxelOk:.2f}%')
     if percentageVoxelOk < TOL:
+        print(f'!!! test if FALSE !!! (tolerance is {TOL}%)')
         return False
     return True
 
@@ -131,7 +132,7 @@ def analyse_one_curve(ax, i, folder, previous_folder, filename, subType):
     else:
         plot_edep(f, a, 'LET ' + subType + ' [keV/um]')
     if previous_folder and (subType != 'Edep'):
-        print('Found previous folder:', previous_folder)
+        # print('Found previous folder:', previous_folder)
         previous_filename = os.path.join(previous_folder, filename)
         r = gamma_index(a, f, previous_filename)
         return r
