@@ -101,7 +101,7 @@ def gamma_index(a, filename, ref_filename):
     # total
     max = y2.max()
     print(f'Test for {ref_filename} {filename}')
-    print(f'Max gamma index is {max:2.f}')
+    print(f'Max gamma index is {max:.2f}')
     # get shared axis if already exist
     ax = a.get_shared_x_axes().get_siblings(a)[0]
     if ax == a:
