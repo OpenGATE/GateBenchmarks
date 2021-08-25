@@ -14,6 +14,7 @@ import gatetools.phsp as phsp
 import itk
 import sys
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -30,14 +31,36 @@ def read_images(folder, scale):
 
     return img, data, data_s
 
+
+def plot_images_profiles(ax, img, label, scale, axe_sum1=2, axe_sum2=1):
+    data = itk.GetArrayViewFromImage(img) * scale
+    y = np.sum(data, axe_sum1)
+    y = np.sum(y, axe_sum2)
+    x = np.arange(len(y)) * img.GetSpacing()[2]
+    ax.plot(x, y, label=label)
+    ax.legend()
+
+
 def relative_uncertainty(folders, scale, factor):
     img1, data1, uncert1 = read_images(folders[0], float(scale[0]))
     img2, data2, uncert2 = read_images(folders[1], float(scale[1]))
 
-    myfontsize = 22
-    myfontsize_tic = 17
-    myfontsize_title = 17
-    
+    myfontsize = 18
+    myfontsize_tic = 15
+    myfontsize_title = 15
+
+    # plot
+    fig, ax = plt.subplots(ncols=1, nrows=2, figsize=(25, 10))
+    a = ax[0]
+    plot_images_profiles(a, img1, folders[0], float(scale[0]))
+    plot_images_profiles(a, img2, folders[1], float(scale[1]))
+    a = ax[1]
+    plot_images_profiles(a, img1, folders[0], float(scale[0]), axe_sum1=0, axe_sum2=1)
+    plot_images_profiles(a, img2, folders[1], float(scale[1]), axe_sum1=0, axe_sum2=1)
+    n = f'{folders[1]}_test.png'
+    print('Save image test figure :', n)
+    plt.savefig(n)
+
     # param
     f = float(factor)  # 0.05
 
@@ -55,12 +78,12 @@ def relative_uncertainty(folders, scale, factor):
     print('Data maxQ*f = ', q * f,
           ' <-- only pixels with value larger than this value are considered (below is "noise")')
     mask = np.where(data2 < q * f, 0, mask)
-    
+
     # compute uncert
-    uncert2 = uncert2 * data2
+    uncert2_d = uncert2 * data2
 
     # compute sigma
-    sigma1 = np.sqrt(uncert1 * uncert1 + uncert2 * uncert2)
+    sigma1 = np.sqrt(uncert1 * uncert1 + uncert2_d * uncert2_d)
     sigma1 = sigma1[mask == 1]
 
     print('Nb pixels before mask: ', data1.size)
@@ -82,8 +105,7 @@ def relative_uncertainty(folders, scale, factor):
 
     u1 = uncert1[mask == 1]
     u2 = uncert2[mask == 1]
-    print('Mean uncert {}% {}%'.format(np.mean(u1) * 100,
-                                       np.mean(u2) * 100))
+    print(f'Mean uncert {np.mean(u1) * 100}% {np.mean(u2) * 100}%')
     print('Mean sigma  {}%'.format(np.mean(sigma1) / np.mean(d1)))
 
     # plot histo
@@ -97,17 +119,14 @@ def relative_uncertainty(folders, scale, factor):
     a.hist(diff1, 200, range=(q1, q2),
            density=False, facecolor='g', alpha=0.3,
            label=l1)
-    # a.legend(prop={'family':'monospace', 'size': 10})
     a.legend(loc='center left', prop={'size': myfontsize_title})
-    vals = a.get_xticks()
-    a.set_xticklabels(['{:,.1%}'.format(x) for x in vals])
     x1 = np.mean(diff1)
     a.axvline(x=x1, color='k')
     a.set_xlabel('Difference %', fontsize=fs)
     a.set_ylabel('Counts', fontsize=fs)
     a.tick_params(labelsize=myfontsize_tic)
     print('----> PHSP1 vs GAN mean diff1 = ', x1 * 100.0)
-    
+
     a = ax[1]
     x = (d1 - d2) / sigma1
     l1 = '{:} $\mu=${:.2f} $\sigma=${:.2f}'.format('PHSP1 vs GAN', np.mean(x), np.std(x))
@@ -122,7 +141,7 @@ def relative_uncertainty(folders, scale, factor):
     a.tick_params(labelsize=myfontsize_tic)
     # a.legend(prop={'family':'monospace', 'size': 10})
     a.legend(loc='center left', prop={'size': myfontsize_title})
- 
+
     img = itk.image_from_array((data1 - data2) / np.mean(d1))
     img.CopyInformation(img1)
     itk.imwrite(img, 'diff1.mhd')
@@ -135,13 +154,15 @@ def relative_uncertainty(folders, scale, factor):
     plt.savefig('a.pdf', dpi=fig.dpi)
     plt.show()
 
-    if np.abs(np.mean(x)) < 0.2 and np.fabs(np.std(x)-1) < 0.2:
+    if np.abs(np.mean(x)) < 0.2 and np.fabs(np.std(x) - 1) < 0.2:
         return True
     return False
 
 
 # -----------------------------------------------------------------------------
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
+
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('output_folders',
                 nargs=-1,
@@ -152,10 +173,11 @@ def analyse_click(output_folders, **kwargs):
     r = analyse_all_folders(output_folders)
     print("Last return: " + str(r))
 
+
 def analyse_all_folders(output_folders, **kwargs):
     # logger
     gt.logging_conf(**kwargs)
-    
+
     # take correct folder:
     outputFolders = []
     for o in output_folders:
@@ -167,7 +189,7 @@ def analyse_all_folders(output_folders, **kwargs):
 
     return r
 
+
 # --------------------------------------------------------------------------
 if __name__ == '__main__':
     analyse_click()
-

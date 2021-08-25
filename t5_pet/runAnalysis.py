@@ -174,11 +174,11 @@ def analyse_pet(output_folder, ax, i):
     bin_centers = bin_borders[:-1] + bin_widths / 2
 
     # expo fit
-    def exponenial_func(x, a, b):
+    def exponential_func(x, a, b):
         return a*np.exp(-b*x)
-    popt, pcov = scipy.optimize.curve_fit(exponenial_func, bin_centers, bin_heights)
+    popt, pcov = scipy.optimize.curve_fit(exponential_func, bin_centers, bin_heights)
     xx = np.linspace(0, end_time, int(end_time))
-    yy = exponenial_func(xx, *popt)
+    yy = exponential_func(xx, *popt)
     hl = np.log(2)/popt[1]
 
     # plot
