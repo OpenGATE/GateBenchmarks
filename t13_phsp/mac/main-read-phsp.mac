@@ -1,0 +1,91 @@
+
+#=====================================================
+/control/execute mac/verbose.mac
+#/control/execute mac/visu.mac
+
+# =====================================================
+# GEOMETRY
+# =====================================================
+
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+/control/execute mac/world.mac
+
+# FAKE Linac head
+# VIRTUAL PLANE FOR PHASE SPACE
+# It should be the same geometry than PhS generation Here we add a
+# "gantry" rotation. To do that easily, we define two box, on for the
+# rotation (according to the isocenter=world origin), then one another
+# to translation the phase-space plane to the right distance
+
+/gate/world/daughters/name                     linacGantry
+/gate/world/daughters/insert                   box
+/gate/linacGantry/setMaterial                  G4_AIR
+/gate/linacGantry/geometry/setXLength          1.0 mm
+/gate/linacGantry/geometry/setYLength          1.0 mm
+/gate/linacGantry/geometry/setZLength          1.0 mm
+#/gate/linacGantry/placement/setRotationAxis    0 1 0
+#/gate/linacGantry/placement/setRotationAngle   0 deg
+/gate/linacGantry/vis/setVisible               1
+
+/gate/linacGantry/daughters/name         linac
+/gate/linacGantry/daughters/insert       box
+/gate/linac/setMaterial                  G4_AIR
+/gate/linac/geometry/setXLength          1.0 mm
+/gate/linac/geometry/setYLength          1.0 mm
+/gate/linac/geometry/setZLength          1.0 mm
+#/gate/linac/placement/setTranslation     0 0 1000 mm
+/gate/linac/vis/setVisible               1
+
+/control/execute mac/geometry.mac
+
+
+# =====================================================
+# PHYSICS
+# =====================================================
+
+/control/execute mac/physics.mac
+
+#=====================================================
+# DETECTORS
+#=====================================================
+
+/control/execute mac/actors.mac
+/gate/actor/stat/save  output/output-read-phsp-stat.txt
+/gate/actor/phsp_wb/save output/phsp-read-waterbox.root
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+
+#=====================================================
+# BEAMS
+#=====================================================
+
+# Read from Phase Space files. Here we indicate the type of particle
+# (gamma) because this information is not stored in the PhS to gain
+# space. Moreover, we set 'useRandomSymmetry' to generate more
+# particle than the number of particle in the PhS, using a Z axis
+# symmetry.
+
+/gate/source/addSource                         beam_g phaseSpace
+/gate/source/beam_g/addPhaseSpaceFile          output/phsp-plane-gamma.root
+/gate/source/beam_g/setParticleType            gamma
+/gate/source/beam_g/attachTo                   PhS_Plane
+/gate/source/beam_g/useRandomSymmetry          true
+/gate/source/beam_g/ignoreWeight               false
+
+
+#=====================================================
+# START BEAMS
+#=====================================================
+
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed 123456
+/gate/application/noGlobalOutput
+
+#/tracking/verbose 2
+
+/gate/application/setTotalNumberOfPrimaries 27413
+/gate/application/start

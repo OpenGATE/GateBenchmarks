@@ -1,0 +1,8 @@
+
+# WORLD
+/gate/world/setMaterial            Air
+/gate/world/geometry/setXLength    3.0 m
+/gate/world/geometry/setYLength    3.0 m
+/gate/world/geometry/setZLength    3.0 m
+/gate/world/vis/setVisible 1
+

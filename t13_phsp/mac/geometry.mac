@@ -1,0 +1,23 @@
+
+# WATER BOX
+# World origin is in the center of the waterbox, not the beam e- source
+/gate/world/daughters/name              waterbox
+/gate/world/daughters/insert            box
+/gate/waterbox/setMaterial              Water
+/gate/waterbox/placement/setTranslation 0 0 -1000 mm
+/gate/waterbox/geometry/setXLength      300 mm
+/gate/waterbox/geometry/setYLength      300 mm
+/gate/waterbox/geometry/setZLength      300 mm
+/gate/waterbox/vis/setColor             blue
+
+# VIRTUAL PLANE FOR PHASE SPACE
+/gate/linac/daughters/name               PhS_Plane
+/gate/linac/daughters/insert             cylinder
+/gate/PhS_Plane/setMaterial              Vacuum
+/gate/PhS_Plane/geometry/setRmin         0 mm
+/gate/PhS_Plane/geometry/setRmax         25 cm
+/gate/PhS_Plane/geometry/setHeight       1 nm
+/gate/PhS_Plane/placement/setTranslation 0.0 0.0 -297 mm
+/gate/PhS_Plane/vis/setColor             white
+/gate/PhS_Plane/vis/setVisible           1
+
