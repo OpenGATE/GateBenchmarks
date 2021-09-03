@@ -2,6 +2,8 @@
 
 set -e -x
 
+yum install -y  libjpeg-devel
+
 source /opt/rh/devtoolset-7/enable
 #source /etc/mybashrc
 export PATH=/software/cmake-3.18.4-Linux-x86_64/bin/:/opt/rh/devtoolset-7/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
