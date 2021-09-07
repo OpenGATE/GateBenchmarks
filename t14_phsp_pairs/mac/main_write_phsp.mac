@@ -1,0 +1,76 @@
+
+/control/execute mac/verbose.mac
+#/control/execute mac/visu.mac
+
+# GEOMETRY
+/control/execute mac/world.mac
+/control/execute mac/table.mac
+/control/execute mac/phantom_NECR.mac
+/control/execute mac/phsp_cylinder.mac
+/control/execute mac/detector.mac
+
+# PHYSICS
+/control/execute mac/physics.mac
+
+# OUTPUT
+/control/execute mac/actors.mac
+/gate/actor/stat/save output/output-write-stat.txt
+/gate/actor/phsp_detector/save output/output-write-detector.root
+
+# phsp
+/gate/actor/addActor                                 PhaseSpaceActor phsp_cylinder
+/gate/actor/phsp_cylinder/attachTo                   phsp_cylinder
+/gate/actor/phsp_cylinder/save                       output/phsp-write.root
+/gate/actor/phsp_cylinder/enableCharge               false
+/gate/actor/phsp_cylinder/enableMass                 false
+/gate/actor/phsp_cylinder/enableCompact              false ## to store eventID
+/gate/actor/phsp_cylinder/enablePDGCode              true
+/gate/actor/phsp_cylinder/enableXPosition            true
+/gate/actor/phsp_cylinder/enableYPosition            true
+/gate/actor/phsp_cylinder/enableZPosition            true
+/gate/actor/phsp_cylinder/enableXDirection           true
+/gate/actor/phsp_cylinder/enableYDirection           true
+/gate/actor/phsp_cylinder/enableZDirection           true
+/gate/actor/phsp_cylinder/enableProductionProcess    true
+/gate/actor/phsp_cylinder/enableProductionVolume     true
+/gate/actor/phsp_cylinder/enableParticleName         false
+/gate/actor/phsp_cylinder/enableWeight               true
+/gate/actor/phsp_cylinder/enableTimeFromBeginOfEvent true
+/gate/actor/phsp_cylinder/useVolumeFrame             true
+
+# store Global time
+/gate/actor/phsp_cylinder/enableTime                 true
+#/gate/actor/phsp_cylinder/enableLocalTime            false
+
+/gate/actor/phsp_cylinder/addFilter                  particleFilter
+/gate/actor/phsp_cylinder/particleFilter/addParticle gamma
+/gate/actor/phsp_cylinder/enableZPosition            true
+
+# INITIALISATION
+/gate/run/initialize
+
+# SOURCE
+
+/gate/source/addSource                      source
+/gate/source/source/gps/particle            e+
+/gate/source/source/gps/energytype          Fluor18
+/gate/source/source/gps/angtype             iso
+/gate/source/source/gps/type                Volume
+/gate/source/source/gps/shape               Cylinder
+/gate/source/source/setForcedUnstableFlag   true
+/gate/source/source/gps/radius              1.6 mm
+/gate/source/source/gps/halfz               35 cm
+/gate/source/source/setForcedHalfLife       6586.0 s
+/gate/source/source/gps/centre              0.0 -4.5 0.0 cm
+/gate/source/source/setActivity             5000 Bq
+
+
+
+# START
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed 123456
+/gate/application/setTimeStart 0 s
+/gate/application/setTimeSlice 1 s
+/gate/application/setTimeStop  1 s
+/gate/application/startDAQ
+

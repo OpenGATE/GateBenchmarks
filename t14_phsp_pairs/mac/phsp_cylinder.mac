@@ -1,0 +1,12 @@
+# Patient phsp_cylinder Exterior
+
+/gate/world/daughters/name phsp_cylinder
+/gate/world/daughters/insert cylinder
+
+/gate/phsp_cylinder/geometry/setRmax 301 mm
+/gate/phsp_cylinder/geometry/setRmin 300 mm
+/gate/phsp_cylinder/geometry/setHeight 250.0 cm
+/gate/phsp_cylinder/setMaterial G4_AIR
+/gate/phsp_cylinder/vis/setColor green
+/gate/phsp_cylinder/vis/setVisible 1
+
