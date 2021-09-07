@@ -1,0 +1,32 @@
+
+
+# Names will be set in the main
+
+# stat
+/gate/actor/addActor               SimulationStatisticActor stat
+
+
+# phsp
+/gate/actor/addActor                           PhaseSpaceActor phsp_wb
+/gate/actor/phsp_wb/attachTo                   waterbox
+/gate/actor/phsp_wb/enableCharge               false
+/gate/actor/phsp_wb/enableMass                 false
+/gate/actor/phsp_wb/enableCompact              false ## for eventID
+/gate/actor/phsp_wb/enablePDGCode              false
+/gate/actor/phsp_wb/enableXPosition            true
+/gate/actor/phsp_wb/enableYPosition            true
+/gate/actor/phsp_wb/enableZPosition            true
+/gate/actor/phsp_wb/enableXDirection           true
+/gate/actor/phsp_wb/enableYDirection           true
+/gate/actor/phsp_wb/enableZDirection           true
+/gate/actor/phsp_wb/enableProductionProcess    false
+/gate/actor/phsp_wb/enableProductionVolume     false
+/gate/actor/phsp_wb/enableParticleName         false
+/gate/actor/phsp_wb/enableWeight               true
+/gate/actor/phsp_wb/enableTime                 true
+/gate/actor/phsp_wb/enableLocalTime            false
+/gate/actor/phsp_wb/enableTimeFromBeginOfEvent true
+/gate/actor/phsp_wb/useVolumeFrame             true
+/gate/actor/phsp_wb/addFilter                  particleFilter
+/gate/actor/phsp_wb/particleFilter/addParticle gamma
+/gate/actor/phsp_wb/enableZPosition            true

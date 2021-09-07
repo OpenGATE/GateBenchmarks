@@ -9,6 +9,8 @@
 */output/*mhd
 */output/*txt
 
+/gmon.out
+
 .idea
 
 /*.zip
@@ -17,3 +19,7 @@
 /*mhd
 /*raw
 
+/t8_LETActor/output-carbon.pdf
+/t8_LETActor/output-proton.pdf
+
+/*/output.pdf

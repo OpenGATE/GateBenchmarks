@@ -1,0 +1,114 @@
+
+#=====================================================
+/control/execute mac/verbose.mac
+#/control/execute mac/visu.mac
+
+# =====================================================
+# GEOMETRY
+# =====================================================
+
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+/control/execute mac/world.mac
+
+# LINAC HEAD
+# World origin is in the center of the beam e- source (not the real
+# isocenter of the gantry room)
+/gate/geometry/setMaterialDatabase data/LinacMaterials.db
+/control/execute mac/linac_head.mac
+
+/control/execute mac/geometry.mac
+
+# =====================================================
+# PHYSICS
+# =====================================================
+
+/control/execute mac/physics.mac
+
+#=====================================================
+# DETECTORS
+#=====================================================
+
+# ----------------------------------------------------
+# Kill actor to stop particles when they go inside a region
+
+/gate/actor/addActor          KillActor killer0
+/gate/actor/killer0/attachTo  kill_box_top
+/gate/actor/addActor          KillActor killer1
+/gate/actor/killer1/attachTo  kill_box_bottom
+/gate/actor/addActor          KillActor killer2
+/gate/actor/killer2/attachTo  kill_box_bottom2
+
+/control/execute mac/actors.mac
+/gate/actor/stat/save  output/output-write-phsp-stat.txt
+/gate/actor/phsp_wb/save output/phsp-write-waterbox.root
+
+# Phase space storage
+/gate/actor/addActor                          PhaseSpaceActor phsp_g
+/gate/actor/phsp_g/attachTo                   PhS_Plane
+/gate/actor/phsp_g/save 	                  output/phsp-plane-gamma.root
+/gate/actor/phsp_g/enableCharge               false
+/gate/actor/phsp_g/enableMass                 false
+/gate/actor/phsp_g/enableCompact              false ## for eventID
+/gate/actor/phsp_g/enablePDGCode              false
+/gate/actor/phsp_g/enableXPosition            true
+/gate/actor/phsp_g/enableYPosition            true
+/gate/actor/phsp_g/enableZPosition            true
+/gate/actor/phsp_g/enableXDirection           true
+/gate/actor/phsp_g/enableYDirection           true
+/gate/actor/phsp_g/enableZDirection           true
+/gate/actor/phsp_g/enableProductionProcess    false
+/gate/actor/phsp_g/enableProductionVolume     false
+/gate/actor/phsp_g/enableParticleName         false
+/gate/actor/phsp_g/enableWeight               true
+/gate/actor/phsp_g/enableTime                 true
+/gate/actor/phsp_g/enableLocalTime            false
+/gate/actor/phsp_g/enableTimeFromBeginOfEvent true
+/gate/actor/phsp_g/useVolumeFrame             true
+/gate/actor/phsp_g/addFilter                  particleFilter
+/gate/actor/phsp_g/particleFilter/addParticle gamma
+/gate/actor/phsp_g/enableZPosition            true
+
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+
+# Bremsstrahlung splitting : generate 100 photon (if below 100 MeV) with weight 1/100
+/process/em/setSecBiasing eBrem target 100 100 MeV
+
+#=====================================================
+# BEAMS
+#=====================================================
+
+/gate/source/addSource                mybeam gps
+/gate/source/mybeam/gps/particle      e-
+/gate/source/mybeam/gps/pos/type      Beam
+/gate/source/mybeam/gps/pos/rot1      0 1 0
+/gate/source/mybeam/gps/pos/rot2      1 0 0
+/gate/source/mybeam/gps/pos/shape     Circle
+/gate/source/mybeam/gps/pos/centre    0. 0. 0.6 mm
+/gate/source/mybeam/gps/pos/sigma_x   1.274 mm
+/gate/source/mybeam/gps/pos/sigma_y   1.274 mm
+/gate/source/mybeam/gps/ang/rot1      1 0 0
+/gate/source/mybeam/gps/ang/rot2      0 1 0
+/gate/source/mybeam/gps/ang/type      beam1d
+/gate/source/mybeam/gps/ang/sigma_r   0 deg
+/gate/source/mybeam/gps/ene/type      Gauss
+/gate/source/mybeam/gps/ene/mono      6.7 MeV
+/gate/source/mybeam/gps/ene/sigma     0.077 MeV
+/gate/source/mybeam/gps/direction     0 0 -1
+
+#=====================================================
+# START BEAMS
+#=====================================================
+
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed 123456
+/gate/application/noGlobalOutput
+
+#/tracking/verbose 2
+
+/gate/application/setTotalNumberOfPrimaries 5000
+/gate/application/start
