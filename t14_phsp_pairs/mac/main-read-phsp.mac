@@ -9,12 +9,12 @@
 
 # offset
 /gate/phsp_cylinder/placement/setTranslation 15 4 15 cm
-#/gate/phsp_cylinder/placement/setRotationAxis 0 1 0
-#/gate/phsp_cylinder/placement/setRotationAngle 20 deg
+/gate/phsp_cylinder/placement/setRotationAxis 0 1 0
+/gate/phsp_cylinder/placement/setRotationAngle 20 deg
 
 /gate/detector/placement/setTranslation 15 35 15 cm   # Y -> 31 + 4
-#/gate/detector/placement/setRotationAxis 0 1 0
-#/gate/detector/placement/setRotationAngle 20 deg
+/gate/detector/placement/setRotationAxis 0 1 0
+/gate/detector/placement/setRotationAngle 20 deg
 
 # PHYSICS
 /control/execute mac/physics.mac
@@ -34,7 +34,7 @@
 /gate/source/beam_pairs/attachTo               phsp_cylinder
 /gate/source/beam_pairs/useRandomSymmetry      false
 /gate/source/beam_pairs/ignoreWeight           false
-/gate/source/beam_pairs/setActivity            4605 Bq
+/gate/source/beam_pairs/setActivity            9240 Bq
 
 
 # START

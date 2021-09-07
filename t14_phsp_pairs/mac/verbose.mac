@@ -21,7 +21,7 @@
 /gate/verbose Error       0
 /gate/verbose Warning     0
 /gate/verbose Output      0
-/gate/verbose Beam        10
+/gate/verbose Beam        0
 /gate/verbose Volume      2
 /gate/verbose Image       0
 /gate/verbose Geometry    1

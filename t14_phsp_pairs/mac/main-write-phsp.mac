@@ -62,7 +62,7 @@
 /gate/source/source/gps/halfz               35 cm
 /gate/source/source/setForcedHalfLife       6586.0 s
 /gate/source/source/gps/centre              0.0 -4.5 0.0 cm
-/gate/source/source/setActivity             5000 Bq
+/gate/source/source/setActivity             10000 Bq
 
 
 
