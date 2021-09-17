@@ -1,0 +1,61 @@
+#  *********************************************************************
+#  * DISCLAIMER                                                        *
+#  *                                                                   *
+#  * Neither the authors of this software system, nor their employing  *
+#  * institutes, nor the agencies providing financial support for this *
+#  * work make any representation or warranty, express or implied,     *
+#  * regarding this software system or assume any liability for its    *
+#  * use.                                                              *
+#  *                                                                   *
+#  * This code implementation is the intellectual property of the      *
+#  * OpenGATE collaboration.                                           *
+#  * By copying, distributing or modifying the Program (or any work    *
+#  * based on the Program) you indicate your acceptance of this        *
+#  * statement, and all its terms.                                     *
+#  *********************************************************************
+
+#=====================================================
+#     W O R L D
+#=====================================================
+
+
+/gate/world/geometry/setXLength       20. cm
+/gate/world/geometry/setYLength       20. cm
+/gate/world/geometry/setZLength       20. cm
+/gate/world/setMaterial               Air
+
+#===============================================================
+# Optical System
+#===============================================================
+
+/gate/world/daughters/name OpticalSystem
+/gate/world/daughters/insert                    box
+/gate/OpticalSystem/geometry/setXLength         10.0 cm
+/gate/OpticalSystem/geometry/setYLength         10.0 cm
+/gate/OpticalSystem/geometry/setZLength         15.0 cm
+/gate/OpticalSystem/placement/setTranslation    0 0 0.0 cm
+/gate/OpticalSystem/setMaterial                 Air
+
+/gate/OpticalSystem/daughters/name              crystal
+/gate/OpticalSystem/daughters/insert            box
+/gate/crystal/geometry/setXLength               3. mm
+/gate/crystal/geometry/setYLength               3. mm
+/gate/crystal/geometry/setZLength               20. mm
+/gate/crystal/placement/setTranslation          30 0 0 mm
+/gate/crystal/setMaterial                       BGO
+/gate/crystal/vis/setColor                      blue
+/gate/crystal/vis/forceWireframe #forceSolid
+
+
+/gate/crystal/attachCrystalSD
+/gate/systems/OpticalSystem/crystal/attach      crystal
+
+
+
+
+
+
+
+
+
+
