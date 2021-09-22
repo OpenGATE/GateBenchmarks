@@ -13,4 +13,5 @@ gt_phsp_plot output/phsp-*-waterbox.root
 
 WARNING about Time in the PhaseSpaceActor, 'enableTime' stores GlobalTime, and 'enableLocalTime' stores LocalTime. If both are enabled, only LocalTime is stored. This behavior should probably be changed in the future. 
 
+WARNING, by default PhaseSpaceSource does not consider Time. Use ignoreTime=false if needed. 
 

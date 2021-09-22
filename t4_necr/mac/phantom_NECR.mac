@@ -7,7 +7,7 @@
 /gate/phantom/geometry/setRmax           103 mm
 /gate/phantom/geometry/setRmin           0.0 cm
 /gate/phantom/geometry/setHeight         71 cm
-/gate/phantom/setMaterial                Air
+/gate/phantom/setMaterial                G4_AIR
 /gate/phantom/vis/forceWireframe
 /gate/phantom/vis/setColor               gray
 /gate/phantom/vis/setVisible             1
@@ -20,7 +20,7 @@
 /gate/cylinderScat/geometry/setRmax         102 mm
 /gate/cylinderScat/geometry/setRmin         0.0 cm
 /gate/cylinderScat/geometry/setHeight       70 cm
-/gate/cylinderScat/setMaterial              Polyethylene
+/gate/cylinderScat/setMaterial              G4_POLYETHYLENE
 /gate/cylinderScat/vis/forceWireframe
 /gate/cylinderScat/vis/setColor             gray
 /gate/cylinderScat/vis/setVisible           1
@@ -33,7 +33,7 @@
 /gate/linearSourceIn/geometry/setRmin           0.0 mm
 /gate/linearSourceIn/geometry/setRmax           1.6 mm
 /gate/linearSourceIn/geometry/setHeight         70 cm
-/gate/linearSourceIn/setMaterial                Water
+/gate/linearSourceIn/setMaterial                G4_WATER
 /gate/linearSourceIn/vis/forceWireframe
 /gate/linearSourceIn/vis/setColor               red
 /gate/linearSourceIn/vis/setVisible             1
@@ -45,7 +45,7 @@
 /gate/linearSourceOut/geometry/setRmin          1.6 mm
 /gate/linearSourceOut/geometry/setRmax          2.5 mm
 /gate/linearSourceOut/geometry/setHeight        70 cm
-/gate/linearSourceOut/setMaterial               Polyethylene
+/gate/linearSourceOut/setMaterial               G4_POLYETHYLENE
 /gate/linearSourceOut/vis/forceWireframe
 /gate/linearSourceOut/vis/setColor              red
 /gate/linearSourceOut/vis/setVisible            0
