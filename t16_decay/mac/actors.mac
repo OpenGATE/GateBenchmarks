@@ -1,0 +1,27 @@
+
+
+/gate/actor/addActor               SimulationStatisticActor stat
+/gate/actor/stat/save              output/stat.txt
+/gate/actor/stat/setTrackTypesFlag true
+
+/gate/actor/addActor                          PhaseSpaceActor phsp_e
+/gate/actor/phsp_e/attachTo                   phsp
+/gate/actor/phsp_e/save 	                  output/phsp_e+.root
+/gate/actor/phsp_e/enableParticleName         false
+/gate/actor/phsp_e/enableProductionVolume     false
+/gate/actor/phsp_e/enableProductionProcess    false
+/gate/actor/phsp_e/storeSecondaries           true
+/gate/actor/phsp_e/enableCompact              true
+/gate/actor/phsp_e/addFilter                  particleFilter
+/gate/actor/phsp_e/particleFilter/addParticle e+
+
+/gate/actor/addActor                          PhaseSpaceActor phsp_g
+/gate/actor/phsp_g/attachTo                   phsp
+/gate/actor/phsp_g/save 	                  output/phsp_g.root
+/gate/actor/phsp_g/enableParticleName         false
+/gate/actor/phsp_g/enableProductionVolume     false
+/gate/actor/phsp_g/enableProductionProcess    false
+/gate/actor/phsp_g/storeSecondaries           true
+/gate/actor/phsp_g/enableCompact              true
+/gate/actor/phsp_g/addFilter                  particleFilter
+/gate/actor/phsp_g/particleFilter/addParticle gamma

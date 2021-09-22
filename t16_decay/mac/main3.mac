@@ -1,0 +1,30 @@
+
+/control/execute mac/verbose.mac
+#/control/execute mac/visu.mac
+/control/execute mac/volumes.mac
+
+#=====================================================
+# PHYSICS
+#=====================================================
+
+# if decay before opt4 -> OK (expected)
+/gate/physics/addProcess RadioactiveDecay
+
+/gate/physics/addPhysicsList emstandard_opt4
+
+# if decay after opt4 -> issue, too much e- ?
+#/gate/physics/addProcess RadioactiveDecay
+
+/control/execute mac/cuts.mac
+
+#=====================================================
+# actors, source
+#=====================================================
+
+/control/execute            mac/actors.mac
+/gate/actor/stat/save       output/stat3.txt
+/gate/actor/phsp_e/save     output/phsp3_e+.root
+/gate/actor/phsp_g/save     output/phsp3_g.root
+
+/control/execute mac/source2.mac
+/control/execute mac/main_end.mac

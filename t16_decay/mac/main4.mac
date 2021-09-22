@@ -1,0 +1,30 @@
+
+/control/execute mac/verbose.mac
+#/control/execute mac/visu.mac
+/control/execute mac/volumes.mac
+
+#=====================================================
+# PHYSICS
+#=====================================================
+
+# no effect (expected)
+#/gate/physics/addProcess RadioactiveDecay
+
+/gate/physics/addPhysicsList QGSP_BERT_EMZ
+
+# no effect (expected)
+#/gate/physics/addProcess RadioactiveDecay
+
+/control/execute mac/cuts.mac
+
+#=====================================================
+# actors, source
+#=====================================================
+
+/control/execute            mac/actors.mac
+/gate/actor/stat/save       output/stat4.txt
+/gate/actor/phsp_e/save     output/phsp4_e+.root
+/gate/actor/phsp_g/save     output/phsp4_g.root
+
+/control/execute mac/source2.mac
+/control/execute mac/main_end.mac
