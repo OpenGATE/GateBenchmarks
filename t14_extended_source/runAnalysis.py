@@ -1,3 +1,27 @@
+#!/usr/bin/env python3
+import gatetools as gt
+import os
+import click
+import matplotlib.pyplot as plt
+from enum import IntEnum
+import uproot
+import numpy as np
+
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+@click.command(context_settings=CONTEXT_SETTINGS)
+@click.argument('output_folders',
+                nargs=-1,
+                required=True,
+                type=click.Path(exists=True, file_okay=True, dir_okay=True))
+@gt.add_options(gt.common_options)
+def analyse_click(output_folders, **kwargs):
+    r = analyse_one_folder(output_folders[0])
+    print(f'Last test return is: {r}')
+
+def analyse_all_folders(output_folders):
+  r = analyse_one_folder(output_folders[0])
+  print(f'Last test return is: {r}')
+
 class SimulatedSource(IntEnum):
   UNKNOWN = 0
   PPS = 1
@@ -18,7 +42,7 @@ def check_tree(tree, requested_st, requested_dt, check_prompt_gammas):
   return True, n_annihilation, n_prompt
 
 def get_edep_annihilation_gammas(tree, array_size):
-  edep_array = np.empty(array_size, dtype=float32)
+  edep_array = np.empty(array_size, dtype=float)
   eindex = 0
   for index, gamma_type in enumerate(tree["gammaType"]):
     if gamma_type == 2:
@@ -27,8 +51,8 @@ def get_edep_annihilation_gammas(tree, array_size):
   return edep_array
 
 def get_edep_both_gammas_types(tree, annihilation_array_size, prompt_array_size):
-  edep_annihilation_array = np.empty(annihilation_array_size, dtype=float32)
-  edep_prompt_array = np.empty(prompt_array_size, dtype=float32)
+  edep_annihilation_array = np.empty(annihilation_array_size, dtype=float)
+  edep_prompt_array = np.empty(prompt_array_size, dtype=float)
   aindex = 0
   pindex = 0
   for index, gamma_type in enumerate(tree["gammaType"]):
@@ -48,7 +72,7 @@ def analyse_pps(tree, edep_plots):
   return is_correct
 
 def analyse_ppsprompt(tree, edep_plots):
-  is_correct = n_annihilation, n_prompt = check_tree(tree, 2, 2, True)
+  is_correct, n_annihilation, n_prompt = check_tree(tree, 2, 2, True)
   if is_correct:
     edep_annihilation, edep_prompt = get_edep_both_gammas_types(tree, n_annihilation, n_prompt)
     edep_plots["dE_pPsPrompt_annihilation"] = edep_annihilation
@@ -62,7 +86,7 @@ def analyse_ops(tree, edep_plots):
   return is_correct
 
 def analyse_opsprompt(tree, edep_plots):
-  is_correct = n_annihilation, n_prompt = check_tree(tree, 3, 2, True)
+  is_correct, n_annihilation, n_prompt = check_tree(tree, 3, 2, True)
   if is_correct:
     edep_annihilation, edep_prompt = get_edep_both_gammas_types(tree, n_annihilation, n_prompt)
     edep_plots["dE_oPsPrompt_annihilation"] = edep_annihilation
@@ -94,8 +118,8 @@ def analyse_one_folder(folder):
   if not all(cr for cr in check_results):
     return False
 
-  bins_annihilation = [round(10.0*i,0) for i in range(0,400)]
-  bins_prompt = [round(10.0*i,0) for i in range(0,1000)]
+  bins_annihilation = [round(0.001*i,2) for i in range(0,400)]
+  bins_prompt = [round(0.001*i,2) for i in range(0,1000)]
 
   _, ax = plt.subplots(ncols=3, nrows=2, figsize=(15, 10))
   ax[0,0].hist(edep_plots["dE_pPs_annihilation"], bins_annihilation)
