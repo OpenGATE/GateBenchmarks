@@ -121,14 +121,23 @@ def analyse_one_folder(folder):
   bins_annihilation = [round(0.001*i,2) for i in range(0,400)]
   bins_prompt = [round(0.001*i,2) for i in range(0,1000)]
 
-  _, ax = plt.subplots(ncols=3, nrows=2, figsize=(15, 10))
-  ax[0,0].hist(edep_plots["dE_pPs_annihilation"], bins_annihilation)
-  ax[0,1].hist(edep_plots["dE_pPsPrompt_annihilation"], bins_annihilation)
-  ax[0,2].hist(edep_plots["dE_pPsPrompt_prompt"], bins_prompt)
+  _, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 10))
+  axs[0,0].hist(edep_plots["dE_pPs_annihilation"], bins_annihilation)
+  axs[0,0].set_title("pPs")
+  axs[0,1].hist(edep_plots["dE_pPsPrompt_annihilation"], bins_annihilation)
+  axs[0,1].set_title("pPsPrompt - annihilation gamma")
+  axs[0,2].hist(edep_plots["dE_pPsPrompt_prompt"], bins_prompt)
+  axs[0,2].set_title("pPsPrompt - prompt gamma")
 
-  ax[1,0].hist(edep_plots["dE_oPs_annihilation"], bins_annihilation)
-  ax[1,1].hist(edep_plots["dE_oPsPrompt_annihilation"], bins_annihilation)
-  ax[1,2].hist(edep_plots["dE_oPsPrompt_prompt"], bins_prompt)
+  axs[1,0].hist(edep_plots["dE_oPs_annihilation"], bins_annihilation)
+  axs[1,0].set_title("oPs")
+  axs[1,1].hist(edep_plots["dE_oPsPrompt_annihilation"], bins_annihilation)
+  axs[1,1].set_title("oPsPrompt - annihilation gamma")
+  axs[1,2].hist(edep_plots["dE_oPsPrompt_prompt"], bins_prompt)
+  axs[1,2].set_title("oPsPrompt - prompt gamma")
+
+  for ax in axs.flat:
+    ax.set(xlabel=r'$\Delta$E [MeV]', ylabel='Counts')
 
   plt.savefig('output.pdf')
   plt.show()
