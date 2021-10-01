@@ -7,6 +7,7 @@
 # -----------------------------------------------------------------------------
 
 import gatetools as gt
+import gatetools.phsp as phsp
 import click
 import os
 import numpy as np
@@ -47,9 +48,9 @@ def analyse_all_folders(output_folders):
     return r
 
 
-def compare_branch(t1, t2, key, tol):
-    b1 = t1[key]
-    b2 = t2[key]
+def compare_branch(b1, b2, key, tol):
+    # b1 = t1[key]
+    # b2 = t2[key]
     m1 = np.mean(b1)
     m2 = np.mean(b2)
     diff_m = (m1 - m2) / m1 * 100
@@ -63,26 +64,54 @@ def compare_branch(t1, t2, key, tol):
 
 
 def analyse_one_folder(folder):
+    print('Compare detected counts from real source or phsp source')
     # read first phsp
-    tree1 = uproot.open(f'{folder}/output-write-detector.root')['PhaseSpace']
+    tree1 = uproot.open(f'{folder}/output_write_detector.root')['PhaseSpace']
     tree1 = tree1.arrays(library="numpy")
     n1 = len(tree1['X'])
     print(f'First (write) phsp {n1} {tree1.keys()}')
 
     # read second phsp
-    tree2 = uproot.open(f'{folder}/output-read-detector.root')['PhaseSpace']
+    tree2 = uproot.open(f'{folder}/output_read_detector.root')['PhaseSpace']
     tree2 = tree2.arrays(library="numpy")
     n2 = len(tree2['X'])
     diffn = (n1 - n2) / n1 * 100
     tol = 10
     r = diffn < tol
-    print(f'Second (read) phsp {n2} {tree2.keys()}: {diffn:.1f}% : {r}')
+    print(f'Second (read) phsp {n2} {tree2.keys()}')
+    print(f'Differences: {diffn:.1f}% (tol = {tol}%): {r}')
 
     # compare some branches
     keys = ['Ekine', 'X', 'Y', 'Z', 'dX', 'dY', 'dZ', 'Weight', 'Time']
     tols = [5, 15, 15, 15, 30, 30, 30, 2, 2]
     for k, t in zip(keys, tols):
-        r = compare_branch(tree1, tree2, k, t) & r
+        r = compare_branch(tree1[k], tree2[k], k, t) & r
+
+    # compare gaga conversion
+    print()
+    print('Compare conversion pairs->tlor->pairs')
+    f = f'{folder}/phsp_write_pairs.npy'
+    tree1, read_keys1, m = phsp.load(f)
+    n1 = len(tree1)
+    print(f'First (write) pairs phsp {n1} {read_keys1}')
+
+    f = f'{folder}/phsp_write_pairs2.npy'
+    tree2, read_keys2, m = phsp.load(f)
+    n2 = len(tree2)
+    print(f'First (write) pairs phsp {n2} {read_keys2}')
+    diffn = (n1 - n2) / n1 * 100
+    tol = 1
+    r = diffn < tol
+    print(f'Differences: {diffn:.5f}% (tol = {tol}%): {r}')
+
+    tols = [1] * len(read_keys1)
+    for k, t in zip(read_keys1, tols):
+        k1 = read_keys1.index(k)
+        if k in read_keys2:
+            k2 = read_keys2.index(k)
+            r = compare_branch(tree1[:, k1], tree2[:, k2], k, t) & r
+
+    print()
     return r
 
 

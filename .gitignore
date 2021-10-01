@@ -4,13 +4,7 @@
 *~
 */__pycache__
 
-*/output/*raw
-*/output/*root
-*/output/*mhd
-*/output/*txt
-
-/gmon.out
-
+gmon.out
 .idea
 
 /*.zip
@@ -18,8 +12,38 @@
 /dpk_benchmark.tar.gz
 /*mhd
 /*raw
+/*/output.pdf
+/save/
+/temp
+
+t*_*/log_t*_*
+t*_*/output/*raw
+t*_*/output/*root
+t*_*/output/*mhd
+t*_*/output/*txt
+t*_*/output/mac
+t*_*/output/data
+t*_*/output/run.log
+t*_*/output/output.local*
+
+/t4_necr/temp
+
+/t6_dpk/save
+/t6_dpk/output/10000_1MeV_opt4_1um_nostepmax_test.hits.npy.gz
 
 /t8_LETActor/output-carbon.pdf
 /t8_LETActor/output-proton.pdf
 
-/*/output.pdf
+/t9_gaga_phsp/output*/*
+/t9_gaga_phsp/data/*root
+/t9_gaga_phsp/results
+/t9_gaga_phsp/pth_old
+/t9_gaga_phsp/output*test.png
+/t9_gaga_phsp/temp
+/t9_gaga_phsp/train_data
+/t9_gaga_phsp/pth
+
+
+
+
+

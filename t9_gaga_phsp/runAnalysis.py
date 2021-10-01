@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
-from matplotlib import collections as mc
-import scipy.stats as ss
-import scipy
-import numpy as np
+import logging
 import os
-import re
 import click
 import gatetools as gt
-import gatetools.phsp as phsp
 import itk
-import sys
-import logging
+import matplotlib.pyplot as plt
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -144,17 +138,22 @@ def relative_uncertainty(folders, scale, factor):
 
     img = itk.image_from_array((data1 - data2) / np.mean(d1))
     img.CopyInformation(img1)
-    itk.imwrite(img, 'diff1.mhd')
+    itk.imwrite(img, 'temp/diff1.mhd')
 
     img = itk.image_from_array(mask)
     img.CopyInformation(img1)
-    itk.imwrite(img, 'mask.mhd')
+    itk.imwrite(img, 'temp/mask.mhd')
 
     plt.tight_layout()
-    plt.savefig('a.pdf', dpi=fig.dpi)
+    plt.savefig('temp/a.pdf', dpi=fig.dpi)
     plt.show()
 
-    if np.abs(np.mean(x)) < 0.2 and np.fabs(np.std(x) - 1) < 0.2:
+    tol = 0.2
+    dm = np.abs(np.mean(x))
+    ds = np.fabs(np.std(x) - 1)
+    print(f'Compare mean {dm:.3f} and tolerance {tol}')
+    print(f'Compare std-1 {ds:.3f} and tolerance {tol}')
+    if dm < tol and ds < tol:
         return True
     return False
 

@@ -1,0 +1,110 @@
+{
+
+    "#": "---------------------------------------------------------------------",
+    "#": " ARCHITECTURE ",
+    "#": "---------------------------------------------------------------------",
+
+    "#": "GAN model v1, v2, ... Default is v3",
+    "model": "v3",
+
+    "#": "loss : non_saturating_bce wasserstein hinge ",
+    "loss": "wasserstein",
+
+    "#": "number of layers for D and G",
+    "d_layers": 3,
+    "g_layers": 3,
+
+    "#": "Number of neurons by layer for D and G",
+    "d_dim": 400,
+    "g_dim": 400,
+
+    "#": "relu or leaky_relu (required)",
+    "activation": "leaky_relu",
+
+    "#": "Number of dimension of the latent variable",
+    "z_dim": 6,
+
+    "#" : "Random distribution for z: uniform normal",
+    "z_rand_type": "normal",
+
+    "#": "penalty type: GP_L1_LS GP_L2_LS GP_Linf_LS",
+    "#": "              GP_L1_Hinge GP_L2_Hinge GP_Linf_Hinge",
+    "#": "              GP_0GP GP_SquareHinge no_penalty",
+    "penalty": "GP_SquareHinge",
+
+    "#": "penalty weight: float value",
+    "penalty_weight": 10,
+
+    "#": "Clamp (only used if penalty_type is 'clamp')",
+    "#clamp_lower": -0.01,
+    "#clamp_upper": 0.01,
+
+    "#": "starting from a previous pth: filename",
+    "#start_pth": "",
+
+    "#": "---------------------------------------------------------------------",
+    "#": " OPTIMISER ",
+    "#": "---------------------------------------------------------------------",
+
+    "#": "optimiser: adam RMSprop SGD",
+    "optimiser": "RMSprop",
+
+    "#": "optimiser: shuffle dataset ? true/false. If True: a bit slower, ~20%",
+    "shuffle": false,
+
+    "#": "(for adam only) adam optimiser: regularisation L2 ; zero if no regul",
+    "#d_weight_decay": 0.5,
+    "#g_weight_decay": 0.5,
+
+    "#": "(for adam only) adam optimiser: beta",
+    "#beta_1": "0.9",
+    "#beta_2": "0.999",
+
+    "#": "(for RMSprop only)",
+    "#RMSProp_d_centered": true,
+    "#RMSProp_g_centered": true,
+
+    "#": "optimiser learning rates (for all optimisers)",
+    "d_learning_rate": 1e-5,
+    "g_learning_rate": 1e-5,
+
+    "#": "Real and Fake instance Gaussian noise sigma. <=0 for none.",
+    "r_instance_noise_sigma": -1,
+    "f_instance_noise_sigma": -1,
+
+    "#": "optimiser: decrease learning rate. 1000-0.2 means, that every 1000 step the lr is x 0.2",
+    "#": "comment the following line to disable scheduler",
+    "#schedule_learning_rate_step": 10000,
+    "#schedule_learning_rate_gamma": 0.8,
+
+    "#": "optimiser: number of D and G update by epoch",
+    "d_nb_update": 2,
+    "g_nb_update": 1,
+
+    "#": "optimiser: max nb of epoch (iteration)",
+    "epoch": 20000,
+
+    "#": "optimiser: nb of samples by batch",
+    "batch_size": 10000,
+
+    "#": "Smooth fake/real labels instead of zero/one",
+    "#label_smoothing": 0.2,
+
+    "#": "---------------------------------------------------------------------",
+    "#": " DATA ",
+    "#": "---------------------------------------------------------------------",
+    "keys": "Ekine X Y dX dY dZ",
+
+    "#": "---------------------------------------------------------------------",
+    "#": " GENERAL ",
+    "#": "---------------------------------------------------------------------",
+
+    "#": "gpu_mode: true false auto",
+    "gpu_mode": "auto",
+
+    "#": "print info during training",
+    "epoch_dump": 500,
+
+    "#": "store mode every n epoch",
+    "epoch_store_model_every": 10000
+}
