@@ -1,0 +1,51 @@
+
+/control/execute mac/verbose.mac
+#/control/execute mac/visu.mac
+
+# GEOMETRY
+/control/execute mac/world.mac
+/control/execute mac/phsp_cylinder.mac
+/control/execute mac/detector.mac
+
+# offset
+/gate/phsp_cylinder/placement/setTranslation 15 4 15 cm
+/gate/phsp_cylinder/placement/setRotationAxis 0 1 0
+/gate/phsp_cylinder/placement/setRotationAngle 20 deg
+
+/gate/detector/placement/setTranslation 15 35 15 cm   # Y -> 31 + 4
+/gate/detector/placement/setRotationAxis 0 1 0
+/gate/detector/placement/setRotationAngle 20 deg
+
+# PHYSICS
+/control/execute mac/physics.mac
+
+# OUTPUT
+/control/execute mac/actors.mac
+/gate/actor/stat/save output/output_read_stat.txt
+/gate/actor/phsp_detector/save output/output_read_detector.root
+
+# INITIALISATION
+/gate/run/initialize
+
+# SOURCE
+/gate/source/addSource                         beam_pairs phaseSpace
+/gate/source/beam_pairs/addPhaseSpaceFile      output/phsp_write_pairs.npy
+/gate/source/beam_pairs/setParticleType        gamma
+/gate/source/beam_pairs/attachTo               phsp_cylinder
+/gate/source/beam_pairs/useRandomSymmetry      false
+/gate/source/beam_pairs/ignoreWeight           false
+/gate/source/beam_pairs/setActivity            3 MBq
+/gate/source/beam_pairs/setForcedUnstableFlag   true
+/gate/source/beam_pairs/setForcedHalfLife      0.01 s
+/gate/source/beam_pairs/ignoreTime             false
+/gate/source/beam_pairs/useRelativeTime        true
+
+
+# START
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed 123456
+/gate/application/setTimeStart 0 s
+/gate/application/setTimeSlice 0.02 s
+/gate/application/setTimeStop  0.02 s
+/gate/application/startDAQ
+

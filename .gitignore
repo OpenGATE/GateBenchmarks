@@ -43,6 +43,10 @@ t*_*/output/output.local*
 /t9_gaga_phsp/train_data
 /t9_gaga_phsp/pth
 
+/t14_phsp_pairs/*png
+/t14_phsp_pairs/data/*pt
+/t14_phsp_pairs/data/*json
+
 
 
 
