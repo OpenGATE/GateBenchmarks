@@ -38,8 +38,8 @@
 
 /control/alias SOURCE_PHSP data/ELEKTA_PRECISE_6mv_part1.root
 
-/control/alias SOURCE_PHSP_PT   data/pth/001.pt
-/control/alias SOURCE_PHSP_JSON data/pth/001.json
+/control/alias SOURCE_PHSP_PT   data/pth/current.pt
+/control/alias SOURCE_PHSP_JSON data/pth/current.json
 
 /control/alias ANALOG analog
 /control/alias GAGA gaga

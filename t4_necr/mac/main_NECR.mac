@@ -1,5 +1,6 @@
 
 /control/execute mac/verbose.mac
+#/control/execute mac/visu.mac
 
 # GEOMETRY
 /gate/geometry/setMaterialDatabase data/GateMaterials_pet.db
@@ -30,8 +31,8 @@
 /gate/random/setEngineName MersenneTwister
 /gate/random/setEngineSeed auto
 /gate/application/setTimeStart 0 s
-/gate/application/setTimeSlice 0.0015 s
-/gate/application/setTimeStop  0.0015 s
+/gate/application/setTimeSlice 0.00015 s
+/gate/application/setTimeStop  0.00015 s
 /gate/application/startDAQ
 
 # computation time estimation (2021)

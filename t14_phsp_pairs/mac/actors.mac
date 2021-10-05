@@ -1,0 +1,31 @@
+
+# Names will be set in the main
+
+# stat
+/gate/actor/addActor               SimulationStatisticActor stat
+
+
+# phsp
+/gate/actor/addActor                                 PhaseSpaceActor phsp_detector
+/gate/actor/phsp_detector/attachTo                   detector
+/gate/actor/phsp_detector/enableCharge               false
+/gate/actor/phsp_detector/enableMass                 false
+/gate/actor/phsp_detector/enableCompact              false ## for eventID
+/gate/actor/phsp_detector/enablePDGCode              false
+/gate/actor/phsp_detector/enableXPosition            true
+/gate/actor/phsp_detector/enableYPosition            true
+/gate/actor/phsp_detector/enableZPosition            true
+/gate/actor/phsp_detector/enableXDirection           true
+/gate/actor/phsp_detector/enableYDirection           true
+/gate/actor/phsp_detector/enableZDirection           true
+/gate/actor/phsp_detector/enableProductionProcess    false
+/gate/actor/phsp_detector/enableProductionVolume     false
+/gate/actor/phsp_detector/enableParticleName         false
+/gate/actor/phsp_detector/enableWeight               true
+/gate/actor/phsp_detector/enableTime                 true
+/gate/actor/phsp_detector/enableLocalTime            false
+/gate/actor/phsp_detector/enableTimeFromBeginOfEvent true
+/gate/actor/phsp_detector/useVolumeFrame             true
+/gate/actor/phsp_detector/addFilter                  particleFilter
+/gate/actor/phsp_detector/particleFilter/addParticle gamma
+/gate/actor/phsp_detector/enableZPosition            true

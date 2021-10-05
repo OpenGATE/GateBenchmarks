@@ -1,0 +1,10 @@
+
+# WORLD
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+
+/gate/world/geometry/setXLength 3 m
+/gate/world/geometry/setYLength 3 m
+/gate/world/geometry/setZLength 3 m
+/gate/world/setMaterial G4_AIR
+/gate/world/vis/setVisible 0
+/gate/world/vis/forceWireframe

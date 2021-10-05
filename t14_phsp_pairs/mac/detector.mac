@@ -1,0 +1,12 @@
+#  P H A N T O M   G E O M E T R Y
+
+# plane 
+/gate/world/daughters/name                detector
+/gate/world/daughters/insert              box
+/gate/detector/placement/setTranslation   0 31 0 cm
+/gate/detector/geometry/setXLength        500 mm
+/gate/detector/geometry/setYLength        1 mm
+/gate/detector/geometry/setZLength        500 mm
+/gate/detector/setMaterial                G4_WATER
+/gate/detector/vis/setColor               blue
+/gate/detector/vis/setVisible             1
