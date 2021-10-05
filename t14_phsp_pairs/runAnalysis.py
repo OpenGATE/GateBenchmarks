@@ -59,7 +59,7 @@ def compare_branch(b1, b2, key, tol):
     if np.fabs(diff_m) > tol:
         r = False
     print(f'Branch {key} \t\t mean {m1:.2f} {m2:.2f} \t diff {diff_m:.2f}%  \t'
-          f' Check ? {r} (tol = {tol:.0f}%) \t range {min1:.1f}:{max1:.1f} ')
+          f' Check ? {r} (tol = {tol:.2f}%) \t range {min1:.1f}:{max1:.1f} ')
     return r
 
 
@@ -98,7 +98,9 @@ def analyse_one_folder(folder):
     print('Compare conversion pairs->tlor->pairs')
     f = f'{folder}/phsp_write_pairs.npy'
     tree1, read_keys1, m = phsp.load(f)
+    print(f)
     f = f'{folder}/phsp_write_pairs2.npy'
+    print(f)
     tree2, read_keys2, m = phsp.load(f)
     r = compare_two_trees('pairs', 'pairs2', tree1, tree2, len(tree1), len(tree2), read_keys1, read_keys2) and r
 

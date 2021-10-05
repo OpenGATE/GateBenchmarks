@@ -48,6 +48,8 @@ t*_*/output/output.local*
 /t14_phsp_pairs/data/*json
 /t14_phsp_pairs/output/*npy
 /t14_phsp_pairs/output/*pdf
+/t14_phsp_pairs/data/*.npy
+
 
 
 
