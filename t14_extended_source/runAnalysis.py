@@ -112,6 +112,22 @@ def get_edep_plot_data(tree, source_type, decay_type):
   return np.array(edep_annihilation_recs, dtype=np.float32), np.array(edep_prompt_recs, dtype=np.float32), expected_entries
 
 def perform_ks_test(edeps, gamma_type, source_type, decay_type):
+  """
+  Performs the two-sample Kolmogorov-Smirnov test for given data from simulation and reference data (data/ directory).
+  Null hypothesis: two distributions are identical.
+
+  Parameters
+  ----------
+  edep : np.array
+   energy depositions
+  gamma_type : GammaType
+  source_type : SourceType
+  decayType : DecayType
+
+  Returns
+  -------
+  passed test : bool
+  """
   source_strings = {SourceType.PARAPOSITRONIUM: "pPs", SourceType.ORTHOPOSITRONIUM: "oPs"}
   decay_strings = {DecayType.STANDARD:"",DecayType.WITHDEEXCITATION:"Prompt"}
   gamma_type_strings = {GammaType.ANNIHILATIONGAMMA:"-annihilation-gamma",GammaType.PROMPTGAMMA:"-prompt-gamma"}
