@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Benchmark for GateExtendedVSource module (emission of gammas from positronium decay).
+"""
 import gatetools as gt
 import os
 import click
@@ -6,6 +9,9 @@ import matplotlib.pyplot as plt
 from enum import IntEnum
 import uproot
 import numpy as np
+from scipy import stats
+import csv
+from pathlib import Path
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.command(context_settings=CONTEXT_SETTINGS)
@@ -15,105 +21,201 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
                 type=click.Path(exists=True, file_okay=True, dir_okay=True))
 @gt.add_options(gt.common_options)
 def analyse_click(output_folders, **kwargs):
-    r = analyse_one_folder(output_folders[0])
-    print(f'Last test return is: {r}')
+  """
+  Method called by runBenchmark script.
 
-def analyse_all_folders(output_folders):
+  Parameters
+  ----------
+  output_folders : list
+   list of output folders
+  """
   r = analyse_one_folder(output_folders[0])
   print(f'Last test return is: {r}')
 
-class SimulatedSource(IntEnum):
-  UNKNOWN = 0
-  PPS = 1
-  PPSPROMPT = 2
-  OPS = 3
-  OPSPROMPT = 4
+def analyse_all_folders(output_folders):
+  """
+  Method calls by runBenchmark script.
 
-def check_tree(tree, requested_st, requested_dt, check_prompt_gammas):
-  n_st = sum(1 for st in tree["sourceType"] if st == requested_st)
-  n_dt = sum(1 for dt in tree["decayType"] if dt == requested_dt)
-  n_annihilation = sum(1 for gt in tree["gammaType"] if gt == 2)
-  n_prompt = 0
-  if check_prompt_gammas:
-    n_prompt = sum(1 for gt in tree["gammaType"] if gt == 3)
-  n_gt = n_annihilation + n_prompt
-  if any(n_st != n for n in [n_dt,n_gt]):
-    return False, 0, 0
-  return True, n_annihilation, n_prompt
+  Parameters
+  ----------
+  output_folders : list
+   list of output folders
 
-def get_edep_annihilation_gammas(tree, array_size):
-  edep_array = np.empty(array_size, dtype=float)
-  eindex = 0
+  Returns
+  -------
+  benchark finihed without errors : bool
+  """
+  #We have only one output folder for this benchmark
+  return analyse_one_folder(output_folders[0])
+
+class GammaType(IntEnum):
+  """
+  Type of gamma emitted by ExtendedVSource.
+
+  Attributes
+  ----------
+  ANNIHILATIONGAMMA - annihilation gamma (from positronium decay)
+  PROMPTGAMMA - deexcitation gamma (emitted from the atom which is a source of e+ just before the beta+ decay)
+  """
+  ANNIHILATIONGAMMA = 2
+  PROMPTGAMMA = 3
+
+class SourceType(IntEnum):
+  """
+  Type of positronium.
+
+  Attributes
+  ----------
+  PARAPOSITRONIUM - pPs (source of 2 annihilation gammas)
+  ORTHOPOSITRONIUM - oPs (source of 3 annihilation gammas)
+  """
+  PARAPOSITRONIUM = 2
+  ORTHOPOSITRONIUM = 3
+
+class DecayType(IntEnum):
+  """
+  Type of positronium decay.
+
+  Attributes
+  ----------
+  STANDARD - only emitted annihilation gammas from positronium decay
+  WITHDEEXCITATION - atom deexcitation (prompt) gamma and annihilation gammas emitted
+  """
+  STANDARD = 1
+  WITHDEEXCITATION = 2
+
+def get_edep_plot_data(tree, source_type, decay_type):
+  """
+  Collects energies depositions from annihilation and prompt gammas.
+  Counts entries for given model (source_type and decay_type).
+
+  Parameters
+  ----------
+  tree : uproot tree
+  source_type : sourceType
+  decay_type : decayType
+
+  Returns
+  -------
+  energies deposited by annihilation gammas, energies deposited by prompt gammas, model counted entries : np.array, np.array, int
+  """
+  edep_annihilation_recs = list()
+  edep_prompt_recs = list()
+  expected_entries = 0
   for index, gamma_type in enumerate(tree["gammaType"]):
-    if gamma_type == 2:
-      edep_array[eindex] = tree["edep"][index]
-      eindex += 1
-  return edep_array
+    if tree["sourceType"][index] == source_type and tree["decayType"][index] == decay_type:
+      expected_entries += 1
+    if gamma_type == GammaType.ANNIHILATIONGAMMA:
+      edep_annihilation_recs.append(tree["edep"][index])
+    elif gamma_type == GammaType.PROMPTGAMMA:
+      edep_prompt_recs.append(tree["edep"][index])
+  return np.array(edep_annihilation_recs, dtype=np.float32), np.array(edep_prompt_recs, dtype=np.float32), expected_entries
 
-def get_edep_both_gammas_types(tree, annihilation_array_size, prompt_array_size):
-  edep_annihilation_array = np.empty(annihilation_array_size, dtype=float)
-  edep_prompt_array = np.empty(prompt_array_size, dtype=float)
-  aindex = 0
-  pindex = 0
-  for index, gamma_type in enumerate(tree["gammaType"]):
-    if gamma_type == 2:
-      edep_annihilation_array[aindex] = tree["edep"][index]
-      aindex += 1
-    elif gamma_type == 3:
-      edep_prompt_array[pindex] = tree["edep"][index]
-      pindex += 1
-  return edep_annihilation_array, edep_prompt_array
+def perform_ks_test(edeps, gamma_type, source_type, decay_type):
+  source_strings = {SourceType.PARAPOSITRONIUM: "pPs", SourceType.ORTHOPOSITRONIUM: "oPs"}
+  decay_strings = {DecayType.STANDARD:"",DecayType.WITHDEEXCITATION:"Prompt"}
+  gamma_type_strings = {GammaType.ANNIHILATIONGAMMA:"-annihilation-gamma",GammaType.PROMPTGAMMA:"-prompt-gamma"}
+  script_dir_path = Path(os.path.dirname(os.path.abspath(__file__)))
+  tests_data_dir_path = script_dir_path/"data"
+  file_path = tests_data_dir_path/"".join([source_strings[source_type],decay_strings[decay_type],gamma_type_strings[gamma_type],".csv"])
+  with file_path.open(mode="r") as file:
+    csvr = csv.reader(file)
+    next(csvr)
+    test_edeps = list()
+    for edep in csvr:
+      test_edeps.append(float(edep[0]))
+    test_edeps = np.array(test_edeps, dtype=np.float32)
+  _, pvalue = stats.ks_2samp(edeps, test_edeps)
+  #in scipy.stats.ks_2samp a hypothesis is for two-sided test is: two distributions are identical, F(x)=G(x) for all x
+  #We can say with certainty that our hypothesis is not true for pvalue equals 5% or lower.
+  pvalue_threshold = 0.05
+  return pvalue > pvalue_threshold
 
 
-def analyse_pps(tree, edep_plots):
-  is_correct, n_annihilation, _ = check_tree(tree, 2, 1, False)
-  if is_correct:
-    edep_plots["dE_pPs_annihilation"] = get_edep_annihilation_gammas(tree, n_annihilation)
-  return is_correct
+def analyse_model(tree, edep_plots, source_type, decay_type):
+  """
+  Checks if data in tree are correct:
+  * number of entries from prompt and annihilation gammas equals entries from the model
+  * energy depositions records passed Kolmogorov–Smirnov test
 
-def analyse_ppsprompt(tree, edep_plots):
-  is_correct, n_annihilation, n_prompt = check_tree(tree, 2, 2, True)
-  if is_correct:
-    edep_annihilation, edep_prompt = get_edep_both_gammas_types(tree, n_annihilation, n_prompt)
-    edep_plots["dE_pPsPrompt_annihilation"] = edep_annihilation
-    edep_plots["dE_pPsPrompt_prompt"] = edep_prompt
-  return is_correct
+  Parameters
+  ----------
+  tree : uproot tree
+  edep_plots : dict
+   for given model new records are added by this method
+  source_type : sourceType
+  decay_type : decayType
 
-def analyse_ops(tree, edep_plots):
-  is_correct, n_annihilation, _ = check_tree(tree, 3, 1, False)
-  if is_correct:
-    edep_plots["dE_oPs_annihilation"] = get_edep_annihilation_gammas(tree, n_annihilation)
-  return is_correct
+  Returns
+  -------
+  correct data (tests passed) : bool
+  """
+  source_strings = {SourceType.PARAPOSITRONIUM: "pPs", SourceType.ORTHOPOSITRONIUM: "oPs"}
+  if not source_type in source_strings:
+    return False
+  if not decay_type in {DecayType.STANDARD, DecayType.WITHDEEXCITATION}:
+    return False
 
-def analyse_opsprompt(tree, edep_plots):
-  is_correct, n_annihilation, n_prompt = check_tree(tree, 3, 2, True)
-  if is_correct:
-    edep_annihilation, edep_prompt = get_edep_both_gammas_types(tree, n_annihilation, n_prompt)
-    edep_plots["dE_oPsPrompt_annihilation"] = edep_annihilation
-    edep_plots["dE_oPsPrompt_prompt"] = edep_prompt
-  return is_correct
+  edep_annihilation, edep_prompt, expected_entries = get_edep_plot_data(tree, source_type, decay_type)
 
-def analyse_one_file(folder, filename,sim_source,edep_plots):
+  total_edep_len = len(edep_annihilation) + len(edep_prompt)
+  if expected_entries != total_edep_len:
+    return False
+
+  if decay_type == DecayType.STANDARD:
+    edep_plots[source_strings[source_type]] = edep_annihilation
+    return perform_ks_test(edep_annihilation, GammaType.ANNIHILATIONGAMMA, source_type, decay_type)
+  plot_title = "".join([source_strings[source_type],"Prompt - annihilation gamma"])
+  edep_plots[plot_title] = edep_annihilation
+  plot_title = "".join([source_strings[source_type],"Prompt - prompt gamma"])
+  edep_plots[plot_title] = edep_prompt
+  test_1 = perform_ks_test(edep_annihilation, GammaType.ANNIHILATIONGAMMA, source_type, decay_type)
+  test_2 = perform_ks_test(edep_prompt, GammaType.PROMPTGAMMA, source_type, decay_type)
+  return test_1 and test_2
+
+def analyse_one_file(folder, edep_plots, filename, source_type, decay_type):
+  """
+  Analyzes single simulation output file:
+  * generates plot's data with energy depositions
+  * validate simulation data
+
+  Parameters
+  ----------
+  folder : str
+  edep_plots : dict
+   for given model new records are added by this method
+  filename : str
+   name of file with simulation data to check
+  source_type : sourceType
+  decay_type : decayType
+
+  Returns
+  -------
+  correct data (tests passed) : bool
+  """
   file_path = os.path.join(folder, filename)
   branches = ["edep","sourceType","decayType","gammaType"]
   tree = uproot.open(file_path)['Hits'].arrays(branches,library="numpy")
-  if sim_source == SimulatedSource.PPS:
-    return analyse_pps(tree, edep_plots)
-  if sim_source == SimulatedSource.PPSPROMPT:
-    return analyse_ppsprompt(tree, edep_plots)
-  if sim_source == SimulatedSource.OPS:
-    return analyse_ops(tree, edep_plots)
-  if sim_source == SimulatedSource.OPSPROMPT:
-    return analyse_opsprompt(tree, edep_plots)
-  return False
+  return analyse_model(tree, edep_plots, source_type, decay_type)
 
 def analyse_one_folder(folder):
+  """
+  Analyze single folder and generates benchmark's report.
+
+  Parameters
+  ----------
+  folder : str
+
+  Returns
+  -------
+  all simulation data in folder passed tests : bool
+  """
   edep_plots  = dict()
   check_results = list()
-  check_results.append(analyse_one_file(folder, "pPs.root",SimulatedSource.PPS,edep_plots))
-  check_results.append(analyse_one_file(folder, "pPs_prompt.root",SimulatedSource.PPSPROMPT,edep_plots))
-  check_results.append(analyse_one_file(folder, "oPs.root",SimulatedSource.OPS,edep_plots))
-  check_results.append(analyse_one_file(folder, "oPs_prompt.root",SimulatedSource.OPSPROMPT,edep_plots))
+  check_results.append(analyse_one_file(folder, edep_plots, "pPs.root", SourceType.PARAPOSITRONIUM, DecayType.STANDARD))
+  check_results.append(analyse_one_file(folder, edep_plots, "pPs_prompt.root", SourceType.PARAPOSITRONIUM, DecayType.WITHDEEXCITATION))
+  check_results.append(analyse_one_file(folder, edep_plots, "oPs.root", SourceType.ORTHOPOSITRONIUM, DecayType.STANDARD))
+  check_results.append(analyse_one_file(folder, edep_plots, "oPs_prompt.root", SourceType.ORTHOPOSITRONIUM, DecayType.WITHDEEXCITATION))
 
   if not all(cr for cr in check_results):
     return False
@@ -122,22 +224,13 @@ def analyse_one_folder(folder):
   bins_prompt = [round(0.001*i,2) for i in range(0,1000)]
 
   _, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 10))
-  axs[0,0].hist(edep_plots["dE_pPs_annihilation"], bins_annihilation)
-  axs[0,0].set_title("pPs")
-  axs[0,1].hist(edep_plots["dE_pPsPrompt_annihilation"], bins_annihilation)
-  axs[0,1].set_title("pPsPrompt - annihilation gamma")
-  axs[0,2].hist(edep_plots["dE_pPsPrompt_prompt"], bins_prompt)
-  axs[0,2].set_title("pPsPrompt - prompt gamma")
 
-  axs[1,0].hist(edep_plots["dE_oPs_annihilation"], bins_annihilation)
-  axs[1,0].set_title("oPs")
-  axs[1,1].hist(edep_plots["dE_oPsPrompt_annihilation"], bins_annihilation)
-  axs[1,1].set_title("oPsPrompt - annihilation gamma")
-  axs[1,2].hist(edep_plots["dE_oPsPrompt_prompt"], bins_prompt)
-  axs[1,2].set_title("oPsPrompt - prompt gamma")
-
-  for ax in axs.flat:
-    ax.set(xlabel=r'$\Delta$E [MeV]', ylabel='Counts')
+  for index, key in enumerate(edep_plots.keys()):
+    x_index = 0 if index < 3 else 1
+    y_index = index%3
+    axs[x_index,y_index].hist(edep_plots[key], bins_annihilation if not "prompt gamma" in key else bins_prompt)
+    axs[x_index,y_index].set_title(key)
+    axs[x_index,y_index].set(xlabel=r'$\Delta$E [MeV]', ylabel='counts')
 
   plt.savefig('output.pdf')
   plt.show()

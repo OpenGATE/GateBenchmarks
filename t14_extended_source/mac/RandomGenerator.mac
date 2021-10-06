@@ -1,2 +1,2 @@
 /gate/random/setEngineName MersenneTwister
-/gate/random/setEngineSeed 12345678
+/gate/random/setEngineSeed auto
