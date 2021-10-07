@@ -43,7 +43,7 @@ def analyse_all_folders(output_folders):
 
   Returns
   -------
-  benchark finihed without errors : bool
+  benchmark finished without errors : bool
   """
   #We have only one output folder for this benchmark
   return analyse_one_folder(output_folders[0])
@@ -111,7 +111,7 @@ def get_edep_plot_data(tree, source_type, decay_type):
       edep_prompt_recs.append(tree["edep"][index])
   return np.array(edep_annihilation_recs, dtype=np.float32), np.array(edep_prompt_recs, dtype=np.float32), expected_entries
 
-def perform_ks_test(edeps, gamma_type, source_type, decay_type):
+def perform_ks_test(edeps, gamma_type, source_type, decay_type, pvalue_threshold):
   """
   Performs the two-sample Kolmogorov-Smirnov test for given data from simulation and reference data (data/ directory).
   Null hypothesis: two distributions are identical.
@@ -123,6 +123,8 @@ def perform_ks_test(edeps, gamma_type, source_type, decay_type):
   gamma_type : GammaType
   source_type : SourceType
   decayType : DecayType
+  pvalue_threshold : float
+   we say that our null hypothesis is not true for pvalue <= pvalue_threshold
 
   Returns
   -------
@@ -138,13 +140,8 @@ def perform_ks_test(edeps, gamma_type, source_type, decay_type):
     csvr = csv.reader(file)
     next(csvr)
     test_edeps = list()
-    for edep in csvr:
-      test_edeps.append(float(edep[0]))
-    test_edeps = np.array(test_edeps, dtype=np.float32)
+    test_edeps = np.array([float(edep[0]) for edep in csvr], dtype=np.float32)
   _, pvalue = stats.ks_2samp(edeps, test_edeps)
-  #in scipy.stats.ks_2samp a hypothesis is for two-sided test is: two distributions are identical, F(x)=G(x) for all x
-  #We can say with certainty that our hypothesis is not true for pvalue equals 5% or lower.
-  pvalue_threshold = 0.05
   return pvalue > pvalue_threshold
 
 
@@ -180,13 +177,13 @@ def analyse_model(tree, edep_plots, source_type, decay_type):
 
   if decay_type == DecayType.STANDARD:
     edep_plots[source_strings[source_type]] = edep_annihilation
-    return perform_ks_test(edep_annihilation, GammaType.ANNIHILATIONGAMMA, source_type, decay_type)
+    return perform_ks_test(edep_annihilation, GammaType.ANNIHILATIONGAMMA, source_type, decay_type, 0.05)
   plot_title = "".join([source_strings[source_type],"Prompt - annihilation gamma"])
   edep_plots[plot_title] = edep_annihilation
   plot_title = "".join([source_strings[source_type],"Prompt - prompt gamma"])
   edep_plots[plot_title] = edep_prompt
-  test_1 = perform_ks_test(edep_annihilation, GammaType.ANNIHILATIONGAMMA, source_type, decay_type)
-  test_2 = perform_ks_test(edep_prompt, GammaType.PROMPTGAMMA, source_type, decay_type)
+  test_1 = perform_ks_test(edep_annihilation, GammaType.ANNIHILATIONGAMMA, source_type, decay_type, 0.05)
+  test_2 = perform_ks_test(edep_prompt, GammaType.PROMPTGAMMA, source_type, decay_type, 0.05)
   return test_1 and test_2
 
 def analyse_one_file(folder, edep_plots, filename, source_type, decay_type):
