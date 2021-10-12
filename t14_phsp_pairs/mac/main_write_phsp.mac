@@ -62,7 +62,7 @@
 /gate/source/source/gps/halfz               35 cm
 /gate/source/source/setForcedHalfLife       0.01 s
 /gate/source/source/gps/centre              0.0 -4.5 0.0 cm
-/gate/source/source/setActivity             3 MBq
+/gate/source/source/setActivity             10 MBq
 
 # real half life of 18 is:
 #/gate/source/source/setForcedHalfLife       6586.0 s
