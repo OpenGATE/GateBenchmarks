@@ -34,7 +34,7 @@
 /gate/source/beam_pairs/attachTo               phsp_cylinder
 /gate/source/beam_pairs/useRandomSymmetry      false
 /gate/source/beam_pairs/ignoreWeight           false
-/gate/source/beam_pairs/setActivity            3 MBq
+/gate/source/beam_pairs/setActivity            10 MBq
 /gate/source/beam_pairs/setForcedUnstableFlag  true
 /gate/source/beam_pairs/setForcedHalfLife      0.01 s
 /gate/source/beam_pairs/ignoreTime             false
