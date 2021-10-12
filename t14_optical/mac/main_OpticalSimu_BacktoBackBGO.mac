@@ -1,0 +1,93 @@
+#  *********************************************************************
+#  * DISCLAIMER                                                        *
+#  *                                                                   *
+#  * Neither the authors of this software system, nor their employing  *
+#  * institutes, nor the agencies providing financial support for this *
+#  * work make any representation or warranty, express or implied,     *
+#  * regarding this software system or assume any liability for its    *
+#  * use.                                                              *
+#  *                                                                   *
+#  * This code implementation is the intellectual property of the      *
+#  * OpenGATE collaboration.                                           *
+#  * By copying, distributing or modifying the Program (or any work    *
+#  * based on the Program) you indicate your acceptance of this        *
+#  * statement, and all its terms.                                     *
+#  *********************************************************************
+
+#=====================================================
+# VISUALISATION and VERBOSE
+#=====================================================
+
+#/vis/disable
+#/control/execute                   ./mac/macro/Visualisation.mac
+/control/execute                   ./mac/macro/Verbose.mac
+
+#=====================================================
+# GEOMETRY
+#=====================================================
+
+/gate/geometry/setMaterialDatabase  data/GateMaterials.db
+
+#=======================================================
+#                   G E O M E T R Y
+#=======================================================
+
+/control/execute                    mac/macro/Geometry.mac
+
+#=====================================================
+#                  P H Y S I C S
+#=====================================================
+
+/control/execute                    mac/macro/Physics.mac
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+
+#=====================================================
+# OPTICAL SURFACES
+#=====================================================
+
+/control/execute                    mac/macro/Optical_Surfaces.mac
+
+#=====================================================
+#   D I G I T I Z E R: DETECTOR ELECTRONIC RESPONSE
+#===================================================== 
+
+/gate/digitizer/Singles/insert	opticaladder 
+/gate/digitizer/Singles/insert	readout
+/gate/digitizer/Singles/readout/setDepth	1 
+
+#=====================================================
+#  S O U R C E
+#=====================================================
+
+/control/execute mac/macro/Source.mac
+
+#=====================================================
+#  D A T A   O U T P U T   
+#=====================================================
+
+/control/execute mac/macro/Output.mac
+
+
+
+
+#=====================================================
+#   R A N D O M
+#=====================================================
+
+# Choose between: JamesRandom Ranlux64 MersenneTwister
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+#/gate/random/verbose 1
+
+#=====================================================
+# A C Q U I S I T I O N
+#=====================================================
+
+/control/execute                mac/macro/StartDAQ.mac
+
+

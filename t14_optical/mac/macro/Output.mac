@@ -1,0 +1,32 @@
+#  *********************************************************************
+#  * DISCLAIMER                                                        *
+#  *                                                                   *
+#  * Neither the authors of this software system, nor their employing  *
+#  * institutes, nor the agencies providing financial support for this *
+#  * work make any representation or warranty, express or implied,     *
+#  * regarding this software system or assume any liability for its    *
+#  * use.                                                              *
+#  *                                                                   *
+#  * This code implementation is the intellectual property of the      *
+#  * OpenGATE collaboration.                                           *
+#  * By copying, distributing or modifying the Program (or any work    *
+#  * based on the Program) you indicate your acceptance of this        *
+#  * statement, and all its terms.                                     *
+#  *********************************************************************
+
+
+/gate/output/root/enable
+/gate/output/root/setFileName             output/BGO_BackToBack
+/gate/output/root/setRootHitFlag          1
+/gate/output/root/setRootSinglesFlag      0
+/gate/output/root/setRootOpticalFlag      1
+
+/gate/output/fastanalysis/enable
+/gate/output/analysis/enable
+
+/gate/output/tree/enable
+/gate/output/tree/addFileName output/p.npy
+/gate/output/tree/addFileName output/p.root
+/gate/output/tree/hits/enable
+/gate/output/tree/addCollection Singles
+
