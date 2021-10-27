@@ -22,8 +22,12 @@ echo "export PATH=/software/gatetools/clustertools/:$PATH" >> /etc/mybashrc
 #Install dependencies according the test
 compile_torch=false
 compile_rtk=false
+export USE_OPTICAL=OFF
 if [ "$TEST" = "t7_garf" ] || [ "$TEST" = "t9_gaga_phsp" ]; then
    compile_torch=true
+fi
+if [ "$TEST" = "t15_optical" ]; then
+   export USE_OPTICAL=ON
 fi
 export GATE_USE_TORCH=OFF
 if [ "$compile_torch" = true ] ; then
@@ -46,6 +50,7 @@ git clone --branch ${COMMIT} https://github.com/OpenGATE/Gate.git src
 cd bin
 cmake -DGATE_USE_TORCH=$GATE_USE_TORCH \
       -DTorch_DIR=$TORCH_DIR \
+      -DGATE_USE_OPTICAL=$USE_OPTICAL \
       ../src
 make -j4
 cd ..
