@@ -28,6 +28,7 @@ if [ "$TEST" = "t7_garf" ] || [ "$TEST" = "t9_gaga_phsp" ]; then
    compile_torch=true
 fi
 if [ "$TEST" = "t15_optical" ]; then
+   yum install -y  libxml2-devel
    export USE_OPTICAL=ON
 fi
 export GATE_USE_TORCH=OFF
