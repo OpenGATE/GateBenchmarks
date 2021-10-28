@@ -17,7 +17,7 @@ git clone https://github.com/OpenGATE/GateTools.git gatetools
 cd gatetools
 python3 -m pip install --upgrade pip
 pip3 install -e .
-pip3 install uproot uproot3 xxhash lz4
+pip3 install uproot uproot3 xxhash lz4 pandas
 echo "export PATH=/software/gatetools/clustertools/:$PATH" >> /etc/mybashrc
 
 #Install dependencies according the test
