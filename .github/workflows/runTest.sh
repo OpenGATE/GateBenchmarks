@@ -15,6 +15,7 @@ mkdir /software/gatetools
 cd /software
 git clone https://github.com/OpenGATE/GateTools.git gatetools
 cd gatetools
+python3 -m pip install --upgrade pip
 pip3 install -e .
 pip3 install uproot uproot3 xxhash lz4
 echo "export PATH=/software/gatetools/clustertools/:$PATH" >> /etc/mybashrc
