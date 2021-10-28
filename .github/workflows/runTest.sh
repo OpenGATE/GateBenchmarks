@@ -42,6 +42,11 @@ if [ "$compile_torch" = true ] ; then
     export GATE_USE_TORCH=ON
     export TORCH_DIR=/software/torch/libtorch/share/cmake/Torch
 fi
+if [ "$TEST" = "t9_gaga_phsp" ] || [ "$TEST" = "t14_phsp_pairs" ]; then
+    #install gaga
+    pip3 install torch==1.10.0+cpu torchvision==0.11.1+cpu torchaudio==0.10.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
+    pip install gaga-phsp
+fi
 
 # Compile master version of Gate
 cd /software/gate
