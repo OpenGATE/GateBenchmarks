@@ -1,0 +1,51 @@
+# *********************************************************************
+#  * DISCLAIMER                                                        *
+#  *                                                                   *
+#  * Neither the authors of this software system, nor their employing  *
+#  * institutes, nor the agencies providing financial support for this *
+#  * work make any representation or warranty, express or implied,     *
+#  * regarding this software system or assume any liability for its    *
+#  * use.                                                              *
+#  *                                                                   *
+#  * This code implementation is the intellectual property of the      *
+#  * OpenGATE collaboration.                                           *
+#  * By copying, distributing or modifying the Program (or any work    *
+#  * based on the Program) you indicate your acceptance of this        *
+#  * statement, and all its terms.                                     *
+#  *********************************************************************
+#
+                                                          
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+#
+#         D E F I N E   Y O U R   S C A N N E R   A N D       
+#                                                             
+#        Y O U R   C O M P L E T E   S I M U L A T I O N   
+#                                                             
+#        F O R   I M A G I N G    A P P L I CA T I O N S       
+#                                                     
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+
+#/vis/disable
+
+/control/execute mac/Geometry_Forte_Vis.mac
+
+/control/execute mac/Physics.mac
+
+/control/execute mac/Digitizer_Forte.mac
+
+/control/execute mac/Phantom_Source_Small_Vis.mac
+
+#====================================================
+#   M E A S U R E M E N T   S E T T I N G S   
+#=====================================================
+
+#/gate/application/setTotalNumberOfPrimaries 40
+
+/gate/application/setTimeSlice     0.001 s
+/gate/application/setTimeStart     0.0   s
+/gate/application/setTimeStop      0.1   s
+
+/gate/application/startDAQ
+
+#exit
+
