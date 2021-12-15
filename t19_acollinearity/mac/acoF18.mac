@@ -1,0 +1,98 @@
+# Taken from the master branch of GateContrib/imaging/PET/PET_CylindricalPET_System.mac of the repo GateContrib the 07/01/21.
+# Modified to apply for this "MWE"
+
+#=====================================================
+# GEOMETRY
+#=====================================================
+
+/gate/geometry/setMaterialDatabase    data/GateMaterials.db
+
+#
+#     W O R L D
+#
+/gate/world/geometry/setXLength       400. cm
+/gate/world/geometry/setYLength       400. cm
+/gate/world/geometry/setZLength       400. cm
+
+
+
+#=====================================================
+#  P H A N T O M
+#=====================================================
+/gate/world/daughters/name bckg
+/gate/world/daughters/insert cylinder
+/gate/bckg/setMaterial Water
+/gate/bckg/vis/setColor grey
+/gate/bckg/geometry/setRmin 0.0 mm
+/gate/bckg/geometry/setRmax 4.0 mm
+/gate/bckg/geometry/setHeight 4 mm
+/gate/bckg/placement/setTranslation 0.0 0.0 0.0 mm
+
+
+#=====================================================
+# PHYSICS
+#=====================================================
+
+/gate/physics/addProcess PhotoElectric
+/gate/physics/processes/PhotoElectric/setModel StandardModel
+
+/gate/physics/addProcess ElectronIonisation e+
+/gate/physics/addProcess ElectronIonisation e-
+
+/gate/physics/processes/ElectronIonisation/setModel StandardModel e+
+/gate/physics/processes/ElectronIonisation/setModel StandardModel e-
+
+/gate/physics/addProcess Bremsstrahlung e+
+/gate/physics/addProcess Bremsstrahlung e-
+
+/gate/physics/processes/Bremsstrahlung/setModel StandardModel e+
+/gate/physics/processes/Bremsstrahlung/setModel StandardModel e-
+
+/gate/physics/addProcess PositronAnnihilation e+
+
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+
+
+
+#=====================================================
+#  P A R T I C L E   S O U R C E
+#=====================================================
+
+/gate/source/addSource src
+/gate/source/src/setActivity 10000 becquerel
+/gate/source/src/gps/particle e+
+/gate/source/src/gps/energytype Fluor18
+/gate/source/src/setForcedUnstableFlag true
+/gate/source/src/setForcedHalfLife 6586.0 s
+/gate/source/src/gps/type Volume
+/gate/source/src/gps/shape Cylinder
+/gate/source/src/gps/radius 0.001 mm
+/gate/source/src/gps/halfz 0.01 mm
+/gate/source/src/gps/centre 0.0 0.0 0.0 mm
+
+
+
+#====================================================
+#  R A N D O M   E N G I N E  A N D  S E E D
+#====================================================
+/gate/random/setEngineName JamesRandom
+/gate/random/setEngineSeed 123456789
+
+/gate/output/allowNoOutput
+
+
+#=====================================================
+#   M E A S U R E M E N T   S E T T I N G S
+#=====================================================
+
+/gate/application/setTimeSlice   50 s
+/gate/application/setTimeStart   0 s
+/gate/application/setTimeStop    50 s
+#/gate/application/setTotalNumberOfPrimaries 100
+
+/gate/application/startDAQ
