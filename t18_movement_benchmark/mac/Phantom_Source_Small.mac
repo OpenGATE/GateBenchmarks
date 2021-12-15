@@ -1,0 +1,98 @@
+###  P H A N T O M S ###
+/gate/world/daughters/name                      phantom
+/gate/world/daughters/insert                    sphere
+/gate/phantom/setMaterial                	Plastic
+/gate/phantom/vis/forceSolid
+/gate/phantom/vis/setColor                      blue
+/gate/phantom/vis/setVisible                    1
+
+/gate/phantom/geometry/setRmin                  0 mm
+/gate/phantom/geometry/setRmax                  10 mm
+/gate/phantom/geometry/setPhiStart              0 deg
+/gate/phantom/geometry/setDeltaPhi              360 deg
+/gate/phantom/geometry/setThetaStart            0 deg
+/gate/phantom/geometry/setDeltaTheta            360 deg
+
+
+/gate/phantom/moves/insert                       genericMove
+/gate/phantom/genericMove/setPlacementsFilename  data/moveSource.placements
+
+#/gate/phantom/attachPhantomSD
+/gate/geometry/rebuild
+/vis/viewer/update
+
+
+
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+
+
+
+### S O U R C E    D E F I N I T I O N ###
+
+
+# F A S T   P R O D U C T I O N   M O D U L E   F O R   F - 1 8   I S O T O P E S
+
+# S O U R C E
+/gate/source/addSource twogamma
+/gate/source/twogamma/setActivity 1 MBq
+/gate/source/twogamma/setType backtoback
+
+# POSITION
+/gate/source/twogamma/gps/centre 0. 0. 0. cm
+
+# PARTICLE
+/gate/source/twogamma/gps/particle gamma
+/gate/source/twogamma/gps/energytype Mono
+/gate/source/twogamma/gps/monoenergy 0.511 MeV
+
+# TYPE = Volume or Surface
+/gate/source/twogamma/gps/type Point
+
+# SET THE ANGULAR DISTRIBUTION OF EMISSION
+/gate/source/twogamma/gps/angtype iso
+# SET MIN AND MAX EMISSION ANGLES
+/gate/source/twogamma/gps/mintheta 0. deg
+/gate/source/twogamma/gps/maxtheta 180. deg
+/gate/source/twogamma/gps/minphi    0. deg
+/gate/source/twogamma/gps/maxphi 360. deg
+
+/gate/source/twogamma/attachTo     phantom
+
+/gate/source/list
+
+
+
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+#                                                                 #
+#                   D E F I N I T I O N   O F                     #
+#                Y O U R   O U T P U T   F I L E                  #
+#                                                                 #
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+
+#=====================================================
+#  D A T A   O U T P U T   
+#=====================================================
+
+/gate/random/setEngineSeed auto
+
+#/gate/output/root/enable
+#/gate/output/root/setFileName               output/genericMoveTest_
+#/gate/output/root/setRootNtupleFlag         0
+#/gate/output/root/setRootHitFlag            0
+#/gate/output/root/setRootSinglesFlag        0
+#/gate/output/root/setRootCoincidencesFlag   1
+#/gate/output/root/setRootdelayFlag          0
+
+/gate/output/ascii/enable
+/gate/output/ascii/setFileName                    output/genericMoveTest_
+/gate/output/ascii/setOutFileHitsFlag           0
+/gate/output/ascii/setOutFileSinglesFlag        0
+/gate/output/ascii/setOutFileEWindowFlag        0
+/gate/output/ascii/setOutFileCoincidencesFlag   1
+/gate/output/ascii/setCoincidenceMask 0 0 0 1 1 1 1 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 
+
