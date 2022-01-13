@@ -1,0 +1,8 @@
+#/gate/digitizer/verbose 2
+#/gate/digitizer/convertor/verbose  3
+
+
+/gate/digitizer/Singles/insert                        adder
+/gate/digitizer/Singles/adder/positionPolicy takeEnergyWinner
+
+

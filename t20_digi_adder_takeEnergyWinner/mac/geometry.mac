@@ -1,0 +1,47 @@
+
+
+/gate/world/geometry/setXLength       1500. mm
+/gate/world/geometry/setYLength       1500. mm
+/gate/world/geometry/setZLength       1500. mm
+ 
+
+/gate/world/daughters/name                   ecat
+/gate/world/daughters/insert		      cylinder
+/gate/ecat/placement/setTranslation           0.0 0.0 0.0 mm
+/gate/ecat/geometry/setRmax                  235 mm
+/gate/ecat/geometry/setRmin                   127 mm
+/gate/ecat/geometry/setHeight                 63 mm #20
+/gate/ecat/setMaterial			Air
+
+/gate/ecat/vis/forceWireframe
+/gate/ecat/vis/setColor                       red
+
+#	BLOCK
+/gate/ecat/daughters/name                   Detector
+/gate/ecat/daughters/insert                   box
+/gate/Detector/placement/setTranslation  0 160 0 mm
+/gate/Detector/geometry/setXLength       1.0 cm 
+/gate/Detector/geometry/setYLength       5 cm 
+/gate/Detector/geometry/setZLength       1.0 cm
+/gate/Detector/setMaterial 	         LYSO
+/gate/ecat/vis/forceWireframe
+/gate/Detector/vis/setColor              white
+
+
+#	R E P E A T   BLOCK
+/gate/Detector/repeaters/insert cubicArray
+/gate/Detector/cubicArray/setRepeatNumberX 1
+/gate/Detector/cubicArray/setRepeatNumberY  1
+/gate/Detector/cubicArray/setRepeatNumberZ 1 
+/gate/Detector/cubicArray/setRepeatVector 63.0 0.0 63.0 mm
+
+
+ #	R E P E A T    R S E C T O R 
+/gate/Detector/repeaters/insert ring
+/gate/Detector/ring/setFirstAngle 0. deg
+/gate/Detector/ring/setRepeatNumber 48
+
+
+
+/gate/systems/ecat/block/attach Detector
+/gate/Detector/attachCrystalSD

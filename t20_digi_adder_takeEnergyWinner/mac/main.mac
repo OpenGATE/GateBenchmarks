@@ -1,0 +1,71 @@
+#=====================================================
+# VISUALISATION
+#=====================================================
+
+/vis/disable
+#/control/execute visu.mac
+
+
+
+/gate/geometry/setMaterialDatabase    data/GateMaterials.db
+#=====================================================
+# GEOMETRY
+#=====================================================
+
+/control/execute                         mac/geometry.mac
+
+
+#=====================================================
+# PHYSICS
+#=====================================================
+
+/gate/physics/addPhysicsList emstandard_opt3
+/gate/physics/processList Enabled
+/gate/physics/processList Initialized
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+
+/gate/run/initialize
+
+
+#=====================================================
+#   D I G I T I Z E R: DETECTOR ELECTRONIC RESPONSE
+#===================================================== 
+
+/control/execute                         mac/digitizer.mac
+
+#=====================================================
+#  P A R T I C L E   S O U R C E
+#=====================================================
+
+/control/execute                          mac/source.mac
+
+
+#=====================================================
+#  D A T A   O U T P U T   
+#=====================================================
+
+/gate/output/root/enable
+/gate/output/root/setFileName             output/test
+
+/gate/output/root/setRootHitFlag         1
+/gate/output/root/setRootSinglesFlag      1
+/gate/output/root/setRootCoincidencesFlag 0
+#/gate/output/root/verbose 3
+
+
+
+#=====================================================
+#  R U N Parameters 
+#=====================================================
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed 123456789
+/gate/random/verbose 1
+
+/gate/application/setTimeSlice   0.05 s # 2s
+/gate/application/setTimeStart   0. s
+/gate/application/setTimeStop    0.05 s
+/gate/application/startDAQ
