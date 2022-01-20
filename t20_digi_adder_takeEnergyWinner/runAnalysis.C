@@ -232,24 +232,12 @@ void runAnalysis(){
        currentY=posY_hit;
        currentZ=posZ_hit;
 
-
-
-       if(!i) // first iteration
-	 {
-	   prevIterEventID=-1; 
-	   prevIterBlockID=-1;
-	 }
-       else if (i== hitTree->GetEntries()-1) // last iteration
+       if (i== hitTree->GetEntries()-1) // last iteration
 	 nextIterEventID=-1;
        else //all other iterations
 	 {
-	   hitTree->GetEntry(i-1);
-	   prevIterEventID=eventID_hit;
-	   prevIterBlockID=blockID_hit;
-
 	   hitTree->GetEntry(i+1);
 	   nextIterEventID=eventID_hit;
-	   nextIterBlockID=blockID_hit;
 	 }
        
        
@@ -302,7 +290,7 @@ void runAnalysis(){
 		 maxEdep[k]=-1;
 		 totEdep[k]=0;
 		 minTime[k]=999;
-		 //cout<< v_uniqueblockID[k]<<endl;
+	
 		 
 	       }	 
 		 
@@ -351,7 +339,8 @@ void runAnalysis(){
 		 h_hits_X->Fill(winnerX[k]);
 		 h_hits_Y->Fill(winnerY[k]);
 		 h_hits_Z->Fill(winnerZ[k]);
-
+		 if (totEdep[k] >0.512)
+		  printf("something is wrong");
 		 
 		 //  printf("! %d %f %f %f %f %.12f\n", v_uniqueblockID[k], totEdep[k], winnerX[k], winnerY[k],winnerZ[k],  minTime[k]);
 		 
@@ -399,7 +388,8 @@ void runAnalysis(){
    /// N entries test
    if (h_hits_totEdep->GetEntries() == singleTree->GetEntries())
      cout<< "Entries test is OK: "<< h_hits_totEdep->GetEntries() << " vs. " <<  singleTree->GetEntries() <<endl;
-   else cout << "\033[1;31m!!! Entries test failed !!! \033[0m"<< h_hits_totEdep->GetEntries() << " vs. " <<  singleTree->GetEntries() <<endl; 
+   else cout << "\033[1;31m!!! Entries test failed !!! \033[0m"<< h_hits_totEdep->GetEntries() << " vs. " <<  singleTree->GetEntries() <<endl;
+
 
 
  
