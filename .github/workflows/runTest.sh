@@ -36,9 +36,9 @@ if [ "$compile_torch" = true ] ; then
     cd /software
     mkdir torch
     cd torch
-    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.4.0%2Bcpu.zip
-    unzip libtorch-shared-with-deps-1.4.0+cpu.zip
-    rm -rf libtorch-shared-with-deps-1.4.0+cpu.zip
+    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.10.1%2Bcpu.zip
+    unzip libtorch-shared-with-deps-1.10.1+cpu.zip
+    rm -rf libtorch-shared-with-deps-1.10.1+cpu.zip
     export GATE_USE_TORCH=ON
     export TORCH_DIR=/software/torch/libtorch/share/cmake/Torch
 fi
