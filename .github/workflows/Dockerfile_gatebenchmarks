@@ -22,6 +22,8 @@ RUN yum install -y  make \
                     centos-release-scl \
                     python3-devel \
                     which \
+                    openssl-devel \
+                    patch \
  && yum install -y devtoolset-7-gcc-c++
 
 #create folder and install cmake
@@ -38,9 +40,10 @@ RUN mkdir software/root-cern \
  && source /etc/mybashrc \
  && cd software/root-cern \
  && mkdir src bin install \
- && git clone --branch v6-19-02 https://github.com/root-project/root.git src \
+ && git clone --branch v6-24-06 https://github.com/root-project/root.git src \
  && cd bin \
- && cmake ../src/ -Dpython=OFF \
+ && cmake ../src/ -DCMAKE_CXX_STANDARD=17 \
+                  -Dpython=OFF \
                   -DCMAKE_INSTALL_PREFIX=/software/root-cern/install \
  && make -j16 install \
  && cd .. \
@@ -53,7 +56,8 @@ RUN mkdir software/geant4 \
  && mkdir src bin install data \
  && git clone --branch v10.7.0 https://github.com/Geant4/geant4.git src \
  && cd bin \
- && cmake ../src/ -DGEANT4_INSTALL_DATA=OFF \
+ && cmake ../src/ -DCMAKE_CXX_FLAGS="-std=c++17" \
+                  -DGEANT4_INSTALL_DATA=OFF \
                   -DGEANT4_INSTALL_DATADIR=/software/geant4/data \
                   -DGEANT4_USE_QT=ON \
                   -DCMAKE_INSTALL_PREFIX=/software/geant4/install \
