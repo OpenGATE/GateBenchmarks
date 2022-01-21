@@ -33,7 +33,8 @@ jobs:
                         t15_optical,
                         t16_decay,
                         t17_extended_source,
-                        t18_movement_benchmark]
+                        t18_movement_benchmark,
+			t20_digi_adder_takeEnergyWinner]
 
     steps:
     - name: Checkout github repo
