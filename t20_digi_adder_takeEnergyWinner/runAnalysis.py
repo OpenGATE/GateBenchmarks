@@ -162,50 +162,13 @@ for i in range(len(energy_single)) :
         print(CRED+"BlockID test failed"+CEND, blockID_from_hit[i], " vs. ", blockID_single[i])
     if (math.fabs(edep_from_hit[i]-energy_single[i])>0.00001):
         print(CRED+"Energy test failed"+CEND, edep_from_hit[i], " vs. ", energy_single[i])
-    if (minTime_from_hit[i] != time_single[i]):
+    if (math.fabs(minTime_from_hit[i] - time_single[i]) >0.00001 ):
         print(CRED+"Min time test failed"+CEND, minTime_from_hit[i], " vs. ", time_single[i])
-    if (posX_from_hit[i] != globalPosX_single[i]):
+    if (math.fabs(posX_from_hit[i] - globalPosX_single[i]) >0.00001):
         print(CRED+"PosX test failed"+CEND, posX_from_hit[i], " vs. ", globalPosX_single[i])
-    if (posY_from_hit[i] != globalPosY_single[i]):
+    if (math.fabs(posY_from_hit[i] - globalPosY_single[i]) >0.00001):
         print(CRED+"PosY test failed"+CEND, posY_from_hit[i], " vs. ", globalPosY_single[i])
-    if (posZ_from_hit[i] != globalPosZ_single[i]):
+    if (math.fabs(posZ_from_hit[i] - globalPosZ_single[i]) >0.00001):
         print(CRED+"PosZ time test failed"+CEND, posZ_from_hit[i], " vs. ", globalPosZ_single[i])
     
-
-"""
-fig, ((ax0,ax1),(ax2,ax3),(ax4,ax5)) = plt.subplots(ncols=2,nrows=3, figsize=(10,10))
-
-#a = phsp.fig_get_sub_fig(ax, 1)
-
-ax0.hist(energy_single, bins=100, alpha=0.5, label="Singles")
-ax00.hist(edep_from_hit, bins=100, alpha=0.5, label="Offline hits analysis")
-ax0.legend(loc='upper right')
-ax0.set_xlabel("edep")
-
-ax1.hist(time_single, bins=100, alpha=0.5, label="time")
-#ax1.legend(loc='upper right')
-ax1.set_xlabel("time")
-
-ax2.hist(globalPosX_single, bins=100, alpha=0.5, label="globalPosX")
-#ax2.legend(loc='upper right')
-ax2.set_xlabel("globalPosX")
-
-ax3.hist(globalPosY_single, bins=100, alpha=0.5, label="globalPosY")
-ax3.set_xlabel("globalPosY")
-
-ax4.hist(globalPosZ_single, bins=100, alpha=0.5, label="globalPosZ")
-ax4.set_xlabel("globalPosZ")
-
-plt.show()
-
-
-plt.hist(posX_from_hit, bins=100, alpha=0.5, label="edep")
-plt.hist(globalPosX_single, bins=100, alpha=0.5, label="edep")
-plt.legend(loc='upper right')
-plt.xlabel("edep, MeV")
-plt.show()
-
-print (edep_hit[2])
-"""
-#input()
 
