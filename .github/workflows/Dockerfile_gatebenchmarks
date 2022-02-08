@@ -54,7 +54,7 @@ RUN mkdir software/geant4 \
  && source /etc/mybashrc \
  && cd software/geant4 \
  && mkdir src bin install data \
- && git clone --branch v10.7.0 https://github.com/Geant4/geant4.git src \
+ && git clone --branch v11.0.0 https://github.com/Geant4/geant4.git src \
  && cd bin \
  && cmake ../src/ -DCMAKE_CXX_FLAGS="-std=c++17" \
                   -DGEANT4_INSTALL_DATA=OFF \
@@ -76,8 +76,8 @@ RUN cd software/geant4 \
  && mv G4* data
 
 RUN cd software/geant4 \
- && wget https://cern.ch/geant4-data/datasets/G4EMLOW.7.13.tar.gz \
- && tar xzvf G4EMLOW.7.13.tar.gz \
+ && wget https://cern.ch/geant4-data/datasets/G4EMLOW.8.0.tar.gz \
+ && tar xzvf G4EMLOW.8.0.tar.gz \
  && rm -f G4*.tar.gz \
  && mv G4* data
 
@@ -92,10 +92,10 @@ RUN cd software/geant4 \
  && mv PhotonEvaporation5.7 RadioactiveDecay5.6 RealSurface2.2 data
 
 RUN cd software/geant4 \
- && wget https://cern.ch/geant4-data/datasets/G4PARTICLEXS.3.1.tar.gz \
+ && wget https://cern.ch/geant4-data/datasets/G4PARTICLEXS.4.0.tar.gz \
  && wget https://cern.ch/geant4-data/datasets/G4PII.1.3.tar.gz \
  && wget https://cern.ch/geant4-data/datasets/G4SAIDDATA.2.0.tar.gz \
- && tar xzvf G4PARTICLEXS.3.1.tar.gz \
+ && tar xzvf G4PARTICLEXS.4.0.tar.gz \
  && tar xzvf G4PII.1.3.tar.gz \
  && tar xzvf G4SAIDDATA.2.0.tar.gz \
  && rm -f G4*.tar.gz \
@@ -105,9 +105,11 @@ RUN cd software/geant4 \
  && wget https://cern.ch/geant4-data/datasets/G4ABLA.3.1.tar.gz \
  && wget https://cern.ch/geant4-data/datasets/G4INCL.1.0.tar.gz \
  && wget https://cern.ch/geant4-data/datasets/G4ENSDFSTATE.2.3.tar.gz \
+ && wget https://cern.ch/geant4-data/datasets/G4TENDL.1.4.tar.gz \
  && tar xzvf G4ABLA.3.1.tar.gz \
  && tar xzvf G4INCL.1.0.tar.gz \
  && tar xzvf G4ENSDFSTATE.2.3.tar.gz \
+ && tar xzvf G4TENDL.1.4.tar.gz \
  && rm -f G4*.tar.gz \
  && mv G4* data
 
