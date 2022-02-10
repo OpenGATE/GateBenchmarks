@@ -36,9 +36,9 @@ if [ "$compile_torch" = true ] ; then
     cd /software
     mkdir torch
     cd torch
-    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.4.0%2Bcpu.zip
-    unzip libtorch-shared-with-deps-1.4.0+cpu.zip
-    rm -rf libtorch-shared-with-deps-1.4.0+cpu.zip
+    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.10.1%2Bcpu.zip
+    unzip libtorch-shared-with-deps-1.10.1+cpu.zip
+    rm -rf libtorch-shared-with-deps-1.10.1+cpu.zip
     export GATE_USE_TORCH=ON
     export TORCH_DIR=/software/torch/libtorch/share/cmake/Torch
 fi
@@ -50,7 +50,8 @@ if [ -z "$COMMIT" ]; then
 fi
 git clone --branch ${COMMIT} https://github.com/OpenGATE/Gate.git src
 cd bin
-cmake -DGATE_USE_TORCH=$GATE_USE_TORCH \
+cmake -DCMAKE_CXX_FLAGS=-std=c++17 \
+      -DGATE_USE_TORCH=$GATE_USE_TORCH \
       -DTorch_DIR=$TORCH_DIR \
       -DGATE_USE_OPTICAL=$USE_OPTICAL \
       ../src
