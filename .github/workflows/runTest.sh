@@ -45,7 +45,11 @@ fi
 if [ "$TEST" = "t9_gaga_phsp" ] || [ "$TEST" = "t14_phsp_pairs" ]; then
     #install gaga
     pip3 install torch==1.10.0+cpu torchvision==0.11.1+cpu torchaudio==0.10.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
-    pip install gaga-phsp
+    cd /software
+    mkdir gaga-phsp
+    git clone https://github.com/dsarrut/gaga-phsp.git gaga-phsp
+    cd gaga-phsp
+    pip3 install -e .
 fi
 
 # Compile master version of Gate
