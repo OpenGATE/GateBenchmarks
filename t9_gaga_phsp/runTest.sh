@@ -8,8 +8,8 @@
 # trial pth/003_v3_40k.pth : PHSP1 vs GAN mu et sigma =  0.07085757 1.1661557 OK <-- best
 # trial pth/004_v3_20k.pth : PHSP1 vs GAN mu et sigma =  0.12475119 1.2066121 no
 
-gaga_convert_pth_to_pt pth/003_v3_40k.pth --no-gpu -k Z 271.1 -v --no-norm -o pth/current
-gaga_convert_pth_to_pt pth/003_v3_40k.pth --no-gpu -k Z 271.1 -v --norm -o pth/current_norm
+gaga_convert_pth_to_pt pth/003_v3_40k.pth --no-gpu -k Z 271.1 -v --no-denorm -o pth/current
+gaga_convert_pth_to_pt pth/003_v3_40k.pth --no-gpu -k Z 271.1 -v --denorm -o pth/current_norm
 
 gate_split_and_run.py mac/main1.mac -a N 1e7 -a TYPE gaga -j 1 -o output1
 gate_split_and_run.py mac/main2.mac -a N 1e7 -a TYPE gaga -j 1 -o output2
