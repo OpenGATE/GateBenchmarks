@@ -28,6 +28,7 @@ You can adapt the variables `COMMIT` with the commit/tag of Gate you want to com
 * Create a Gate macro in a folder, with the subfolders `data`, `mac`and `output` (see folder `t1_edep_profiles` for example)
 * Create a `runTest.py` Python script that will run your simulation
 * Create a `runAnalysis.py`Python script to analyse the output. This script must take as input a list of output folders where the output of different Gate versions for this test will be compared and analyzed. You have to implement two functions: `analyse_command_line` and `analyse_all_folders` and you have to return `True` or `False`.
+* Add the name of your test in that list https://github.com/OpenGATE/GateBenchmarks/blob/master/.github/workflows/main.yml#L19 to be able to run the test in Github Actions
 * To avoid to reach the Github quota for LFS, we share the LFS binary data in https://gitlab.in2p3.fr/opengate/gatebenchmarks_data
 * Contact us in issues or pull request to have help or submit your test
 

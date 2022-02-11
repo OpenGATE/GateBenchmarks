@@ -1,0 +1,278 @@
+#  *********************************************************************
+#  * DISCLAIMER                                                        *
+#  *                                                                   *
+#  * Neither the authors of this software system, nor their employing  *
+#  * institutes, nor the agencies providing financial support for this *
+#  * work make any representation or warranty, express or implied,     *
+#  * regarding this software system or assume any liability for its    *
+#  * use.                                                              *
+#  *                                                                   *
+#  * This code implementation is the intellectual property of the      *
+#  * OpenGATE collaboration.                                           *
+#  * By copying, distributing or modifying the Program (or any work    *
+#  * based on the Program) you indicate your acceptance of this        *
+#  * statement, and all its terms.                                     *
+#  *********************************************************************
+#
+                                                          
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+#
+#         D E F I N E   Y O U R   S C A N N E R   A N D       
+#                                                             
+#        Y O U R   C O M P L E T E   S I M U L A T I O N   
+#                                                             
+#        F O R   I M A G I N G    A P P L I CA T I O N S       
+#                                                     
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+
+
+#=====================================================
+# VISUALISATION
+#=====================================================
+
+#/vis/disable
+
+/vis/open                           OGL
+/vis/viewer/reset
+#/vis/viewer/set/viewpointThetaPhi   120 30
+/vis/viewer/set/viewpointThetaPhi 30 30
+#/vis/viewer/set/viewpointThetaPhi   270 0
+/vis/viewer/zoom                    1.1
+/vis/viewer/set/style surface
+/vis/drawVolume
+#/tracking/storeTrajectory           1
+/vis/scene/add/trajectories 
+/vis/scene/endOfEventAction accumulate 10
+#/vis/scene/add/axes
+/vis/viewer/update
+
+/vis/viewer/set/background white
+
+/vis/viewer/set/targetPoint 0 0 0 mm 
+#/vis/viewer/set/lightsVector -1 0.5 1
+
+#=====================================================
+# GEOMETRY
+#=====================================================
+
+
+/gate/geometry/setMaterialDatabase    data/GateMaterials.db
+
+
+#
+#     W O R L D
+#
+/gate/world/geometry/setXLength       300. cm
+/gate/world/geometry/setYLength       300. cm
+/gate/world/geometry/setZLength       300. cm
+/gate/world/setMaterial               Air
+/gate/world/vis/setColor              white
+/gate/world/vis/forceWireframe
+/gate/world/vis/setVisible            0
+
+
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+#                                                                 #
+#     D E F I N I T I O N   A N D   D E S C R I T I O N           #
+#        O F   Y O U R   P E T   D E V I C E                      #
+#                                                                 #
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+
+
+#	ADAC_Forte
+/gate/world/daughters/name                          ADAC
+/gate/world/daughters/systemType                    cylindricalPET
+/gate/world/daughters/insert                        box
+/gate/ADAC/placement/setTranslation       0.0 0.0 0.0 cm
+/gate/ADAC/geometry/setXLength       200. cm
+/gate/ADAC/geometry/setYLength       200. cm
+/gate/ADAC/geometry/setZLength       200. cm
+/gate/ADAC/placement/setRotationAxis      0 0 1
+/gate/ADAC/placement/setRotationAngle     0 deg
+/gate/ADAC/setMaterial                    Air
+/gate/ADAC/vis/setColor                   white
+/gate/ADAC/vis/forceWireframe
+/gate/ADAC/vis/setVisible                 0
+
+
+#   RING
+/gate/world/daughters/name         ring
+/gate/world/daughters/insert       tessellated
+/gate/ring/placement/setTranslation         0.0 0.0 -750.0 mm
+/gate/ring/geometry/setPathToSTLFile        data/ring.stl
+/gate/ring/setMaterial                      Aluminium
+/gate/ring/vis/forceWireframe
+/gate/ring/vis/setColor                     green
+/gate/ring/vis/setVisible                   0
+
+#   RING COVER
+/gate/world/daughters/name                       plasticRing
+/gate/world/daughters/insert                     cylinder
+/gate/plasticRing/placement/setTranslation        0.0 0.0 -350.0 mm
+/gate/plasticRing/geometry/setRmax                600 mm
+/gate/plasticRing/geometry/setRmin                350 mm
+/gate/plasticRing/geometry/setHeight              5.0 mm
+/gate/plasticRing/placement/setRotationAngle      90 deg
+/gate/plasticRing/setMaterial                     Plastic
+/gate/plasticRing/vis/forceSolid
+/gate/plasticRing/vis/setColor                   green
+/gate/plasticRing/vis/setVisible                  1
+
+
+
+#	HEAD
+#   Move this volume to control the head separation
+
+/gate/ADAC/daughters/name           head
+/gate/ADAC/daughters/insert         box
+/gate/head/placement/setTranslation           487 0.0 0.0 mm    # Head distance from centre of system. User must add 87 mm to this value.
+/gate/head/placement/setRotationAxis          0 1 0
+/gate/head/placement/setRotationAngle         90 deg
+/gate/head/geometry/setXLength                600 mm
+/gate/head/geometry/setYLength                700 mm
+/gate/head/geometry/setZLength                255 mm
+/gate/head/setMaterial                        Air
+/gate/head/vis/setColor                       red
+/gate/head/vis/forceWireframe                 
+/gate/head/vis/setVisible                     1
+
+
+/gate/head/moves/insert                       genericMove
+/gate/head/genericMove/setPlacementsFilename  data/moveDetector.placements
+
+/gate/head/daughters/name                      lightguide
+/gate/head/daughters/insert                    tessellated
+/gate/lightguide/placement/setTranslation       -190 -255 -95 mm
+/gate/lightguide/geometry/setPathToSTLFile      data/lightguide.stl
+/gate/lightguide/setMaterial                    Glass
+/gate/lightguide/vis/forceSolid
+/gate/lightguide/vis/setColor                   cyan
+/gate/lightguide/vis/setVisible                 1
+
+/gate/head/daughters/name                      PMTs
+/gate/head/daughters/insert                    tessellated
+/gate/PMTs/placement/setTranslation             -190 -255 -95 mm
+/gate/PMTs/geometry/setPathToSTLFile            data/PMTs.stl
+/gate/PMTs/setMaterial                          PMT
+/gate/PMTs/vis/forceSolid
+/gate/PMTs/vis/setColor                         yellow
+/gate/PMTs/vis/setVisible                       1
+
+/gate/head/daughters/name                      electronics
+/gate/head/daughters/insert                    tessellated
+/gate/electronics/placement/setTranslation      -190 -255 -95 mm
+/gate/electronics/geometry/setPathToSTLFile     data/electronics.stl
+/gate/electronics/setMaterial                   Elec
+/gate/electronics/vis/forceSolid
+/gate/electronics/vis/setColor                  blue
+/gate/electronics/vis/setVisible                1
+
+
+/gate/head/daughters/name                      shielding
+/gate/head/daughters/insert                    tessellated
+/gate/shielding/placement/setTranslation        -190 -255 -95 mm
+/gate/shielding/geometry/setPathToSTLFile       data/shielding.stl
+/gate/shielding/setMaterial                     Lead
+/gate/shielding/vis/forceWireframe
+/gate/shielding/vis/setColor                    gray
+/gate/shielding/vis/setVisible                  1
+
+
+/gate/head/daughters/name                      casing
+/gate/head/daughters/insert                    tessellated
+/gate/casing/placement/setTranslation           -190 -255 -95 mm
+/gate/casing/geometry/setPathToSTLFile          data/casing.stl
+/gate/casing/setMaterial                        Aluminium
+/gate/casing/vis/forceWireframe
+/gate/casing/vis/setColor                       gray
+/gate/casing/vis/setVisible                     1
+
+/gate/head/daughters/name                      frontAl
+/gate/head/daughters/insert                    box
+/gate/frontAl/placement/setTranslation          0. 0.0 -96 mm
+/gate/frontAl/geometry/setXLength               500 mm
+/gate/frontAl/geometry/setYLength               600 mm
+/gate/frontAl/geometry/setZLength               1.5 mm
+/gate/frontAl/setMaterial                       Aluminium
+/gate/frontAl/vis/forceWireframe
+/gate/frontAl/vis/setColor                      white
+/gate/frontAl/vis/setVisible                    1
+
+/gate/head/daughters/name                      frontPlastic
+/gate/head/daughters/insert                    box
+/gate/frontPlastic/placement/setTranslation          0. 0.0 -100 mm
+/gate/frontPlastic/geometry/setXLength               500 mm
+/gate/frontPlastic/geometry/setYLength               600 mm
+/gate/frontPlastic/geometry/setZLength               10 mm
+/gate/frontPlastic/setMaterial                       Perspex
+/gate/frontPlastic/vis/forceSolid
+/gate/frontPlastic/vis/setColor                      grey
+/gate/frontPlastic/vis/setVisible                    1
+
+/gate/head/daughters/name                      crystal
+/gate/head/daughters/insert                    box
+/gate/crystal/placement/setTranslation          0.0 0.0 -87 mm # Crystal center is 13 mm from the front of the detector head
+/gate/crystal/geometry/setXLength               470 mm
+/gate/crystal/geometry/setYLength               590 mm
+/gate/crystal/geometry/setZLength               16 mm
+/gate/crystal/setMaterial                       NaI
+/gate/crystal/vis/forceSolid
+/gate/crystal/vis/setColor                      red
+/gate/crystal/vis/setVisible                    1
+
+
+### M O D U L E ###
+
+/gate/crystal/daughters/name                    active
+/gate/crystal/daughters/insert                  box
+/gate/active/placement/setTranslation           0.0 0.0 0.0 cm
+/gate/active/geometry/setXLength                125 mm
+/gate/active/geometry/setYLength                169 mm
+/gate/active/geometry/setZLength                16 mm
+/gate/active/setMaterial                        NaI
+/gate/active/vis/forceSolid
+/gate/active/vis/setColor                       green
+/gate/active/vis/setVisible                     0
+
+/gate/active/repeaters/insert                  cubicArray
+/gate/active/cubicArray/setRepeatNumberX       3
+/gate/active/cubicArray/setRepeatNumberY       3
+/gate/active/cubicArray/setRepeatNumberZ       1
+/gate/active/cubicArray/setRepeatVector        126.5 170 0 mm
+
+
+###	R E P E A T     H E A D ###
+/gate/head/repeaters/insert                     ring
+/gate/head/ring/setPoint1 0. 1. 0. mm
+/gate/head/ring/setPoint2 0. 0. 0. mm
+/gate/head/ring/setRepeatNumber                 2
+
+/gate/geometry/rebuild
+/vis/viewer/update
+
+/gate/systems/list 
+
+
+#	A T T A C H    S Y S T E M 
+/gate/systems/ADAC/rsector/attach     head
+/gate/systems/ADAC/module/attach      crystal
+/gate/systems/ADAC/crystal/attach     active
+
+
+#	A T T A C H    C R Y S T A L  SD
+/gate/systems/list
+/gate/active/attachCrystalSD
+
+#	A T T A C H	P H A N T O M  SD
+
+#/gate/world/attachPhantomSD
+#/gate/plasticRing/attachPhantomSD
+#/gate/ring/attachPhantomSD
+#/gate/lightguide/attachPhantomSD
+#/gate/PMTs/attachPhantomSD
+#/gate/electronics/attachPhantomSD
+#/gate/frontPlastic/attachPhantomSD
+#/gate/frontAl/attachPhantomSD
+#/gate/shielding/attachPhantomSD
+#/gate/casing/attachPhantomSD
+#/gate/crystal/attachPhantomSD

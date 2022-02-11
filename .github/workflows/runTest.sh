@@ -15,24 +15,30 @@ mkdir /software/gatetools
 cd /software
 git clone https://github.com/OpenGATE/GateTools.git gatetools
 cd gatetools
+python3 -m pip install --upgrade pip
 pip3 install -e .
-pip3 install uproot uproot3 xxhash lz4
+pip3 install uproot uproot3 xxhash lz4 pandas
 echo "export PATH=/software/gatetools/clustertools/:$PATH" >> /etc/mybashrc
 
 #Install dependencies according the test
 compile_torch=false
 compile_rtk=false
+export USE_OPTICAL=OFF
 if [ "$TEST" = "t7_garf" ] || [ "$TEST" = "t9_gaga_phsp" ]; then
    compile_torch=true
+fi
+if [ "$TEST" = "t15_optical" ]; then
+   yum install -y  libxml2-devel
+   export USE_OPTICAL=ON
 fi
 export GATE_USE_TORCH=OFF
 if [ "$compile_torch" = true ] ; then
     cd /software
     mkdir torch
     cd torch
-    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.4.0%2Bcpu.zip
-    unzip libtorch-shared-with-deps-1.4.0+cpu.zip
-    rm -rf libtorch-shared-with-deps-1.4.0+cpu.zip
+    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.10.1%2Bcpu.zip
+    unzip libtorch-shared-with-deps-1.10.1+cpu.zip
+    rm -rf libtorch-shared-with-deps-1.10.1+cpu.zip
     export GATE_USE_TORCH=ON
     export TORCH_DIR=/software/torch/libtorch/share/cmake/Torch
 fi
@@ -44,8 +50,10 @@ if [ -z "$COMMIT" ]; then
 fi
 git clone --branch ${COMMIT} https://github.com/OpenGATE/Gate.git src
 cd bin
-cmake -DGATE_USE_TORCH=$GATE_USE_TORCH \
+cmake -DCMAKE_CXX_FLAGS=-std=c++17 \
+      -DGATE_USE_TORCH=$GATE_USE_TORCH \
       -DTorch_DIR=$TORCH_DIR \
+      -DGATE_USE_OPTICAL=$USE_OPTICAL \
       ../src
 make -j4
 cd ..

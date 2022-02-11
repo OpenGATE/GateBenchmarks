@@ -1,0 +1,28 @@
+
+/control/execute mac/verbose.mac
+#/control/execute mac/visu.mac
+/control/execute mac/volumes.mac
+
+#=====================================================
+# PHYSICS
+#=====================================================
+
+/gate/physics/addPhysicsList emstandard_opt4
+
+# WARNING If enabled, very long, too much e- tracks ???
+#/gate/physics/addProcess RadioactiveDecay
+#/gate/physics/addProcess Decay
+
+/control/execute mac/cuts.mac
+
+#=====================================================
+# actors, source
+#=====================================================
+
+/control/execute            mac/actors.mac
+/gate/actor/stat/save       output/stat1.txt
+/gate/actor/phsp_e/save     output/phsp1_e+.root
+/gate/actor/phsp_g/save     output/phsp1_g.root
+
+/control/execute mac/source1.mac
+/control/execute mac/main_end.mac
