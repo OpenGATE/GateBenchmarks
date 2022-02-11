@@ -27,3 +27,4 @@ done
 mv output1/output.local_0/* output1
 
 mv output2/output.local_0/* output2
+cp -r output2/* output/*
