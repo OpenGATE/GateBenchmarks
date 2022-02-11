@@ -9,7 +9,8 @@ Expected time: 0.3 sec
 
 
 Run the analysis with 
-./py/analyse_pet.py output/pet.root
+runAnalysis_energyWinner.py
+runAnalysis_centroid.py
 
 Timing
 source 2gammas 50 kBq 0.05sec -> 0.3 sec

@@ -19,7 +19,7 @@ logger=logging.getLogger(__name__)
 
 
 
-file="output/test.root"
+file="output/test_energyWinner.root"
 #file_path = os.path.join(folder, filename)
 #file = uproot.open("output/test.root")
 #print(file_path.classnames())
