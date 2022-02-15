@@ -105,7 +105,7 @@ def analyse_one_folder(folder, ax, iFolder):
         #a.set_ylim([0, vmax])
         i += 1
 
-    if abs(rel_diff[2]) < 20 and abs(rel_diff[5]) < 20:
+    if abs(rel_diff[2]) < 22 and abs(rel_diff[5]) < 22:
         return True
     return False
 
