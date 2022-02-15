@@ -27,7 +27,7 @@
 
 /vis/disable
 
-/control/execute mac/Geometry_Forte_Vis.mac
+/control/execute mac/Geometry_Forte.mac
 
 /control/execute mac/Physics.mac
 
