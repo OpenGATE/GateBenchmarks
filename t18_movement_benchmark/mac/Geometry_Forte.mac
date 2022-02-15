@@ -36,17 +36,20 @@
 #/vis/viewer/reset
 #/vis/viewer/set/viewpointThetaPhi   120 30
 #/vis/viewer/set/viewpointThetaPhi 30 30
-#/vis/viewer/set/viewpointThetaPhi   0 0
-#/vis/viewer/zoom                    1.5
+#/vis/viewer/set/viewpointThetaPhi   270 0
+#/vis/viewer/zoom                    1.1
 #/vis/viewer/set/style surface
 #/vis/drawVolume
 #/tracking/storeTrajectory           1
 #/vis/scene/add/trajectories 
-#/vis/scene/endOfEventAction accumulate
+#/vis/scene/endOfEventAction accumulate 10
 #/vis/scene/add/axes
 #/vis/viewer/update
 
+#/vis/viewer/set/background white
 
+#/vis/viewer/set/targetPoint 0 0 0 mm
+#/vis/viewer/set/lightsVector -1 0.5 1
 
 #=====================================================
 # GEOMETRY
@@ -65,7 +68,7 @@
 /gate/world/setMaterial               Air
 #/gate/world/vis/setColor              white
 #/gate/world/vis/forceWireframe
-#/gate/world/vis/setVisible            1
+#/gate/world/vis/setVisible            0
 
 
 #-------------------oooooOOOOO00000OOOOOooooo---------------------#
@@ -89,7 +92,7 @@
 /gate/ADAC/setMaterial                    Air
 #/gate/ADAC/vis/setColor                   white
 #/gate/ADAC/vis/forceWireframe
-#/gate/ADAC/vis/setVisible                 1
+#/gate/ADAC/vis/setVisible                 0
 
 
 #   RING
@@ -99,20 +102,20 @@
 /gate/ring/geometry/setPathToSTLFile        data/ring.stl
 /gate/ring/setMaterial                      Aluminium
 #/gate/ring/vis/forceWireframe
-#/gate/ring/vis/setColor                     gray
-#/gate/ring/vis/setVisible                   1
+#/gate/ring/vis/setColor                     green
+#/gate/ring/vis/setVisible                   0
 
 #   RING COVER
 /gate/world/daughters/name                       plasticRing
 /gate/world/daughters/insert                     cylinder
 /gate/plasticRing/placement/setTranslation        0.0 0.0 -350.0 mm
-/gate/plasticRing/geometry/setRmax                800 mm
+/gate/plasticRing/geometry/setRmax                600 mm
 /gate/plasticRing/geometry/setRmin                350 mm
 /gate/plasticRing/geometry/setHeight              5.0 mm
 /gate/plasticRing/placement/setRotationAngle      90 deg
 /gate/plasticRing/setMaterial                     Plastic
-#/gate/plasticRing/vis/forceWireframe
-#/gate/plasticRing/vis/setColor                    gray
+#/gate/plasticRing/vis/forceSolid
+#/gate/plasticRing/vis/setColor                   green
 #/gate/plasticRing/vis/setVisible                  1
 
 
@@ -130,8 +133,12 @@
 /gate/head/geometry/setZLength                255 mm
 /gate/head/setMaterial                        Air
 #/gate/head/vis/setColor                       red
-#/gate/head/vis/forceWireframe                 
-#/gate/head/vis/setVisible                     1 
+#/gate/head/vis/forceWireframe
+#/gate/head/vis/setVisible                     1
+
+
+/gate/head/moves/insert                       genericMove
+/gate/head/genericMove/setPlacementsFilename  data/moveDetector.placements
 
 /gate/head/daughters/name                      lightguide
 /gate/head/daughters/insert                    tessellated
@@ -139,7 +146,7 @@
 /gate/lightguide/geometry/setPathToSTLFile      data/lightguide.stl
 /gate/lightguide/setMaterial                    Glass
 #/gate/lightguide/vis/forceSolid
-#/gate/lightguide/vis/setColor                   blue
+#/gate/lightguide/vis/setColor                   cyan
 #/gate/lightguide/vis/setVisible                 1
 
 /gate/head/daughters/name                      PMTs
@@ -157,8 +164,8 @@
 /gate/electronics/geometry/setPathToSTLFile     data/electronics.stl
 /gate/electronics/setMaterial                   Elec
 #/gate/electronics/vis/forceSolid
-#/gate/electronics/vis/setColor                  grey
-#/gate/electronics/vis/setVisible                0
+#/gate/electronics/vis/setColor                  blue
+#/gate/electronics/vis/setVisible                1
 
 
 /gate/head/daughters/name                      shielding
@@ -168,7 +175,7 @@
 /gate/shielding/setMaterial                     Lead
 #/gate/shielding/vis/forceWireframe
 #/gate/shielding/vis/setColor                    gray
-#/gate/shielding/vis/setVisible                  0
+#/gate/shielding/vis/setVisible                  1
 
 
 /gate/head/daughters/name                      casing
@@ -178,7 +185,7 @@
 /gate/casing/setMaterial                        Aluminium
 #/gate/casing/vis/forceWireframe
 #/gate/casing/vis/setColor                       gray
-#/gate/casing/vis/setVisible                     0
+#/gate/casing/vis/setVisible                     1
 
 /gate/head/daughters/name                      frontAl
 /gate/head/daughters/insert                    box
@@ -198,39 +205,40 @@
 /gate/frontPlastic/geometry/setYLength               600 mm
 /gate/frontPlastic/geometry/setZLength               10 mm
 /gate/frontPlastic/setMaterial                       Perspex
-#/gate/frontPlastic/vis/forceWireframe
-#/gate/frontPlastic/vis/setColor                      white
+#/gate/frontPlastic/vis/forceSolid
+#/gate/frontPlastic/vis/setColor                      grey
 #/gate/frontPlastic/vis/setVisible                    1
 
 /gate/head/daughters/name                      crystal
 /gate/head/daughters/insert                    box
 /gate/crystal/placement/setTranslation          0.0 0.0 -87 mm # Crystal center is 13 mm from the front of the detector head
-/gate/crystal/geometry/setXLength               16.5 cm
-/gate/crystal/geometry/setYLength               19.5 cm
-/gate/crystal/geometry/setZLength               1.6 cm
+/gate/crystal/geometry/setXLength               470 mm
+/gate/crystal/geometry/setYLength               590 mm
+/gate/crystal/geometry/setZLength               16 mm
 /gate/crystal/setMaterial                       NaI
-#/gate/crystal/vis/forceWireframe
+#/gate/crystal/vis/forceSolid
 #/gate/crystal/vis/setColor                      red
 #/gate/crystal/vis/setVisible                    1
 
-/gate/crystal/repeaters/insert                  cubicArray
-/gate/crystal/cubicArray/setRepeatNumberX       3
-/gate/crystal/cubicArray/setRepeatNumberY       3
-/gate/crystal/cubicArray/setRepeatNumberZ       1
-/gate/crystal/cubicArray/setRepeatVector        16.5 19.5 0 cm
 
 ### M O D U L E ###
 
 /gate/crystal/daughters/name                    active
 /gate/crystal/daughters/insert                  box
 /gate/active/placement/setTranslation           0.0 0.0 0.0 cm
-/gate/active/geometry/setXLength                16.5 cm
-/gate/active/geometry/setYLength                19.5 cm
-/gate/active/geometry/setZLength                1.6 cm
+/gate/active/geometry/setXLength                125 mm
+/gate/active/geometry/setYLength                169 mm
+/gate/active/geometry/setZLength                16 mm
 /gate/active/setMaterial                        NaI
 #/gate/active/vis/forceSolid
 #/gate/active/vis/setColor                       green
-#/gate/active/vis/setVisible                     1
+#/gate/active/vis/setVisible                     0
+
+/gate/active/repeaters/insert                  cubicArray
+/gate/active/cubicArray/setRepeatNumberX       3
+/gate/active/cubicArray/setRepeatNumberY       3
+/gate/active/cubicArray/setRepeatNumberZ       1
+/gate/active/cubicArray/setRepeatVector        126.5 170 0 mm
 
 
 ###	R E P E A T     H E A D ###
