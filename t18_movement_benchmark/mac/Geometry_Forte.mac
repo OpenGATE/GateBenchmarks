@@ -122,7 +122,7 @@
 
 /gate/ADAC/daughters/name           head
 /gate/ADAC/daughters/insert         box
-/gate/head/placement/setTranslation           {sep} 0.0 0.0 mm    # Head distance from centre of system. User must add 87 mm to this value.
+/gate/head/placement/setTranslation           487 0.0 0.0 mm    # Head distance from centre of system. User must add 87 mm to this value.
 /gate/head/placement/setRotationAxis          0 1 0
 /gate/head/placement/setRotationAngle         90 deg
 /gate/head/geometry/setXLength                600 mm
