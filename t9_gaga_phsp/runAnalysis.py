@@ -181,10 +181,16 @@ def analyse_all_folders(output_folders, **kwargs):
     outputFolders = []
     for o in output_folders:
         if os.path.isdir(o):
-            outputFolders.append(o)
+            if not o == "output1" and not o == "output2" and not o == "output":
+                outputFolders.append(o)
+    # spacial case here because the output are in 2 different folders output1 and output2 and we need to be sure that both are correct
+    outputFolders.append("output1")
+    outputFolders.append("output2")
 
-    for o in outputFolders:
+    for o in outputFolders[:-2]:
         r = relative_uncertainty(['reference_data', o], [1, 10], 0.05)
+    r = relative_uncertainty(['reference_data', outputFolders[-2]], [1, 10], 0.05)
+    r = r and relative_uncertainty(['reference_data', outputFolders[-1]], [1, 10], 0.05)
 
     return r
 

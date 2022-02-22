@@ -11,9 +11,18 @@
 gaga_convert_pth_to_pt pth/003_v3_40k.pth --no-gpu -k Z 271.1 -v --no-denorm -o pth/current
 gaga_convert_pth_to_pt pth/003_v3_40k.pth --no-gpu -k Z 271.1 -v --denorm -o pth/current_norm
 
-gate_split_and_run.py mac/main1.mac -a N 1e7 -a TYPE gaga -j 1 -o output1
-gate_split_and_run.py mac/main2.mac -a N 1e7 -a TYPE gaga -j 1 -o output2
+gate_split_and_run.py mac/main1.mac -nd -a N 1e7 -a TYPE gaga -j 1 -o output1
+# Wait Gate pids
+processId=($(ps -ef | grep 'Gate' | grep -v 'grep' | awk '{ print $2 }'))
+echo "Waiting for Gate to terminate ..."
+for pid in ${processId[*]}; do
+  while [[ ${?} == 0 ]]; do
+    sleep 1s
+    ps -p $pid >/dev/null
+  done
+done
 
+gate_split_and_run.py mac/main2.mac -nd -a N 1e7 -a TYPE gaga -j 1 -o output2
 # Wait Gate pids
 processId=($(ps -ef | grep 'Gate' | grep -v 'grep' | awk '{ print $2 }'))
 echo "Waiting for Gate to terminate ..."
@@ -25,5 +34,7 @@ for pid in ${processId[*]}; do
 done
 
 mv output1/output.local_0/* output1
-
 mv output2/output.local_0/* output2
+mkdir output
+cp -r output2/* output/
+
