@@ -19,7 +19,7 @@ logger=logging.getLogger(__name__)
 
 
 
-file="output/test_energyWinner.root"
+file="output/test_centroid.root"
 #file_path = os.path.join(folder, filename)
 #file = uproot.open("output/test.root")
 #print(file_path.classnames())
@@ -101,17 +101,19 @@ for index in range(len(edep_hit)) :
             maxEdep[k]=-1
             totEdep[k]=0.
             minTime[k]=999
-            
+            winnerX[k]=0
+            winnerY[k]=0
+            winnerZ[k]=0
             
         for j in range(len(tmp_blockID)) :
             for k in range(n_unique_blockID) :
                 if ( tmp_blockID[j] ==  unique_blockID[k]) :
-                    if (tmp_edep_hit[j] >= maxEdep[k]) : #find max energy and position of energy winner
-                        maxEdep[k]=tmp_edep_hit[j]
-                        winnerX[k]=tmp_posX_hit[j]
-                        winnerY[k]=tmp_posY_hit[j]
-                        winnerZ[k]=tmp_posZ_hit[j]
-
+                    winnerX[k] += tmp_posX_hit[j]*tmp_edep_hit[j]
+                    winnerY[k] += tmp_posY_hit[j]*tmp_edep_hit[j]
+                    winnerZ[k] += tmp_posZ_hit[j]*tmp_edep_hit[j]
+                    
+                   
+        
                     if (tmp_time_hit[j]<minTime[k]) : #min time
                         minTime[k]=tmp_time_hit[j]
 
@@ -121,9 +123,9 @@ for index in range(len(edep_hit)) :
             blockID_from_hit.append(unique_blockID[k])
             edep_from_hit.append(totEdep[k])
             minTime_from_hit.append(minTime[k])
-            posX_from_hit.append(winnerX[k])
-            posY_from_hit.append(winnerY[k])
-            posZ_from_hit.append(winnerZ[k])
+            posX_from_hit.append(winnerX[k]/totEdep[k])
+            posY_from_hit.append(winnerY[k]/totEdep[k])
+            posZ_from_hit.append(winnerZ[k]/totEdep[k])
             #print ("winner! ", unique_blockID[k], totEdep[k], winnerX[k], winnerY[k], winnerZ[k])
 	    
         del tmp_blockID[:]
@@ -160,15 +162,15 @@ posZ_from_hit.sort()
 for i in range(len(energy_single)) :
     if (blockID_from_hit[i] != blockID_single[i]):
         print(CRED+"BlockID test failed"+CEND, blockID_from_hit[i], " vs. ", blockID_single[i])
-    if (math.fabs(edep_from_hit[i]-energy_single[i])>0.00001):
+    if (math.fabs(edep_from_hit[i]-energy_single[i])>0.0001):
         print(CRED+"Energy test failed"+CEND, edep_from_hit[i], " vs. ", energy_single[i])
-    if (math.fabs(minTime_from_hit[i] - time_single[i]) >0.00001 ):
+    if (math.fabs(minTime_from_hit[i] - time_single[i]) >0.0001 ):
         print(CRED+"Min time test failed"+CEND, minTime_from_hit[i], " vs. ", time_single[i])
-    if (math.fabs(posX_from_hit[i] - globalPosX_single[i]) >0.00001):
+    if (math.fabs(posX_from_hit[i] - globalPosX_single[i]) >0.0001):
         print(CRED+"PosX test failed"+CEND, posX_from_hit[i], " vs. ", globalPosX_single[i])
-    if (math.fabs(posY_from_hit[i] - globalPosY_single[i]) >0.00001):
+    if (math.fabs(posY_from_hit[i] - globalPosY_single[i]) >0.0001):
         print(CRED+"PosY test failed"+CEND, posY_from_hit[i], " vs. ", globalPosY_single[i])
-    if (math.fabs(posZ_from_hit[i] - globalPosZ_single[i]) >0.00001):
+    if (math.fabs(posZ_from_hit[i] - globalPosZ_single[i]) >0.0001):
         print(CRED+"PosZ time test failed"+CEND, posZ_from_hit[i], " vs. ", globalPosZ_single[i])
     
 

@@ -160,15 +160,15 @@ posZ_from_hit.sort()
 for i in range(len(energy_single)) :
     if (blockID_from_hit[i] != blockID_single[i]):
         print(CRED+"BlockID test failed"+CEND, blockID_from_hit[i], " vs. ", blockID_single[i])
-    if (math.fabs(edep_from_hit[i]-energy_single[i])>0.00001):
+    if (math.fabs(edep_from_hit[i]-energy_single[i])>0.0001):
         print(CRED+"Energy test failed"+CEND, edep_from_hit[i], " vs. ", energy_single[i])
-    if (math.fabs(minTime_from_hit[i] - time_single[i]) >0.00001 ):
+    if (math.fabs(minTime_from_hit[i] - time_single[i]) >0.0001 ):
         print(CRED+"Min time test failed"+CEND, minTime_from_hit[i], " vs. ", time_single[i])
-    if (math.fabs(posX_from_hit[i] - globalPosX_single[i]) >0.00001):
+    if (math.fabs(posX_from_hit[i] - globalPosX_single[i]) >0.0001):
         print(CRED+"PosX test failed"+CEND, posX_from_hit[i], " vs. ", globalPosX_single[i])
-    if (math.fabs(posY_from_hit[i] - globalPosY_single[i]) >0.00001):
+    if (math.fabs(posY_from_hit[i] - globalPosY_single[i]) >0.0001):
         print(CRED+"PosY test failed"+CEND, posY_from_hit[i], " vs. ", globalPosY_single[i])
-    if (math.fabs(posZ_from_hit[i] - globalPosZ_single[i]) >0.00001):
+    if (math.fabs(posZ_from_hit[i] - globalPosZ_single[i]) >0.0001):
         print(CRED+"PosZ time test failed"+CEND, posZ_from_hit[i], " vs. ", globalPosZ_single[i])
     
 
