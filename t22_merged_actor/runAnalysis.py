@@ -50,7 +50,7 @@ def analyse_all_folders(output_folders):
 def analyse_one_folder(folder):
     # Open Edep map
     try:
-        Edep = np.fromfile(os.path.join(folder, "tessellated-Edep.raw"), "float32")
+        Edep = np.fromfile(os.path.join(folder, "dose-Edep.raw"), "float32")
         Edep = Edep.reshape((50, 50, 50))
         Edep = Edep[25, ...] # Get slice 25
     except:
@@ -62,7 +62,7 @@ def analyse_one_folder(folder):
     # Get mean value inside the meshed sphere
     avgMesh = Edep[22:28, 12:18].mean()
 
-    print(folder + " tessellated-Edep.raw: avgMesh = " + str(avgMesh) + " and avgBackground = " + str(avgBackground)) 
+    print(folder + " dose-Edep.raw: avgMesh = " + str(avgMesh) + " and avgBackground = " + str(avgBackground)) 
     # Mean background energy value should be always bigger
     if (avgMesh > avgBackground):
         return False

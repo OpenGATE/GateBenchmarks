@@ -1,8 +1,7 @@
 ############################
 # VISUALIZATION PARAMETERS #
 ############################
-#/vis/disable
-/vis/open OGL
+/vis/disable
 
 #############
 # VERBOSITY #
@@ -38,21 +37,29 @@
 # Phantom                         #
 ###################################
 
-# Main volume
-/gate/world/daughters/name                        brachy
-/gate/world/daughters/insert                      box
-/gate/brachy/geometry/setXLength                  50 mm
-/gate/brachy/geometry/setYLength                  50 mm
-/gate/brachy/geometry/setZLength                  50 mm
-/gate/brachy/placement/setTranslation             0 0 0 mm
-/gate/brachy/setMaterial                          Water
+# THE CONTAINER VOLUME
+/gate/world/daughters/name                          GlobalVol
+/gate/world/daughters/insert                        box
+/gate/GlobalVol/geometry/setXLength                 60. mm
+/gate/GlobalVol/geometry/setYLength                 60. mm
+/gate/GlobalVol/geometry/setZLength                 60. mm
+/gate/GlobalVol/placement/setTranslation            0.0 0.0 0.0 mm
+/gate/GlobalVol/setMaterial Air
+
+# Voxelized volume
+/gate/GlobalVol/daughters/name                      brachy
+/gate/GlobalVol/daughters/insert                    ImageRegularParametrisedVolume
+/gate/brachy/geometry/SetImage                      data/water_box.mhd
+/gate/brachy/geometry/setRangeToMaterialFile        data/range.dat
+/gate/brachy/placement/setTranslation               0. 0. 0. mm
+/gate/brachy/setSkipEqualMaterials                  0
 
 # Meshed volume
-/gate/brachy/daughters/name                       mesh
-/gate/brachy/daughters/insert                     tessellated
-/gate/mesh/geometry/setPathToSTLFile              data/Sphere5mmRadius.stl
-/gate/mesh/placement/setTranslation               -10 0.0 0.0 mm
-/gate/mesh/setMaterial                            Vacuum
+/gate/GlobalVol/daughters/name                      mesh
+/gate/GlobalVol/daughters/insert                    tessellated
+/gate/mesh/geometry/setPathToSTLFile                data/Sphere5mmRadius.stl
+/gate/mesh/placement/setTranslation                 -10 0.0 0.0 mm
+/gate/mesh/setMaterial                              Vacuum
 
 ###########
 # PHYSICS #
@@ -77,6 +84,13 @@
 
 /gate/output/allowNoOutput
 
+# MergedVolumeActor
+# This actor MUST be the first actor declared in the GATE macro
+/gate/actor/addActor                    MergedVolumeActor mergedVol
+/gate/actor/mergedVol/attachTo          GlobalVol
+/gate/actor/mergedVol/volumeToMerge     mesh
+
+# DoseActor
 /gate/actor/addActor                          DoseActor  dosePhantom
 /gate/actor/dosePhantom/attachTo              brachy
 /gate/actor/dosePhantom/stepHitType           post
@@ -89,7 +103,7 @@
 /gate/actor/dosePhantom/enableSquaredEdep     false
 /gate/actor/dosePhantom/enableUncertaintyDose false
 /gate/actor/dosePhantom/enableSquaredDose     false
-/gate/actor/dosePhantom/save                  output/tessellated.mhd
+/gate/actor/dosePhantom/save                  output/dose.mhd
 
 ##################
 # INITIALIZATION #
