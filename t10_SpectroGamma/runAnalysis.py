@@ -120,14 +120,14 @@ def analyze_one_file(file):
     efficiencyTest = False
     peakTest = False
     print(str(efficiency_full) + " " + str(reference_efficiency_full) + " " + str(error_efficiency_full))
-    if(np.abs(efficiency_full-reference_efficiency_full) <= 5*error_efficiency_full):
+    if(np.abs(efficiency_full-reference_efficiency_full) <= 3*error_efficiency_full):
         print("Test of full efficiency is OK for " + file)
         efficiencyTest = True
     else:
         print("Problem with test of full efficiency for " + file)
 
-    if(np.abs(efficiency_peak-reference_efficiency_peak) <= 2*error_efficiency_peak):
-        print("Test of spectrum efficiency is OK for " + file)
+    if(np.abs(efficiency_peak-reference_efficiency_peak) <= 3*error_efficiency_peak):
+        print("Test of peak efficiency is OK for " + file)
         peakTest = True
     else:
         print("Problem with test of peak efficiency for " + file)
