@@ -1,3 +1,0 @@
-
-Gate tessellatedBench.mac
-
