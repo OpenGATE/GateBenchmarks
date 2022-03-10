@@ -25,8 +25,6 @@
 /gate/mainbox1/vis/setColor blue
 
 
-/gate/geometry/setIonisationPotential G4_WATER 78 eV
-/gate/geometry/setIonisationPotential Air 85.7 eV
 
 
 #=====================================================
@@ -36,15 +34,18 @@
 /gate/physics/addPhysicsList FTFP_INCLXX_EMZ
 #/control/execute mac/physicslist_HAD_std_6_2_2.mac
 
-/gate/physics/Gamma/SetCutInRegion      world 1 mm
-/gate/physics/Electron/SetCutInRegion   world 1 mm
-/gate/physics/Positron/SetCutInRegion   world 1 mm
+/gate/physics/Gamma/SetCutInRegion      world 100 m
+/gate/physics/Electron/SetCutInRegion   world 100 m
+/gate/physics/Positron/SetCutInRegion   world 100 m
 
-/gate/physics/Gamma/SetCutInRegion      mainbox1 0.1 mm
-/gate/physics/Electron/SetCutInRegion   mainbox1 0.1 mm
-/gate/physics/Positron/SetCutInRegion   mainbox1 0.1 mm
+/gate/physics/Gamma/SetCutInRegion      mainbox1 100 m
+/gate/physics/Electron/SetCutInRegion   mainbox1 100 m
+/gate/physics/Positron/SetCutInRegion   mainbox1 100 m
+/gate/physics/Proton/SetCutInRegion   mainbox1 0.5 mm
 
-/gate/physics/SetMaxStepSizeInRegion world 0.1 mm
+
+/gate/physics/SetMaxStepSizeInRegion world 10 mm
+/gate/physics/SetMaxStepSizeInRegion mainbox1 0.5 mm
 /gate/physics/ActivateStepLimiter proton
 /gate/physics/ActivateStepLimiter deuteron
 /gate/physics/ActivateStepLimiter triton
@@ -154,8 +155,8 @@
 #=====================================================
 
 /gate/random/setEngineName MersenneTwister
-/gate/random/setEngineSeed 123456
+/gate/random/setEngineSeed 12345678910
 
 /gate/application/noGlobalOutput
-/gate/application/setTotalNumberOfPrimaries 2000
+
 /gate/application/start
