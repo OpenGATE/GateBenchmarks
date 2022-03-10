@@ -1,0 +1,142 @@
+############################
+# VISUALIZATION PARAMETERS #
+############################
+/vis/disable
+
+#############
+# VERBOSITY #
+#############
+/control/verbose            0
+/run/verbose                1
+/run/particle/verbose       0
+
+/event/verbose              0
+/tracking/verbose           0
+
+/gate/generator/verbose     0
+/gate/source/verbose        0
+
+/gate/verbose               Actor   0 
+
+#########################
+# SET MATERIAL DATABASE #
+#########################
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+
+#########
+# WORLD #
+#########
+/gate/world/geometry/setXLength             100. cm
+/gate/world/geometry/setYLength             100. cm
+/gate/world/geometry/setZLength             100. cm
+/gate/world/setMaterial                     Air
+/gate/world/vis/setVisible                  1
+/gate/world/vis/forceWireframe
+
+###################################
+# Phantom                         #
+###################################
+
+# Main volume
+/gate/world/daughters/name                        brachy
+/gate/world/daughters/insert                      box
+/gate/brachy/geometry/setXLength                  50 mm
+/gate/brachy/geometry/setYLength                  50 mm
+/gate/brachy/geometry/setZLength                  50 mm
+/gate/brachy/placement/setTranslation             0 0 0 mm
+/gate/brachy/setMaterial                          Water
+
+# Meshed volume
+/gate/brachy/daughters/name                       mesh
+/gate/brachy/daughters/insert                     tessellated
+/gate/mesh/geometry/setPathToSTLFile              data/Sphere5mmRadius.stl
+/gate/mesh/placement/setTranslation               -10 0.0 0.0 mm
+/gate/mesh/setMaterial                            Vacuum
+
+###########
+# PHYSICS #
+###########
+
+/gate/physics/addPhysicsList emstandard_opt3
+
+/gate/physics/setEMin 990 eV
+/gate/physics/setEMax 250 MeV
+
+/gate/physics/setDEDXBinning 300
+/gate/physics/setLambdaBinning 300
+
+/gate/physics/Electron/SetCutInRegion  world 10 m
+/gate/physics/Gamma/SetCutInRegion     world 10 m
+
+#/gate/physics/print physics.txt
+
+###################################
+# Dose Phantom                    #
+###################################
+
+/gate/output/allowNoOutput
+
+/gate/actor/addActor                          DoseActor  dosePhantom
+/gate/actor/dosePhantom/attachTo              brachy
+/gate/actor/dosePhantom/stepHitType           post
+/gate/actor/dosePhantom/setPosition           0 0 0 mm
+/gate/actor/dosePhantom/setVoxelSize          1 1 1 mm
+/gate/actor/dosePhantom/enableDose            false
+/gate/actor/dosePhantom/enableEdep            true
+/gate/actor/dosePhantom/enableNumberOfHits    false
+/gate/actor/dosePhantom/enableUncertaintyEdep false
+/gate/actor/dosePhantom/enableSquaredEdep     false
+/gate/actor/dosePhantom/enableUncertaintyDose false
+/gate/actor/dosePhantom/enableSquaredDose     false
+/gate/actor/dosePhantom/save                  output/tessellated.mhd
+
+##################
+# INITIALIZATION #
+##################
+
+/gate/run/initialize
+
+##############
+# SOURCE GPS #
+##############
+
+# Main source
+
+/gate/source/addSource                   src gps
+/gate/source/src/gps/particle            gamma
+/gate/source/src/gps/ene/type            User
+/gate/source/src/gps/hist/type           energy
+/gate/source/src/gps/hist/point          0 0.0
+/gate/source/src/gps/hist/point          27.202E-03 0.406
+/gate/source/src/gps/hist/point          27.472E-03 0.757
+/gate/source/src/gps/hist/point          30.98E-03 0.202
+/gate/source/src/gps/hist/point          31.71E-03 0.0439
+/gate/source/src/gps/hist/point          35.492E-03 0.0668
+/gate/source/src/gps/position            10.0 0.0 0.0 mm
+/gate/source/src/gps/pos/type            Volume
+/gate/source/src/gps/pos/shape           Cylinder
+/gate/source/src/gps/pos/inner_radius    500 um
+/gate/source/src/gps/pos/radius          500.017 um
+/gate/source/src/gps/pos/halfz           2 mm
+/gate/source/src/gps/ang/type            iso
+/gate/source/src/gps/ang/mintheta        0. deg
+/gate/source/src/gps/ang/minphi          0. deg
+/gate/source/src/gps/ang/maxphi          360. deg
+
+/gate/source/list
+
+###############
+# RANDOM      #
+###############
+
+/gate/random/setEngineName MersenneTwister
+#/gate/random/setEngineSeed 10
+
+###############
+# START       #
+###############
+
+/gate/application/setNumberOfPrimariesPerRun 1000000
+/gate/application/startDAQ
+
+exit
