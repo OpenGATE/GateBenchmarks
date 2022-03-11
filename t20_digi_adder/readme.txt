@@ -15,8 +15,7 @@ Expected time: 0.6 sec
 
 
 Run the analysis with 
-runAnalysis_energyWinner.py
-runAnalysis_centroid.py
+runAnalysis.py
 
 Timing
 source 2gammas 50 kBq 0.05sec -> 0.6 sec
