@@ -17,33 +17,35 @@
 # Global Box
 /gate/world/daughters/name              mainbox1
 /gate/world/daughters/insert            box
-/gate/mainbox1/geometry/setXLength      40 cm
-/gate/mainbox1/geometry/setYLength      40 cm
-/gate/mainbox1/geometry/setZLength      40 cm
-/gate/mainbox1/placement/setTranslation 0.0 0.0 25 cm
-/gate/mainbox1/setMaterial Water
+/gate/mainbox1/geometry/setXLength      20 cm
+/gate/mainbox1/geometry/setYLength      20 cm
+/gate/mainbox1/geometry/setZLength      20 cm
+/gate/mainbox1/placement/setTranslation 0.0 0.0 10 cm
+/gate/mainbox1/setMaterial G4_WATER
 /gate/mainbox1/vis/setVisible 1
 /gate/mainbox1/vis/setColor blue
 
-# /gate/geometry/setIonisationPotential Water 75 eV
-# /gate/geometry/setIonisationPotential Air 85.7 eV
+# /gate/geometry/setIonisationPotential Water 78 eV
+/gate/geometry/setIonisationPotential Air 85.7 eV
 
 
 #=====================================================
 # PHYSICS
 #=====================================================
 
-/gate/physics/addPhysicsList QGSP_BERT_EMV
+/gate/physics/addPhysicsList QGSP_BIC_EMZ
 
-/gate/physics/Gamma/SetCutInRegion      world 1 mm
-/gate/physics/Electron/SetCutInRegion   world 1 mm
-/gate/physics/Positron/SetCutInRegion   world 1 mm
+/gate/physics/Gamma/SetCutInRegion      world 100 m
+/gate/physics/Electron/SetCutInRegion   world 100 m
+/gate/physics/Positron/SetCutInRegion   world 100 m
 
-/gate/physics/Gamma/SetCutInRegion      mainbox1 0.1 mm
-/gate/physics/Electron/SetCutInRegion   mainbox1 0.1 mm
-/gate/physics/Positron/SetCutInRegion   mainbox1 0.1 mm
+/gate/physics/Gamma/SetCutInRegion      mainbox1 100 m
+/gate/physics/Electron/SetCutInRegion   mainbox1 100 m
+/gate/physics/Positron/SetCutInRegion   mainbox1 100 m
+/gate/physics/Proton/SetCutInRegion   mainbox1 0.5 mm
 
-/gate/physics/SetMaxStepSizeInRegion world 1 mm
+/gate/physics/SetMaxStepSizeInRegion world 10 mm
+/gate/physics/SetMaxStepSizeInRegion mainbox1 1 mm
 /gate/physics/ActivateStepLimiter proton
 /gate/physics/ActivateStepLimiter deuteron
 /gate/physics/ActivateStepLimiter triton
@@ -74,7 +76,7 @@
 /gate/actor/dose3d/attachTo    	         mainbox1
 /gate/actor/dose3d/stepHitType           random
 /gate/actor/dose3d/setPosition           0 0 0 cm
-/gate/actor/dose3d/setResolution         50 50 50
+/gate/actor/dose3d/setResolution         20 20 20
 /gate/actor/dose3d/enableEdep            true
 /gate/actor/dose3d/enableUncertaintyEdep true
 /gate/actor/dose3d/enableDose            true
@@ -128,7 +130,7 @@
 
 # JamesRandom Ranlux64 MersenneTwister
 /gate/random/setEngineName MersenneTwister
-/gate/random/setEngineSeed 123456
+/gate/random/setEngineSeed 12345678911
 
 # /gate/random/verbose 1
 # /gate/source/verbose 0
@@ -137,7 +139,7 @@
 #/tracking/verbose 1
 
 /gate/application/noGlobalOutput
-/gate/application/setTotalNumberOfPrimaries 200
+/gate/application/setTotalNumberOfPrimaries 200000
 /gate/application/start
 
 exit

@@ -85,7 +85,7 @@ def analyse_one_particle(output_folders, particle_name):
 def gamma_index(a, filename, ref_filename):
     img = itk.imread(filename)
     img_ref = itk.imread(ref_filename)
-    gi = gt.gamma_index_3d_equal_geometry(img_ref, img, dta=1, dd=1, ddpercent=True)
+    gi = gt.gamma_index_3d_equal_geometry(img_ref, img, dta=1, dd=3, ddpercent=True)
     # itk.imwrite(gi, 'gi.mhd')
     spacing = img.GetSpacing()
     data = itk.GetArrayViewFromImage(gi)
