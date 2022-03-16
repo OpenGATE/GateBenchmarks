@@ -116,7 +116,7 @@ def gamma_index(a, filename, ref_filename):
         indexThreshold = np.where(data > 0)
         index = np.where(data[indexThreshold] <= 1.0)
         percentageVoxelOk = index[0].size / indexThreshold[0].size * 100
-    print(f'  Voxels that passes gamma index 1%1mm: {percentageVoxelOk:.2f}%')
+    print(f'  Voxels that passes gamma index 3%1mm: {percentageVoxelOk:.2f}%')
     if percentageVoxelOk < TOL:
         print(f'!!! test if FALSE !!! (tolerance is {TOL}%)')
         return False
