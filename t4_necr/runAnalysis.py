@@ -47,11 +47,41 @@ def analysis(root_file):
     print(f'Scattered events {data.scatter_count}')
     print(f'Trues events     {data.trues_count}')
 
-    print(f'Prompt rate    {data.prompts_count / duration} counts.s-1')
-    print(f'Delayed rate   {data.delays_count / duration}  counts.s-1')
-    print(f'Random rate    {data.randoms_count / duration} counts.s-1')
-    print(f'Scattered rate {data.scatter_count / duration} counts.s-1')
-    print(f'Trues rate     {data.trues_count / duration} counts.s-1')
+    ref_prompts_rate = 11383333
+    ref_delays_rate = 9913333
+    ref_randoms_rate = 9866667
+    ref_scatter_rate = 600000
+    ref_trues_rate = 916667
+
+    data.prompts_count_rate = data.prompts_count / duration
+    data.delays_count_rate = data.delays_count / duration
+    data.randoms_count_rate = data.randoms_count / duration
+    data.scatter_count_rate = data.scatter_count / duration
+    data.trues_count_rate = data.trues_count / duration
+
+    test_ok = True
+    tol = 0.10
+
+    d = abs(data.prompts_count_rate - ref_prompts_rate) / ref_prompts_rate
+    test_ok = test_ok and d < tol
+    print(f'Prompt rate     {data.prompts_count_rate:.0f} cps    -> {d * 100:.2f}%   (tol {tol * 100}%)')
+
+    d = abs(data.delays_count_rate - ref_delays_rate) / ref_delays_rate
+    test_ok = test_ok and d < tol
+    print(f'Delayed rate    {data.delays_count_rate:.0f} cps     -> {d * 100:.2f}%   (tol {tol * 100}%)')
+
+    d = abs(data.randoms_count_rate - ref_randoms_rate) / ref_randoms_rate
+    test_ok = test_ok and d < tol
+    print(f'Random rate     {data.randoms_count_rate:.0f} cps    -> {d * 100:.2f}%   (tol {tol * 100}%)')
+
+    tol = 0.25
+    d = abs(data.scatter_count_rate - ref_scatter_rate) / ref_scatter_rate
+    test_ok = test_ok and d < tol
+    print(f'Scattered rate  {data.scatter_count_rate:.0f} cps    -> {d * 100:.2f}%   (tol {tol * 100}%)')
+
+    d = abs(data.trues_count_rate - ref_trues_rate) / ref_trues_rate
+    test_ok = test_ok and d < tol
+    print(f'Trues rate      {data.trues_count_rate:.0f} cps     -> {d * 100:.2f}%   (tol {tol * 100}%)')
 
     # reference NECR (Salvadori2020)
     # obtained for 1787914158 Bq -> ~78 kBq.mL-1
@@ -81,16 +111,23 @@ def analysis(root_file):
     Rtot = data.prompts_count / duration
     Rsc = data.scatter_count / duration
     necr = Rt ** 2 / Rtot
-    sf = Rsc / (Rt + Rsc)
+    sf = Rsc / (Rt + Rsc) * 100
     print(f'Simulation duration        = {duration} sec')
-    print(f'ScatterFraction            = {sf * 100.0} %')
-    print(f'NECR                       = {necr:.2f} <-> {ref_necr} counts.s-1')
+
+    tol = 10
+    sf_ref = 39.56043956043956
+    d = abs(sf - sf_ref) / sf_ref
+    test_ok = d < tol and test_ok
+    print(f'ScatterFraction            = {sf:.2f} %   <-> {sf_ref:.2f}  -> {d:.2f}%  (tol {tol:.2f}%)')
+    print(f'NECR                       = {necr:.2f}  <-> {ref_necr} cps')
 
     # difference with reference
-    diff = (necr - ref_necr) / ref_necr * 100.0
-    print(f'NECR Difference is         = {diff:.2f} %')
-
-    return abs(diff) < 15.0
+    diff = abs(necr - ref_necr) / ref_necr * 100.0
+    tol = 30
+    print(f'NECR Difference is         = {diff:.2f} % (tol {tol}%)')
+    test_ok = abs(diff) < tol and test_ok
+    print('Test : ', test_ok)
+    return test_ok
 
 
 # --------------------------------------------------------------------------
