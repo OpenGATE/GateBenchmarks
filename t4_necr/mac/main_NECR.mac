@@ -31,8 +31,8 @@
 /gate/random/setEngineName MersenneTwister
 /gate/random/setEngineSeed auto
 /gate/application/setTimeStart 0 s
-/gate/application/setTimeSlice 0.00015 s
-/gate/application/setTimeStop  0.00015 s
+/gate/application/setTimeSlice 0.00030 s
+/gate/application/setTimeStop  0.00030 s
 /gate/application/startDAQ
 
 # computation time estimation (2021)
