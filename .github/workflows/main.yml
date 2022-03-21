@@ -35,6 +35,7 @@ jobs:
                         t17_extended_source,
                         t18_movement_benchmark,
                         t20_digi_adder,
+                        t21_tle,
                         t22_merged_actor]
 
     steps:
