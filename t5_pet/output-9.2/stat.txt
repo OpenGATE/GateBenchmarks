@@ -1,0 +1,16 @@
+# NumberOfRun = 2
+# NumberOfEvents = 20628329
+# NumberOfTracks = 63026932
+# NumberOfSteps = 418543357
+# NumberOfGeometricalSteps = 143646716
+# NumberOfPhysicalSteps = 274896641
+# ElapsedTimeWoInit = 2176.7400000000002
+# ElapsedTime = 2179.0099999999998
+# StartDate = Mon Mar 21 14:33:05 2022
+# EndDate = Mon Mar 21 14:52:41 2022
+# NumberOfMergedJobs = 2
+# MeanPPS = 9466.835397726492
+# MeanElapsedTime = 1089.5049999999999
+# MinElapsedTime = 1002.43
+# MaxElapsedTime = 1176.58
+# Speedup = 1.8528996598639453

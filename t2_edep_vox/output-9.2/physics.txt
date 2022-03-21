@@ -1,0 +1,130 @@
+<!> *** Warning *** <!>  Processes not yet initialized!
+
+List of particles with their associated processes
+
+<!> *** Warning *** <!>  Processes not yet initialized!
+
+  * GenericIon
+    - msc
+    - ionIoni
+    - nuclearStopping
+  * He3
+    - msc
+    - ionIoni
+    - nuclearStopping
+  * alpha
+    - msc
+    - ionIoni
+    - nuclearStopping
+  * anti_He3
+    - msc
+    - hIoni
+  * anti_alpha
+    - msc
+    - hIoni
+  * anti_deuteron
+    - msc
+    - hIoni
+  * anti_omega-
+    - msc
+    - hIoni
+  * anti_proton
+    - msc
+    - hIoni
+    - hBrems
+    - hPairProd
+  * anti_sigma+
+    - msc
+    - hIoni
+  * anti_sigma-
+    - msc
+    - hIoni
+  * anti_triton
+    - msc
+    - hIoni
+  * anti_xi-
+    - msc
+    - hIoni
+  * deuteron
+    - msc
+    - hIoni
+  * e+
+    - msc
+    - eIoni
+    - eBrem
+    - ePairProd
+    - annihil
+  * e-
+    - msc
+    - eIoni
+    - eBrem
+    - ePairProd
+  * gamma
+    - phot
+    - compt
+    - conv
+    - Rayl
+  * kaon+
+    - msc
+    - hIoni
+    - hBrems
+    - hPairProd
+  * kaon-
+    - msc
+    - hIoni
+    - hBrems
+    - hPairProd
+  * mu+
+    - msc
+    - muIoni
+    - muBrems
+    - muPairProd
+  * mu-
+    - msc
+    - muIoni
+    - muBrems
+    - muPairProd
+  * omega-
+    - msc
+    - hIoni
+  * pi+
+    - msc
+    - hIoni
+    - hBrems
+    - hPairProd
+  * pi-
+    - msc
+    - hIoni
+    - hBrems
+    - hPairProd
+  * proton
+    - msc
+    - hIoni
+    - hBrems
+    - hPairProd
+    - nuclearStopping
+  * sigma+
+    - msc
+    - hIoni
+  * sigma-
+    - msc
+    - hIoni
+  * tau+
+    - msc
+    - hIoni
+  * tau-
+    - msc
+    - hIoni
+  * triton
+    - msc
+    - hIoni
+  * xi-
+    - msc
+    - hIoni
+
+
+-----------------------------------------------------------------------------
+
+List of processes:
+
+
