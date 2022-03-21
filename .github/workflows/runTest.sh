@@ -59,8 +59,7 @@ if [ -z "$COMMIT" ]; then
 fi
 git clone --branch ${COMMIT} https://github.com/OpenGATE/Gate.git src
 cd bin
-cmake -DCMAKE_CXX_FLAGS=-std=c++17 \
-      -DGATE_USE_TORCH=$GATE_USE_TORCH \
+cmake -DGATE_USE_TORCH=$GATE_USE_TORCH \
       -DTorch_DIR=$TORCH_DIR \
       -DGATE_USE_OPTICAL=$USE_OPTICAL \
       ../src

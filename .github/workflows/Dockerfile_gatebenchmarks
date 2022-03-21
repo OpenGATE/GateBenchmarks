@@ -56,8 +56,7 @@ RUN mkdir software/geant4 \
  && mkdir src bin install data \
  && git clone --branch v11.0.0 https://github.com/Geant4/geant4.git src \
  && cd bin \
- && cmake ../src/ -DCMAKE_CXX_FLAGS="-std=c++17" \
-                  -DGEANT4_INSTALL_DATA=OFF \
+ && cmake ../src/ -DGEANT4_INSTALL_DATA=OFF \
                   -DGEANT4_INSTALL_DATADIR=/software/geant4/data \
                   -DGEANT4_USE_QT=ON \
                   -DCMAKE_INSTALL_PREFIX=/software/geant4/install \
