@@ -1,0 +1,66 @@
+
+
+/gate/world/geometry/setXLength       1500. mm
+/gate/world/geometry/setYLength       1500. mm
+/gate/world/geometry/setZLength       1500. mm
+ 
+
+/gate/world/daughters/name                   ecat
+/gate/world/daughters/insert		      cylinder
+/gate/ecat/placement/setTranslation           0.0 0.0 0.0 mm
+/gate/ecat/geometry/setRmax                  235 mm
+/gate/ecat/geometry/setRmin                   127 mm
+/gate/ecat/geometry/setHeight                 63 mm #20
+/gate/ecat/setMaterial			Air
+
+/gate/ecat/vis/forceWireframe
+/gate/ecat/vis/setColor                       red
+
+#	BLOCK
+/gate/ecat/daughters/name                 Block
+/gate/ecat/daughters/insert                   box
+/gate/Block/placement/setTranslation  160 0 0 mm
+/gate/Block/geometry/setXLength       6.0 cm 
+/gate/Block/geometry/setYLength       1 cm 
+/gate/Block/geometry/setZLength       1.0 cm
+/gate/Block/setMaterial 	         Air
+/gate/Block/vis/setColor              white
+
+
+#	CRYSTAL
+/gate/Block/daughters/name                   Detector
+/gate/Block/daughters/insert                   box
+/gate/Detector/placement/setTranslation  0 0 0 mm
+/gate/Detector/geometry/setXLength       2.0 cm 
+/gate/Detector/geometry/setYLength       1 cm 
+/gate/Detector/geometry/setZLength       1.0 cm
+/gate/Detector/setMaterial 	         LYSO
+/gate/ecat/vis/forceWireframe
+/gate/Detector/vis/setColor              white
+
+#	R E P E A T   CRYSTAL
+/gate/Detector/repeaters/insert cubicArray
+/gate/Detector/cubicArray/setRepeatNumberX 3
+/gate/Detector/cubicArray/setRepeatNumberY  1
+/gate/Detector/cubicArray/setRepeatNumberZ 1 
+/gate/Detector/cubicArray/setRepeatVector 2.0 0.0 0.0 cm
+
+#	R E P E A T   BLOCK
+#/gate/Block/repeaters/insert cubicArray
+#/gate/Block/cubicArray/setRepeatNumberX 1
+#/gate/Block/cubicArray/setRepeatNumberY  1
+#/gate/Block/cubicArray/setRepeatNumberZ 1 
+#/gate/Block/cubicArray/setRepeatVector 63.0 0.0 63.0 mm
+
+
+ #	R E P E A T    R S E C T O R 
+/gate/Block/repeaters/insert ring
+/gate/Block/ring/setFirstAngle 0. deg
+/gate/Block/ring/setRepeatNumber 2
+
+
+
+/gate/systems/ecat/block/attach Block
+/gate/systems/ecat/crystal/attach Detector
+
+/gate/Detector/attachCrystalSD
