@@ -1,0 +1,12 @@
+#/gate/digitizer/verbose 2
+#/gate/digitizer/convertor/verbose  3
+
+
+/gate/digitizer/Singles/insert                        adder
+/gate/digitizer/Singles/adder/positionPolicy 	      energyWeightedCentroid
+
+
+/gate/digitizer/Singles/insert                        readout
+/gate/digitizer/Singles/readout/setPolicy 	      TakeEnergyCentroid
+/gate/digitizer/Singles/readout/setDepth 	      1
+#/gate/digitizer/Singles/readout/verbose 3

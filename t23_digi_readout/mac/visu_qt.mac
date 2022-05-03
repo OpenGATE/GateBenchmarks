@@ -1,0 +1,15 @@
+/vis/open OGLSQt
+#/vis/viewer/set/viewpointThetaPhi 0 90
+#/vis/viewer/panTo 0 0.
+#/vis/viewer/zoom 1.
+#/vis/viewer/set/projection perspective
+#/vis/viewer/set/lightsMove camera
+/vis/drawVolume
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories 
+/vis/scene/add/hits   1	
+/vis/scene/endOfEventAction accumulate -1
+#/vis/scene/add/axes 
+
+#/vis/ogl/printEPS
+#/vis/ogl/set/printMode vectored 
