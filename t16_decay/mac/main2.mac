@@ -1,6 +1,5 @@
 
 /control/execute mac/verbose.mac
-#/control/execute mac/visu.mac
 /control/execute mac/volumes.mac
 
 #=====================================================

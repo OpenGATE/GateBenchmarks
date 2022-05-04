@@ -1,7 +1,4 @@
 
-# Visualisation
-#/control/execute mac/visu.mac
-
 # Verbosity
 /control/execute mac/verbose.mac
 
@@ -19,6 +16,9 @@
 
 # Initialisation
 /gate/run/initialize
+
+# Visualisation
+#/control/execute mac/visu.mac
 
 # Source
 /control/execute mac/sources.mac

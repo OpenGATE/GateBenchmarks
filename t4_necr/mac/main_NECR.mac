@@ -1,6 +1,5 @@
 
 /control/execute mac/verbose.mac
-#/control/execute mac/visu.mac
 
 # GEOMETRY
 /gate/geometry/setMaterialDatabase data/GateMaterials_pet.db
@@ -23,6 +22,8 @@
 
 # INITIALISATION
 /gate/run/initialize
+
+#/control/execute mac/visu.mac
 
 # SOURCE
 /control/execute mac/source_NECR.mac

@@ -30,6 +30,30 @@
 
 /gate/run/initialize
 
+#=====================================================
+# VISUALISATION
+#=====================================================
+
+#/vis/disable
+
+/vis/open                           OGL
+/vis/viewer/reset
+#/vis/viewer/set/viewpointThetaPhi   120 30
+/vis/viewer/set/viewpointThetaPhi 30 30
+#/vis/viewer/set/viewpointThetaPhi   270 0
+/vis/viewer/zoom                    1.1
+/vis/viewer/set/style surface
+/vis/drawVolume
+#/tracking/storeTrajectory           1
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate 10
+#/vis/scene/add/axes
+/vis/viewer/update
+
+/vis/viewer/set/background white
+
+/vis/viewer/set/targetPoint 0 0 0 mm
+#/vis/viewer/set/lightsVector -1 0.5 1
 
 
 ### S O U R C E    D E F I N I T I O N ###

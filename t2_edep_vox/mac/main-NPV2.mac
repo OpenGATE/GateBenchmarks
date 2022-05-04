@@ -13,7 +13,6 @@
 #=====================================================
 
 /control/execute mac/verbose.mac
-#/control/execute mac/visu.mac
 
 #=====================================================
 # GEOMETRY
@@ -83,3 +82,4 @@
 #=====================================================
 
 /control/execute mac/start.mac
+#/control/execute mac/visu.mac
