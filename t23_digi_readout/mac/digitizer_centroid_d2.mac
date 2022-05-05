@@ -9,4 +9,6 @@
 /gate/digitizer/Singles/insert                        readout
 /gate/digitizer/Singles/readout/setPolicy 	      TakeEnergyCentroid
 /gate/digitizer/Singles/readout/setDepth 	      2
+/gate/digitizer/Singles/readout/forceReadoutVolumeForEnergyCentroid    true
+
 #/gate/digitizer/Singles/readout/verbose 3
