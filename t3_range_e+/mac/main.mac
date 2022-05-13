@@ -1,4 +1,3 @@
-#/control/execute mac/visu.mac
 
 # World 
 /gate/geometry/setMaterialDatabase data/GateMaterials.db
@@ -31,6 +30,8 @@
 
 # Init
 /gate/run/initialize
+
+#/control/execute mac/visu.mac
 
 # Source (http://www.nucleide.org)
 /gate/source/addSource pointsource gps

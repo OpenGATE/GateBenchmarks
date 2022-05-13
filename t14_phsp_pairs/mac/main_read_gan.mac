@@ -2,7 +2,6 @@
 /control/execute mac/verbose.mac
 /gate/verbose Beam 2
 /gate/verbose Actor 1
-#/control/execute mac/visu.mac
 
 # GEOMETRY
 /control/execute mac/world.mac
@@ -28,6 +27,8 @@
 
 # INITIALISATION
 /gate/run/initialize
+
+#/control/execute mac/visu.mac
 
 # SOURCE
 /gate/source/addSource                         beam_pairs phaseSpace
