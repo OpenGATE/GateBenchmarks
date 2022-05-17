@@ -39,8 +39,8 @@ def analyse_all_folders(output_folders):
     pathAcoBTB = "output/dataAcoBTB.bin"
 
     # Read the simulation data
-    F18_aco_angle = process_binary(main_dir, pathAcoF18)
-    BTB_aco_angle = process_binary(main_dir, pathAcoBTB)
+    F18_aco_angle = process_binary(pathAcoF18)
+    BTB_aco_angle = process_binary(pathAcoBTB)
 
     # single output figure
     f = plt.figure(figsize=(10, 9))
@@ -51,9 +51,8 @@ def analyse_all_folders(output_folders):
     plt.savefig("acoDistComparison.png")
     plt.close()
 
-def process_binary(path, filename):
-    filepath = os.path.join(main_dir, filename)
-    data = np.fromfile(filepath, dtype = float)
+def process_binary(filename):
+    data = np.fromfile(filename, dtype = float)
 
     # Angle between the vectors as obtained from the angle() function
     aco_angle = data*180/np.pi
