@@ -65,8 +65,8 @@
 /gate/source/src/gps/halfz 0.01 mm
 /gate/source/src/gps/centre 0.0 0.0 0.0 mm
 /gate/source/src/gps/angtype        iso
-
-
+/gate/source/setDebugPositronAnnihilationFlag True
+/gate/output/debugPositronAnnihilation/setFileName output/dataAcoBTB.bin
 
 
 #====================================================
