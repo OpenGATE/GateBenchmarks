@@ -18,7 +18,6 @@ cd gatetools
 python3 -m pip install --upgrade pip
 pip3 install -e .
 pip3 install uproot uproot3 xxhash lz4 pandas
-echo "export PATH=/software/gatetools/clustertools/:$PATH" >> /etc/mybashrc
 
 #Install dependencies according the test
 compile_torch=false
@@ -67,7 +66,8 @@ make -j4
 cd ..
 rm -rf src
 source /etc/mybashrc
-echo "export PATH=/software/gate/bin:$PATH" >> /etc/mybashrc
+echo 'export PATH=/software/gatetools/clustertools/:$PATH' >> /etc/mybashrc
+echo 'export PATH=/software/gate/bin:$PATH' >> /etc/mybashrc
 source /etc/mybashrc
 
 # Go to execute the test
