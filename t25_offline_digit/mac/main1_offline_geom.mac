@@ -1,0 +1,9 @@
+
+
+# Geometry is needed to identify layer with volumeID of hits and to perform operations with pulses
+/gate/geometry/setMaterialDatabase data/GateMaterials_pet.db
+/control/execute mac/PET_CylindricalPET_geom.mac
+
+
+# INITIALIZE is needed to recover volumeID from hits using DetectorConstruction
+/gate/run/initialize
