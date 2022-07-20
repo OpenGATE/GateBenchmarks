@@ -168,9 +168,9 @@
 #/gate/digitizer/Singles/insert                        readout
 #/gate/digitizer/Singles/readout/setDepth              1
 
-#/gate/digitizer/Singles/insert                        blurring
-#/gate/digitizer/Singles/blurring/setResolution        0.26
-#/gate/digitizer/Singles/blurring/setEnergyOfReference 511. keV
+/gate/digitizer/Singles/insert                        blurring
+/gate/digitizer/Singles/blurring/setResolution        0.26
+/gate/digitizer/Singles/blurring/setEnergyOfReference 511. keV
 
 /gate/digitizer/Singles/insert                        thresholder
 /gate/digitizer/Singles/thresholder/setThreshold      350. keV
@@ -182,6 +182,8 @@
 #===================================================== 
 
 /gate/digitizer/Coincidences/setWindow          10. ns
+/gate/digitizer/Coincidences/minSectorDifference 1
+/gate/digitizer/Coincidences/MultiplesPolicy killAll
 
 #=====================================================
 #  P A R T I C L E   S O U R C E

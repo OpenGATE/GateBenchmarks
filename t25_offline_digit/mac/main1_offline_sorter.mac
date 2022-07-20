@@ -5,6 +5,10 @@
 
 
 /gate/digitizer/Coincidences/setWindow 10. ns
+#/gate/digitizer/Coincidences/setAcceptancePolicy4CC keepIfMultipleVolumeIDsInvolved
+/gate/digitizer/Coincidences/setAcceptancePolicy4CC keepAll
+#why there are more coincidences in keepAll than in keepIfMultipleVolumeIDsInvolved ? Is it possible that in the semi head BGo and LSO same volume ID ?? To be checked,
+
 
 # There may be problems since by default in PET there is this minSectorDifference.
 # I do not know how this is read offline.
