@@ -7,12 +7,6 @@
 
 /gate/digitizer/layers/insert adder
 
-#/gate/digitizer/layers/insert                        readout
-#/gate/digitizer/layers/readout/setDepth              1
-
-#/gate/digitizer/Singles/insert                        adder
-#/gate/digitizer/Singles/insert                        readout
-#/gate/digitizer/Singles/readout/setDepth              1
 
 /gate/digitizer/layers/insert                        blurring
 /gate/digitizer/layers/blurring/setResolution        0.26
@@ -26,9 +20,6 @@
 # INITIALIZE is needed to recover volumeID from hits using DetectorConstruction
 /gate/run/initialize
 
-#=======================================================================
-#   how to include a R A N D O M   E N G I N E  A N D  S E E D for offline digitizer ???
-#=============================================================================================
 
 
 
