@@ -56,15 +56,16 @@ cd /software/gate
 if [ -z "$COMMIT" ]; then
     COMMIT="develop"
 fi
-git clone --branch ${COMMIT} https://github.com/OpenGATE/Gate.git src
+if [ ! -d /src ]; then
+  git clone --branch ${COMMIT} https://github.com/OpenGATE/Gate.git /src
+fi
 cd bin
 cmake -DGATE_USE_TORCH=$GATE_USE_TORCH \
       -DTorch_DIR=$TORCH_DIR \
       -DGATE_USE_OPTICAL=$USE_OPTICAL \
-      ../src
+      /src
 make -j4
 cd ..
-rm -rf src
 source /etc/mybashrc
 echo 'export PATH=/software/gatetools/clustertools/:$PATH' >> /etc/mybashrc
 echo 'export PATH=/software/gate/bin:$PATH' >> /etc/mybashrc
