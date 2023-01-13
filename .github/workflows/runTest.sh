@@ -4,6 +4,16 @@ set -e -x
 
 yum install -y  libjpeg-devel
 
+#update python
+yum install -y rh-python38-python-devel rh-python38-python-pip.noarch
+rm /usr/bin/python /usr/bin/python3 /usr/bin/pip3
+ln -s /opt/rh/rh-python38/root/usr/bin/python /usr/bin/python
+ln -s /opt/rh/rh-python38/root/usr/bin/python3 /usr/bin/python3
+python3 -m pip install --upgrade pip
+ln -s /opt/rh/rh-python38/root/usr/local/bin/pip3 /usr/bin/pip3
+which python3
+python3 --version
+
 source /opt/rh/devtoolset-7/enable
 #source /etc/mybashrc
 export PATH=/software/cmake-3.18.4-Linux-x86_64/bin/:/opt/rh/devtoolset-7/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -15,7 +25,6 @@ mkdir /software/gatetools
 cd /software
 git clone https://github.com/OpenGATE/GateTools.git gatetools
 cd gatetools
-python3 -m pip install --upgrade pip
 pip3 install -e .
 pip3 install uproot uproot3 xxhash lz4 pandas
 
@@ -73,10 +82,6 @@ source /etc/mybashrc
 
 # Go to execute the test
 cd /home/
-rm /usr/bin/python
-ln -s /usr/bin/python3 /usr/bin/python
-which python3
-python3 --version
 export LC_ALL=en_US.utf8
 export LANG=en_US.utf8
 pip3 install click colorama
