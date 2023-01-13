@@ -47,7 +47,7 @@ jobs:
     - name: Checkout LFS objects
       run: git lfs checkout
     - name: Checkout submodules
-      run: git submodule update --init --recursive
+      run: export GIT_SSL_NO_VERIFY=1 && git submodule update --init --recursive
     - name: Install dependencies
       run: |
         sudo apt-get update -qq
