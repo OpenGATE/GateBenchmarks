@@ -59,9 +59,11 @@ jobs:
                                 libxpm-dev \
                                 libxft-dev \
                                 libxext-dev \
-                                qt5-default \
+                                qtbase5-dev \
+                                qt5-qmake \
                                 git \
                                 cmake \
+                                libssl-dev \
                                 python3.8-dev \
                                 ccache \
                                 fftw3-dev
