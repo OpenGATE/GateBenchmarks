@@ -2,7 +2,11 @@
 
 set -e -x
 
+#yum updates
 yum install -y  libjpeg-devel
+if [ "$TEST" = "t15_optical" ]; then
+   yum install -y  libxml2-devel
+fi
 
 #update python
 yum install -y rh-python38-python-devel rh-python38-python-pip.noarch
@@ -36,7 +40,6 @@ if [ "$TEST" = "t7_garf" ] || [ "$TEST" = "t9_gaga_phsp" ]; then
    compile_torch=true
 fi
 if [ "$TEST" = "t15_optical" ]; then
-   yum install -y  libxml2-devel
    export USE_OPTICAL=ON
 fi
 export GATE_USE_TORCH=OFF
@@ -78,6 +81,7 @@ cd ..
 source /etc/mybashrc
 echo 'export PATH=/software/gatetools/clustertools/:$PATH' >> /etc/mybashrc
 echo 'export PATH=/software/gate/bin:$PATH' >> /etc/mybashrc
+echo 'export PATH=/opt/rh/rh-python38/root/usr/local/bin/:$PATH' >> /etc/mybashrc
 source /etc/mybashrc
 
 # Go to execute the test
