@@ -132,44 +132,45 @@ def analyze(folder, type):
     
         if breaker:
             break
-
-    if type == "test1":
-        coin_noMulti1=coin
-    elif type == "test2":
-        coin_noMulti2=list(set(coin))
-    elif type == "test3":
-        coin_noMulti3=[v for v, c in collections.Counter(coin).items() if c == 1]
-    elif type == "test4":
-        coin_noMulti4=[v for v, c in collections.Counter(coin).items() if c == 1]
-
+  
+    
     CRED = '\033[91m'
     CEND = '\033[0m'
 
     #N entries test
     returnBool = True
-    if math.fabs(len(coin_noMulti1)-len(eventID1_coin)) > buffer_size:
-        print(CRED+"Test1 (takeAllGoods policy) failed: difference in the result "+CEND, len(coin_noMulti1)-len(eventID1_coin), " >  buffer size: ",buffer_size )
-        returnBool = False
-    else:
-        print("Test1 (takeAllGoods policy) is OK: difference in the result ", len(coin_noMulti1)-len(eventID1_coin), " < buffer size: ", buffer_size)
+    
+    if type == "test1":
+        coin_noMulti1=coin
+        if math.fabs(len(coin_noMulti1)-len(eventID1_coin)) > buffer_size:
+          print(CRED+"Test1 (takeAllGoods policy) failed: difference in the result "+CEND, len(coin_noMulti1)-len(eventID1_coin), " >  buffer size: ",buffer_size )
+          returnBool = False
+        else:
+          print("Test1 (takeAllGoods policy) is OK: difference in the result ", len(coin_noMulti1)-len(eventID1_coin), " < buffer size: ", buffer_size)
+   
+    elif type == "test2":
+        coin_noMulti2=list(set(coin))
+        if math.fabs(len(coin_noMulti4)-len(eventID1_coin)) > buffer_size:
+          print(CRED+"Test4 (keepIfOnlyOneGood policy) failed: difference in the result "+CEND, len(coin_noMulti4), " - ", len(eventID1_coin), " = ",len(coin_noMulti4)-len(eventID1_coin), " >  buffer size: ",buffer_size )
+          returnBool = False
+        else:
+          print("Test4 (keepIfOnlyOneGood policy) is OK: difference in the result ", len(coin_noMulti4)-len(eventID1_coin), " < buffer size: ", buffer_size)
+          
+    elif type == "test3":
+        coin_noMulti3=[v for v, c in collections.Counter(coin).items() if c == 1]
+        if math.fabs(len(coin_noMulti4)-len(eventID1_coin)) > buffer_size:
+          print(CRED+"Test4 (keepIfOnlyOneGood policy) failed: difference in the result "+CEND, len(coin_noMulti4), " - ", len(eventID1_coin), " = ",len(coin_noMulti4)-len(eventID1_coin), " >  buffer size: ",buffer_size )
+          returnBool = False
+        else:
+          print("Test4 (keepIfOnlyOneGood policy) is OK: difference in the result ", len(coin_noMulti4)-len(eventID1_coin), " < buffer size: ", buffer_size)
 
-    if math.fabs(len(coin_noMulti2)-len(eventID1_coin)) > buffer_size:
-        print(CRED+"Test2 (takeWinnerOfGoods policy) failed: difference in the result "+CEND, len(coin_noMulti2), " - ", len(eventID1_coin), " = ",len(coin_noMulti2)-len(eventID1_coin), " >  buffer size: ",buffer_size )
-        returnBool = False
-    else:
-        print("Test2 (takeWinnerOfGoods policy) is OK: difference in the result ", len(coin_noMulti2)-len(eventID1_coin), " < buffer size: ", buffer_size)
-
-    if math.fabs(len(coin_noMulti3)-len(eventID1_coin)) > buffer_size:
-        print(CRED+"Test3 (killAll policy) failed: difference in the result "+CEND, len(coin_noMulti3), " - ", len(eventID1_coin), " = ",len(coin_noMulti3)-len(eventID1_coin), " >  buffer size: ",buffer_size )
-        returnBool = False
-    else:
-        print("Test3 (killAll policy) is OK: difference in the result ", len(coin_noMulti3)-len(eventID1_coin), " < buffer size: ", buffer_size)
-
-    if math.fabs(len(coin_noMulti4)-len(eventID1_coin)) > buffer_size:
-        print(CRED+"Test4 (keepIfOnlyOneGood policy) failed: difference in the result "+CEND, len(coin_noMulti4), " - ", len(eventID1_coin), " = ",len(coin_noMulti4)-len(eventID1_coin), " >  buffer size: ",buffer_size )
-        returnBool = False
-    else:
-        print("Test4 (keepIfOnlyOneGood policy) is OK: difference in the result ", len(coin_noMulti4)-len(eventID1_coin), " < buffer size: ", buffer_size)
+    elif type == "test4":
+        coin_noMulti4=[v for v, c in collections.Counter(coin).items() if c == 1]
+        if math.fabs(len(coin_noMulti4)-len(eventID1_coin)) > buffer_size:
+          print(CRED+"Test4 (keepIfOnlyOneGood policy) failed: difference in the result "+CEND, len(coin_noMulti4), " - ", len(eventID1_coin), " = ",len(coin_noMulti4)-len(eventID1_coin), " >  buffer size: ",buffer_size )
+          returnBool = False
+        else:
+          print("Test4 (keepIfOnlyOneGood policy) is OK: difference in the result ", len(coin_noMulti4)-len(eventID1_coin), " < buffer size: ", buffer_size)
 
     return(returnBool)
 
