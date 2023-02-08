@@ -1,0 +1,133 @@
+
+/gate/world/geometry/setXLength       800. mm
+/gate/world/geometry/setYLength       800. mm
+/gate/world/geometry/setZLength       800. mm
+
+# Hierarchy:
+#   CylindricalPET
+#     module (Gate level 1, rsector)
+#       unit   (Gate level 2, module)
+#         block   (Gate level 3, submodule)
+#           optical unit  (Gate level 4, crystal)
+#             crystal        (Gate level 5, layer0)
+
+
+
+  
+# Empty cylindricalPET
+/gate/world/daughters/name                      cylindricalPET
+/gate/world/daughters/insert                    cylinder
+/gate/cylindricalPET/geometry/setRmax           350. mm
+/gate/cylindricalPET/geometry/setRmin           290. mm
+/gate/cylindricalPET/geometry/setHeight         270. mm
+/gate/cylindricalPET/placement/setTranslation   0.0 0.0 0.0 cm
+/gate/cylindricalPET/setMaterial                Air
+/gate/cylindricalPET/vis/setVisible             1
+
+# Module
+/gate/cylindricalPET/daughters/name             module
+/gate/cylindricalPET/daughters/insert           box
+/gate/module/geometry/setXLength                64.5 mm
+/gate/module/geometry/setYLength                25. mm
+/gate/module/geometry/setZLength                250.4 mm
+# This is 311.8 mm radius + half depth 12.5
+/gate/module/placement/setTranslation           0. 324.3 0. mm
+/gate/module/setMaterial                        Air
+/gate/module/vis/forceWireframe                 
+/gate/module/vis/setColor                       white
+/gate/module/vis/setVisible             1
+
+# Unit
+/gate/module/daughters/name                     unit
+/gate/module/daughters/insert                   box
+/gate/unit/geometry/setXLength                  64.5 mm
+/gate/unit/geometry/setYLength                  25. mm
+/gate/unit/geometry/setZLength                  47.84 mm
+/gate/unit/placement/setTranslation             0. 0. 0. mm
+/gate/unit/setMaterial                          Air
+/gate/unit/vis/forceWireframe                   
+/gate/unit/vis/setColor                         blue
+/gate/unit/vis/setVisible             1
+
+# Block
+/gate/unit/daughters/name                       block
+/gate/unit/daughters/insert                     box
+/gate/block/geometry/setXLength                 15.9 mm
+/gate/block/geometry/setYLength                 25. mm
+/gate/block/geometry/setZLength                 47.84 mm
+/gate/block/placement/setTranslation            0. 0. 0. mm
+/gate/block/setMaterial                         Air
+/gate/block/vis/forceWireframe                  
+/gate/block/vis/setColor                        red
+/gate/block/vis/setVisible             1
+
+# Optical unit : 4x3 crystals
+/gate/block/daughters/name                      optical
+/gate/block/daughters/insert                    box
+/gate/optical/geometry/setXLength               15.9 mm
+/gate/optical/geometry/setYLength               25. mm
+/gate/optical/geometry/setZLength               15.9 mm
+/gate/optical/placement/setTranslation          0. 0. 0. mm
+/gate/optical/setMaterial                       Air
+/gate/optical/vis/forceWireframe                
+/gate/optical/vis/setColor                      yellow
+/gate/optical/vis/setVisible             1
+
+# Crystal
+/gate/optical/daughters/name                    crystal
+/gate/optical/daughters/insert                  box
+/gate/crystal/geometry/setXLength               3.95 mm
+/gate/crystal/geometry/setYLength               25. mm
+/gate/crystal/geometry/setZLength               5.3 mm
+/gate/crystal/placement/setTranslation          0. 0. 0. mm
+#/gate/crystal/setMaterial                       Uranium
+/gate/crystal/setMaterial                       LYSO-GE
+/gate/crystal/vis/forceWireframe                    
+/gate/crystal/vis/setColor                      green
+/gate/crystal/vis/setVisible                    1
+
+# crystal repeater -> optical unit
+/gate/crystal/repeaters/insert                  cubicArray
+/gate/crystal/cubicArray/setRepeatNumberX       4
+/gate/crystal/cubicArray/setRepeatNumberY       1
+/gate/crystal/cubicArray/setRepeatNumberZ       3
+/gate/crystal/cubicArray/setRepeatVector        3.9833 0. 5.3 mm
+
+# optical unit repeater -> block
+/gate/optical/repeaters/insert                  linear
+/gate/optical/linear/setRepeatNumber            3
+/gate/optical/linear/setRepeatVector            0.  0. 15.97 mm
+
+# block repeater -> unit
+/gate/block/repeaters/insert                    linear
+/gate/block/linear/setRepeatNumber              4
+/gate/block/linear/setRepeatVector              16.20 0.  0. mm
+
+
+# unit repeater -> Module
+/gate/unit/repeaters/insert                     linear
+/gate/unit/linear/setRepeatNumber               5
+/gate/unit/linear/setRepeatVector               0. 0. 50.64 mm
+
+
+# module repeater (circular) -> Ring
+/gate/module/repeaters/insert                   ring
+/gate/module/ring/setRepeatNumber               28
+
+
+
+# Attach system geometry
+/gate/systems/cylindricalPET/rsector/attach      module
+/gate/systems/cylindricalPET/module/attach       unit
+/gate/systems/cylindricalPET/submodule/attach    block
+/gate/systems/cylindricalPET/crystal/attach      optical
+/gate/systems/cylindricalPET/layer0/attach       crystal
+
+# Attach crystal sensitive detector
+/gate/crystal/attachCrystalSD
+
+# Describe
+#/gate/systems/cylindricalPET/describe
+
+#-------------------------------------------------------------------------------#
+
