@@ -1,0 +1,147 @@
+#  *********************************************************************
+#  * DISCLAIMER                                                        *
+#  *                                                                   *
+#  * Neither the authors of this software system, nor their employing  *
+#  * institutes, nor the agencies providing financial support for this *
+#  * work make any representation or warranty, express or implied,     *
+#  * regarding this software system or assume any liability for its    *
+#  * use.                                                              *
+#  *                                                                   *
+#  * This code implementation is the intellectual property of the      *
+#  * OpenGATE collaboration.                                           *
+#  * By copying, distributing or modifying the Program (or any work    *
+#  * based on the Program) you indicate your acceptance of this        *
+#  * statement, and all its terms.                                     *
+#  *********************************************************************
+                                                             
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+#
+#         D E F I N E   Y O U R   O P T I C A L   S Y S T E M       
+#                                                             
+#        A N D   Y O U R   C O M P L E T E   S I M U L A T I O N   
+#                                                             
+#        F O R   I M A G I N G    A P P L I C A T I O N S       
+#                                                     
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+
+
+#=====================================================
+# VISUALISATION and VERBOSE
+#=====================================================
+
+#/vis/disable
+#/control/execute                    mac/Visualisation.mac
+/control/execute                    mac/Verbose.mac
+
+#=====================================================
+# GEOMETRY
+#=====================================================
+
+/gate/geometry/setMaterialDatabase    data/GateMaterials.db
+
+#=====================================================
+#     W O R L D
+#=====================================================
+
+
+/gate/world/geometry/setXLength       200. cm
+/gate/world/geometry/setYLength       200. cm
+/gate/world/geometry/setZLength       200. cm
+/gate/world/setMaterial               Air
+
+
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+#                                                                 #
+#     D E F I N I T I O N   A N D   D E S C R I T I O N           #
+#        O F   Y O U R   D E V I C E                              #
+#                                                                 #
+#-------------------oooooOOOOO00000OOOOOooooo---------------------#
+
+#=======================================================
+#                   G E O M E T R Y
+#=======================================================
+
+/control/execute                    mac/Geometry.mac
+      
+#=====================================================
+#                   P H A N T O M
+#=====================================================
+
+/control/execute mac/Phantom.mac
+
+#=====================================================
+#                  P H Y S I C S
+#=====================================================
+
+/gate/physics/addProcess OpticalAbsorption
+/gate/physics/addProcess OpticalRayleigh
+/gate/physics/addProcess OpticalBoundary
+/gate/physics/addProcess OpticalMie
+/gate/physics/addProcess OpticalWLS
+
+/gate/physics/processList Enabled
+/gate/physics/processList Initialized
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+
+
+#===============================================================
+# Optical photons Detection Surface should be DIELECTRIC-METAL
+#===============================================================
+
+/gate/crystal/surfaces/name                           Detection1
+/gate/crystal/surfaces/insert                         Electronics
+/gate/crystal/surfaces/Detection1/setSurface          perfect_apd  
+
+/gate/Electronics/surfaces/name                     Detection2
+/gate/Electronics/surfaces/insert                   crystal
+/gate/Electronics/surfaces/Detection2/setSurface    perfect_apd  
+
+
+#=====================================================
+#   D I G I T I Z E R: DETECTOR ELECTRONIC RESPONSE
+#=====================================================
+
+/control/execute mac/digitizer.mac
+
+#=====================================================
+#  S O U R C E
+#=====================================================
+
+/control/execute mac/Source.mac
+
+#=====================================================
+#  D A T A   O U T P U T   
+#=====================================================
+
+/gate/output/root/enable
+/gate/output/root/setFileName                     ./output/test
+/gate/output/root/setRootHitFlag          0
+/gate/output/root/setRootSinglesFlag      1
+/gate/output/root/setRootOpticalFlag      0
+
+
+
+#=====================================================
+#   R A N D O M
+#=====================================================
+
+# Choose between: JamesRandom Ranlux64 MersenneTwister
+/gate/random/setEngineName MersenneTwister
+#/gate/random/setEngineSeed default
+/gate/random/setEngineSeed auto
+#/gate/random/setEngineSeed 123456789
+/gate/random/verbose 1
+
+#=====================================================
+#   MEASUREMENT SETTINGS   
+#=====================================================
+
+/gate/application/setTimeSlice   100 s
+/gate/application/setTimeStart   0 s
+/gate/application/setTimeStop    100 s
+/gate/application/startDAQ
