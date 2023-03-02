@@ -41,7 +41,7 @@ jobs:
                         t26_CoinSorter, 
                         t27_Hits_2SD,
                         t28_Singles_2SD,
-                        t29_optical_digi]x
+                        t29_optical_digi]
 
     steps:
     - name: Checkout github repo
