@@ -4,7 +4,7 @@ set -e -x
 
 #yum updates
 yum install -y  libjpeg-devel
-if [ "$TEST" = "t15_optical" ]; then
+if [ "$TEST" = "t15_optical" ] || [ "$TEST" = "t29_optical_digi" ]; then
    yum install -y  libxml2-devel
 fi
 
@@ -39,7 +39,7 @@ export USE_OPTICAL=OFF
 if [ "$TEST" = "t7_garf" ] || [ "$TEST" = "t9_gaga_phsp" ]; then
    compile_torch=true
 fi
-if [ "$TEST" = "t15_optical" ]; then
+if [ "$TEST" = "t15_optical" ] || [ "$TEST" = "t29_optical_digi" ]; then
    export USE_OPTICAL=ON
 fi
 export GATE_USE_TORCH=OFF
