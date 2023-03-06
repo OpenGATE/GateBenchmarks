@@ -1,0 +1,17 @@
+
+
+#=====================================================
+#   D I G I T I Z E R: DETECTOR ELECTRONIC RESPONSE
+#===================================================== 
+
+/gate/digitizer/Singles/insert opticaladder 
+/gate/digitizer/Singles/insert                        readout 
+# for pixels:
+#/gate/digitizer/Singles/readout/setDepth              2
+# for crystal:
+/gate/digitizer/Singles/readout/setDepth              1
+
+# In order to detect only fluorescent photons, you can use an upholder cut:
+/gate/digitizer/Singles/insert upholder
+/gate/digitizer/Singles/upholder/setUphold 2.1 eV
+

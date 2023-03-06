@@ -1,0 +1,90 @@
+/gate/world/geometry/setXLength       800. mm
+/gate/world/geometry/setYLength       800. mm
+/gate/world/geometry/setZLength       800. mm
+
+# SPECT Head: main volume, everything is included in SPECThead
+# the name MUST be SPECThead
+/gate/world/daughters/name SPECThead
+/gate/world/daughters/insert box
+/gate/SPECThead/geometry/setXLength 57.6 cm
+/gate/SPECThead/geometry/setYLength 44.6 cm
+/gate/SPECThead/geometry/setZLength 18 cm
+/gate/SPECThead/placement/setRotationAxis  1 0 0
+/gate/SPECThead/placement/setRotationAngle -90 deg
+/gate/SPECThead/vis/setColor white
+/gate/SPECThead/setMaterial Air
+/gate/SPECThead/vis/forceWireframe
+
+# Shielding: main volume
+/gate/SPECThead/daughters/name shielding
+/gate/SPECThead/daughters/insert box
+/gate/shielding/geometry/setXLength 57.6 cm
+/gate/shielding/geometry/setYLength 44.6 cm
+/gate/shielding/geometry/setZLength 11.1375 cm
+/gate/shielding/placement/setTranslation 0. 0. -3.64 cm
+/gate/shielding/setMaterial Lead
+/gate/shielding/vis/setColor red
+/gate/shielding/vis/forceWireframe
+
+
+# Shielding: first layer of the lead cover
+/gate/shielding/daughters/name shielding_lead_cover
+/gate/shielding/daughters/insert box
+/gate/shielding_lead_cover/geometry/setXLength 57.6 cm
+/gate/shielding_lead_cover/geometry/setYLength 40.6 cm
+/gate/shielding_lead_cover/geometry/setZLength  10.1375 cm
+/gate/shielding_lead_cover/placement/setTranslation 0. 0. 0.5 cm
+/gate/shielding_lead_cover/setMaterial Lead
+/gate/shielding_lead_cover/vis/forceWireframe
+
+
+# Shielding: Aluminium Cover
+/gate/shielding_lead_cover/daughters/name shielding_aluminium_cover
+/gate/shielding_lead_cover/daughters/insert box
+/gate/shielding_aluminium_cover/geometry/setXLength 54. cm
+/gate/shielding_aluminium_cover/geometry/setYLength 40. cm
+/gate/shielding_aluminium_cover/geometry/setZLength 0.13 cm
+/gate/shielding_aluminium_cover/placement/setTranslation 0. 0. 5.00375 cm
+/gate/shielding_aluminium_cover/setMaterial Aluminium
+/gate/shielding_aluminium_cover/vis/setColor blue
+/gate/shielding_aluminium_cover/vis/forceWireframe
+
+
+# Shielding: reflector crystal2
+/gate/shielding_lead_cover/daughters/name crystal2
+/gate/shielding_lead_cover/daughters/insert box
+/gate/crystal2/geometry/setXLength 54. cm
+/gate/crystal2/geometry/setYLength 40. cm
+/gate/crystal2/geometry/setZLength  0.12 cm
+/gate/crystal2/placement/setTranslation 0. 0. 3.29125 cm
+/gate/crystal2/setMaterial NaI
+/gate/crystal2/vis/setColor blue
+/gate/crystal2/vis/forceWireframe
+
+
+# Shielding: crystal
+/gate/shielding_lead_cover/daughters/name crystal
+/gate/shielding_lead_cover/daughters/insert box
+/gate/crystal/geometry/setXLength 54. cm
+/gate/crystal/geometry/setYLength 40. cm
+/gate/crystal/geometry/setZLength  1.5875 cm
+/gate/crystal/placement/setTranslation  0 0 4.145 cm
+/gate/crystal/setMaterial NaI
+/gate/crystal/vis/setColor yellow
+
+# special command to say that this volume is the crystal
+/gate/systems/SPECThead/crystal/attach crystal
+# This is needed !
+/gate/crystal/attachCrystalSD
+/gate/crystal2/attachCrystalSD
+
+# Shielding: Backside
+# The back-side is fairly complex, and may have a strong influence on the
+# spectrum: the model shown here is simplified
+/gate/shielding_lead_cover/daughters/name shielding_backside
+/gate/shielding_lead_cover/daughters/insert box
+/gate/shielding_backside/geometry/setXLength 54. cm
+/gate/shielding_backside/geometry/setYLength 40. cm
+/gate/shielding_backside/geometry/setZLength  8. cm
+/gate/shielding_backside/placement/setTranslation 0. 0. -0.76875 cm
+/gate/shielding_backside/setMaterial Air
