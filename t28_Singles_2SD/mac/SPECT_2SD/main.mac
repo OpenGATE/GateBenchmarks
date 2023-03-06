@@ -32,8 +32,7 @@
 #=====================================================
 #   D I G I T I Z E R: DETECTOR ELECTRONIC RESPONSE
 #===================================================== 
-
-#/control/execute                         digitizer_old.mac
+/gate/digitizer/Singles/insert adder
 
 #=====================================================
 #  P A R T I C L E   S O U R C E
@@ -50,7 +49,7 @@
 /gate/output/root/setFileName             output/SPECT
 
 /gate/output/root/setRootHitFlag         1
-#/gate/output/root/setRootSinglesFlag      1
+/gate/output/root/setRootSinglesFlag      1
 #/gate/output/root/setRootCoincidencesFlag 0
 #/gate/output/root/verbose 3
 
