@@ -70,7 +70,7 @@ def analyze(folder, previous_folder, name):
 
 def compare_with_previous_version(filename_new, filename_old):
     branches = ["energy","globalPosX", "globalPosY", "globalPosZ", "time"]
-
+    print(filename_new, filename_old)
     energy_old=[]
     posX_old=[]
     globalPosY_old=[]
@@ -105,7 +105,7 @@ def compare_with_previous_version(filename_new, filename_old):
                     globalPosZ_tmp=singlesTree_tmp["globalPosZ"]
                     time_tmp=singlesTree_tmp["time"]
 
-                    singlesTree2_tmp = uproot.open(file_tmp)['Singles_crystal2'].arrays(branches,library="numpy")
+                    singlesTree2_tmp = file_old['Singles_crystal2'].arrays(branches,library="numpy")
                     energy2_tmp=singlesTree2_tmp["energy"]
                     globalPosX2_tmp=singlesTree2_tmp["globalPosX"]
                     globalPosY2_tmp=singlesTree2_tmp["globalPosY"]
@@ -143,7 +143,7 @@ def compare_with_previous_version(filename_new, filename_old):
                     globalPosZ_tmp=singlesTree_tmp["globalPosZ"]
                     time_tmp=singlesTree_tmp["time"]
 
-                    singlesTree2_tmp = uproot.open(file_tmp)['Singles_crystal2'].arrays(branches,library="numpy")
+                    singlesTree2_tmp = file_new['Singles_crystal2'].arrays(branches,library="numpy")
                     energy2_tmp=singlesTree2_tmp["energy"]
                     globalPosX2_tmp=singlesTree2_tmp["globalPosX"]
                     globalPosY2_tmp=singlesTree2_tmp["globalPosY"]
