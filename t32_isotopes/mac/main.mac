@@ -1,0 +1,121 @@
+#/control/alias mainMaterial "C"
+#/control/alias npart "1000000"
+#/control/alias suffix "1M"
+#/control/alias physicList "QGSP_BIC_HP"
+
+/control/execute mac/verbose.mac
+
+#=====================================================
+# GEOMETRY
+#=====================================================
+
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+
+# World
+/gate/world/geometry/setXLength 2 m
+/gate/world/geometry/setYLength 2 m
+/gate/world/geometry/setZLength 4 m
+/gate/world/setMaterial Vacuum
+
+
+# Sphere (virtual detector)
+/gate/world/daughters/name              shellcyl1
+/gate/world/daughters/insert            sphere
+/gate/shellcyl1/geometry/setRmin		75  cm
+/gate/shellcyl1/geometry/setRmax		75.1  cm
+/gate/shellcyl1/placement/setTranslation 0.0 0.0 25 cm
+/gate/shellcyl1/setMaterial Vacuum
+
+# Global Box
+/gate/world/daughters/name              mainbox1
+/gate/world/daughters/insert            box
+/gate/mainbox1/geometry/setXLength      20 cm
+/gate/mainbox1/geometry/setYLength      20 cm
+/gate/mainbox1/geometry/setZLength      100 cm
+/gate/mainbox1/placement/setTranslation 0.0 0.0 25 cm
+/gate/mainbox1/setMaterial              {mainMaterial}
+/gate/mainbox1/vis/setVisible 1
+/gate/mainbox1/vis/setColor yellow
+
+
+#=====================================================
+# PHYSICS
+#=====================================================
+
+/gate/physics/addPhysicsList {physicList}
+
+/gate/physics/Gamma/SetCutInRegion      world 10 mm
+/gate/physics/Electron/SetCutInRegion   world 10 mm
+/gate/physics/Positron/SetCutInRegion   world 10 mm
+
+/gate/physics/Proton/SetCutInRegion   mainbox1 0.5 mm
+
+/gate/physics/SetMaxStepSizeInRegion world 10 mm
+/gate/physics/SetMaxStepSizeInRegion mainbox1 1 mm
+
+/gate/physics/ActivateStepLimiter proton
+
+/gate/physics/displayCuts
+
+
+#=====================================================
+# OUTPUT
+#=====================================================
+
+/gate/actor/addActor     KillActor                    MyActor
+/gate/actor/MyActor/save                              output/part-{mainMaterial}-{physicList}-{suffix}.txt
+/gate/actor/MyActor/attachTo                          world
+/gate/actor/MyActor/addFilter                         particleFilter
+/gate/actor/MyActor/particleFilter/addParticle        neutron
+
+/gate/actor/addActor               SimulationStatisticActor stat
+/gate/actor/stat/save              output/stat-{mainMaterial}-{physicList}-{suffix}.txt
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+# Enable the following lines to display available and enabled processes
+# /gate/physics/processList Available
+# /gate/physics/processList Enabled
+
+
+#=====================================================
+# BEAMS
+#=====================================================
+
+/gate/source/addSource mybeam gps
+
+/gate/source/mybeam/gps/particle proton
+/gate/source/mybeam/gps/pos/type Beam
+/gate/source/mybeam/gps/pos/shape Cylinder
+/gate/source/mybeam/gps/pos/centre 0 0 -75 cm
+/gate/source/mybeam/gps/pos/radius	1 mm
+/gate/source/mybeam/gps/pos/halfz	1 cm
+/gate/source/mybeam/gps/ene/mono 100 MeV
+/gate/source/mybeam/gps/ene/type Gauss
+/gate/source/mybeam/gps/ene/sigma 2.0 MeV
+/gate/source/mybeam/gps/direction 0 0 1
+
+#=====================================================
+# VISUALISATION
+#=====================================================
+
+#/control/execute mac/visu.mac
+
+#=====================================================
+# START BEAMS
+#=====================================================
+
+#MersenneTwister
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+
+/material/g4/printMaterial {mainMaterial}
+
+/gate/application/setTotalNumberOfPrimaries {npart}
+/gate/application/start
+
+exit
+
