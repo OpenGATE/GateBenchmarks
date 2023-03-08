@@ -34,21 +34,21 @@ t*_*/output/output.local*
 /t8_LETActor/output-carbon.pdf
 /t8_LETActor/output-proton.pdf
 
-/t9_gaga_phsp/output*/*
-/t9_gaga_phsp/data/*root
-/t9_gaga_phsp/results
-/t9_gaga_phsp/pth_old
-/t9_gaga_phsp/output*test.png
-/t9_gaga_phsp/temp
-/t9_gaga_phsp/train_data
-/t9_gaga_phsp/pth
+/deprecated/t9_gaga_phsp/output*/*
+/deprecated/t9_gaga_phsp/data/*root
+/deprecated/t9_gaga_phsp/results
+/deprecated/t9_gaga_phsp/pth_old
+/deprecated/t9_gaga_phsp/output*test.png
+/deprecated/t9_gaga_phsp/temp
+/deprecated/t9_gaga_phsp/train_data
+/deprecated/t9_gaga_phsp/pth
 
-/t14_phsp_pairs/*png
-/t14_phsp_pairs/data/*pt
-/t14_phsp_pairs/data/*json
-/t14_phsp_pairs/output/*npy
-/t14_phsp_pairs/output/*pdf
-/t14_phsp_pairs/data/*.npy
+/deprecated/t14_phsp_pairs/*png
+/deprecated/t14_phsp_pairs/data/*pt
+/deprecated/t14_phsp_pairs/data/*json
+/deprecated/t14_phsp_pairs/output/*npy
+/deprecated/t14_phsp_pairs/output/*pdf
+/deprecated/t14_phsp_pairs/data/*.npy
 
 
 
