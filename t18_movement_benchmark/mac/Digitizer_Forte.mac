@@ -6,78 +6,81 @@
 #-------------------oooooOOOOO00000OOOOOooooo---------------------#
 
 #	   A D D E R
-/gate/digitizer/Singles/insert adder
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/insert adder
 
 
 #      E N E R G Y   B L U R R I N G
-/gate/digitizer/Singles/insert                              blurring
-/gate/digitizer/Singles/blurring/setResolution              0.20
-/gate/digitizer/Singles/blurring/setEnergyOfReference       511. keV
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/insert                              energyResolution
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/energyResolution/fwhm              0.20
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/energyResolution/energyOfReference       511. keV
 
-/gate/digitizer/Singles/insert pileup
-/gate/digitizer/Singles/pileup/setDepth 4
-/gate/digitizer/Singles/pileup/setPileup  300 ns
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/insert pileup
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/pileup/setDepth 4
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/pileup/setPileup  300 ns
 
 #      T I M E      R E S O L U T I O N 
-#/gate/digitizer/Singles/insert                              timeResolution
-#/gate/digitizer/Singles/timeResolution/setTimeResolution    16 ns
+#/gate/digitizerMgr/active/SinglesDigitizer/Singles/insert                              timeResolution
+#/gate/digitizerMgr/active/SinglesDigitizer/Singles/timeResolution/fwhm    16 ns
 
 
-#/gate/digitizer/Singles/insert spblurring
-#/gate/digitizer/Singles/spblurring/setSpresolution 5.0 mm
-#/gate/digitizer/Singles/spblurring/verbose 1
+#/gate/digitizerMgr/active/SinglesDigitizer/Singles/insert spatialResolution
+#/gate/digitizerMgr/active/SinglesDigitizer/Singles/spatialResolution/fwhm 5.0 mm
+
+#/gate/digitizerMgr/active/SinglesDigitizer/Singles/spatialResolution/confineInsideOfSmallestElement true
+#/gate/digitizerMgr/active/SinglesDigitizer/Singles/spatialResolution/verbose 1
 
 
 #       E N E R G Y   C U T
-/gate/digitizer/Singles/insert                              thresholder
-/gate/digitizer/Singles/thresholder/setThreshold            200 keV
-/gate/digitizer/Singles/insert                              upholder
-/gate/digitizer/Singles/upholder/setUphold                  1200 keV
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/insert                              energyFraming
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/energyFraming/setMin            200 keV
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/energyFraming/setMax                  1200 keV
 
 
 #       D E A D    T I M E 
-/gate/digitizer/Singles/insert                              deadtime
-/gate/digitizer/Singles/deadtime/setDeadTime                1.2  us
-/gate/digitizer/Singles/deadtime/setMode                    paralysable
-/gate/digitizer/Singles/deadtime/chooseDTVolume             crystal
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/insert                              deadtime
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/deadtime/setDeadTime                1.2  us
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/deadtime/setMode                    paralysable
+/gate/digitizerMgr/active/SinglesDigitizer/Singles/deadtime/chooseDTVolume             crystal
 
 
 
 #       E N E R G Y     W I N D O W
-/gate/digitizer/name                                EWindow
-/gate/digitizer/insert                              singleChain
-/gate/digitizer/EWindow/setInputName                Singles
-/gate/digitizer/EWindow/insert                      thresholder
+/gate/digitizerMgr/name                                EWindow
+/gate/digitizerMgr/chooseSD active
+/gate/digitizerMgr/insert                              SinglesDigitizer
+/gate/digitizerMgr/active/SinglesDigitizer/EWindow/setInputCollection                Singles
+/gate/digitizerMgr/active/SinglesDigitizer/EWindow/insert                      energyFraming
 # 50 % energy window
-/gate/digitizer/EWindow/thresholder/setThreshold    380 keV
-/gate/digitizer/EWindow/insert                      upholder
-/gate/digitizer/EWindow/upholder/setUphold          640 keV
+/gate/digitizerMgr/active/SinglesDigitizer/EWindow/energyFraming/setMin    380 keV
+/gate/digitizerMgr/active/SinglesDigitizer/EWindow/energyFraming/setMax          640 keV
 
 
 #	    C O I N C I D E N C E    S O R T E R 
-/gate/digitizer/Coincidences/setInputName           EWindow
-/gate/digitizer/Coincidences/setWindow              15 ns
-/gate/digitizer/Coincidences/minSectorDifference    1
-/gate/digitizer/Coincidences/describe
-/gate/digitizer/Coincidences/MultiplesPolicy takeWinnerOfGoods
+/gate/digitizerMgr/CoincidenceSorter/Coincidences/setInputCollection           EWindow
+/gate/digitizerMgr/CoincidenceSorter/Coincidences/setWindow              15 ns
+/gate/digitizerMgr/CoincidenceSorter/Coincidences/minSectorDifference    1
+#/gate/digitizerMgr/CoincidenceSorter/Coincidences/describe
+/gate/digitizerMgr/CoincidenceSorter/Coincidences/MultiplesPolicy takeWinnerOfGoods
 
-#/gate/digitizer/name                                delay
-#/gate/digitizer/insert                              coincidenceSorter
-#/gate/digitizer/delay/setInputName                  EWindow
-#/gate/digitizer/delay/setWindow                     15. ns
-#/gate/digitizer/delay/setOffset                     500. ns
-#/gate/digitizer/delay/minSectorDifference    1
-#/gate/digitizer/delay/describe
-#/gate/digitizer/delay/MultiplesPolicy takeWinnerOfGoods
+#/gate/digitizerMgr/name                                delay
+#/gate/digitizerMgr/chooseSD active
+#/gate/digitizerMgr/insert                              CoincidenceSorter
+#/gate/digitizerMgr/active/SinglesDigitizer/delay/setInputCollection                  EWindow
+#/gate/digitizerMgr/active/SinglesDigitizer/delay/setWindow                     15. ns
+#/gate/digitizerMgr/active/SinglesDigitizer/delay/setOffset                     500. ns
+#/gate/digitizerMgr/active/SinglesDigitizer/delay/minSectorDifference    1
+#/gate/digitizerMgr/active/SinglesDigitizer/delay/describe
+#/gate/digitizerMgr/active/SinglesDigitizer/delay/MultiplesPolicy takeWinnerOfGoods
 
-#/gate/digitizer/name                                	finalCoinc
-#/gate/digitizer/insert                              	coincidenceChain
-#/gate/digitizer/finalCoinc/addInputName             	delay
-#/gate/digitizer/finalCoinc/addInputName             	Coincidences
-#/gate/digitizer/finalCoinc/describe
-#/gate/digitizer/finalCoinc/usePriority              	false
-#/gate/digitizer/finalCoinc/insert deadtime
-#/gate/digitizer/finalCoinc/deadtime/setDeadTime		1.15 us
-#/gate/digitizer/finalCoinc/deadtime/setMode nonparalysable
+#/gate/digitizerMgr/name                                	finalCoinc
+#/gate/digitizerMgr/chooseSD active
+#/gate/digitizerMgr/insert                              	coincidenceChain
+#/gate/digitizerMgr/active/SinglesDigitizer/finalCoinc/addInputName             	delay
+#/gate/digitizerMgr/active/SinglesDigitizer/finalCoinc/addInputName             	Coincidences
+#/gate/digitizerMgr/active/SinglesDigitizer/finalCoinc/describe
+#/gate/digitizerMgr/active/SinglesDigitizer/finalCoinc/usePriority              	false
+#/gate/digitizerMgr/active/SinglesDigitizer/finalCoinc/insert deadtime
+#/gate/digitizerMgr/active/SinglesDigitizer/finalCoinc/deadtime/setDeadTime		1.15 us
+#/gate/digitizerMgr/active/SinglesDigitizer/finalCoinc/deadtime/setMode nonparalysable
 
 

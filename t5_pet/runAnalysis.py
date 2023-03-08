@@ -45,21 +45,36 @@ def analyse_pet(output_folder, ax, i):
     print('Filename', filename)
     coinc = []
     delays = []
+    singles = []
+    times = []
     if os.path.isfile(filename):
 
         f = uproot.open(filename)
         #print("List of keys: \n", f.keys())
+        with uproot.open(filename) as f_tmp:
+            for keyname in f_tmp:
+                if keyname == "Singles;1":
+                    print("singles")
+                    singles = f_tmp['Singles']
+                    times = tget(singles, 'time')
+                else:
+                    if keyname == "Singles_BGO;1" :
+                        singles = f_tmp['Singles_BGO']
+                        times = tget(singles, 'time')
+                    
 
+        print("th following")                
         # get timing
-        singles = f['Singles']
-        times = tget(singles, 'time')
-
-        singles = f['Singles']
+        #singles = f['Singles']
+        #times = tget(singles, 'time')
+        
+        #singles = f['Singles']
         print('nb of singles ', len(singles))
-
+        #times = tget(singles, 'time')
+         
         coinc = f['Coincidences']
         print('nb of coincidences', len(coinc))
-
+        
         delays = f['delay']
         print('nb of delays', len(delays))
     try:

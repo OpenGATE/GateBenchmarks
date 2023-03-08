@@ -61,9 +61,9 @@
 #   D I G I T I Z E R: DETECTOR ELECTRONIC RESPONSE
 #===================================================== 
 
-/gate/digitizer/Singles/insert	opticaladder 
-/gate/digitizer/Singles/insert	readout
-/gate/digitizer/Singles/readout/setDepth	1 
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert	opticaladder 
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert	readout
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/readout/setDepth	1 
 
 #=====================================================
 #  S O U R C E
