@@ -33,7 +33,8 @@
 #=====================================================
 
 
-/gate/digitizer/Singles/insert adder
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert adder
+/gate/digitizerMgr/crystal2/SinglesDigitizer/Singles/insert adder
 
 #=====================================================
 #  P A R T I C L E   S O U R C E

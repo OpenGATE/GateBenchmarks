@@ -119,7 +119,7 @@
 /gate/output/ascii/setFileName                    output/genericMoveTest_
 /gate/output/ascii/setOutFileHitsFlag           0
 /gate/output/ascii/setOutFileSinglesFlag        0
-/gate/output/ascii/setOutFileEWindowFlag        0
+#/gate/output/ascii/setOutFileEWindow_activeFlag        0
 /gate/output/ascii/setOutFileCoincidencesFlag   1
 /gate/output/ascii/setCoincidenceMask 0 0 0 1 1 1 1 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 
 

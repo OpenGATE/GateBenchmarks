@@ -1,9 +1,9 @@
 #.................... SCANNER DATA PROCESSING PARAMETERS
 #       ADDER
 # The adder output is a pulse that is an energy weighted centroid for the different hit positions within each crystal volume invlved in the event
-/gate/digitizer/Singles/insert adder
-#/gate/digitizer/Singles/adder/verbose 0
-#/gate/digitizer/convertor/verbose 0
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert adder
+#/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/adder/verbose 0
+#/gate/digitizerMgr/convertor/verbose 0
 
 # READOUT
 
@@ -12,8 +12,8 @@
 # total energy in the stack and the position of the pulse with the
 # maximun energy.
 
-/gate/digitizer/Singles/insert readout
-/gate/digitizer/Singles/readout/setDepth 1
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert readout
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/readout/setDepth 1
 
 
 # NOISE  
@@ -27,63 +27,63 @@
 /gate/distributions/insert Exponential 
 /gate/distributions/dt_distrib/setLambda 2.1701 us
 
-/gate/digitizer/Singles/insert noise 
-/gate/digitizer/Singles/noise/setDeltaTDistribution dt_distrib 
-/gate/digitizer/Singles/noise/setEnergyDistribution energy_distrib
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert noise 
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/noise/setDeltaTDistribution dt_distrib 
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/noise/setEnergyDistribution energy_distrib
 
 
 # ENERGY BLURRING
-/gate/digitizer/Singles/insert crystalblurring 
-/gate/digitizer/Singles/crystalblurring/setCrystalResolutionMin 0.112
-/gate/digitizer/Singles/crystalblurring/setCrystalResolutionMax 0.112
-/gate/digitizer/Singles/crystalblurring/setCrystalQE 0.865
-/gate/digitizer/Singles/crystalblurring/setCrystalEnergyOfReference 511. keV 
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert energyResolution 
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/energyResolution/fwhmMin 0.112
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/energyResolution/fwhmMax 0.112
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert efficiency
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/efficiency/setUniqueEfficiency 0.865
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/energyResolution/energyOfReference 511. keV 
 
 
 # TEMPORAL RESOLUTION
-/gate/digitizer/Singles/insert timeResolution
-/gate/digitizer/Singles/timeResolution/setTimeResolution 220.0 ps
-/gate/digitizer/Singles/timeResolution/verbose 0
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert timeResolution
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/timeResolution/fwhm 220.0 ps
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/timeResolution/verbose 0
 
 
 # PILES-UP
-/gate/digitizer/Singles/insert pileup 
-/gate/digitizer/Singles/pileup/setDepth 1
-/gate/digitizer/Singles/pileup/setPileup 5.9 ns
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert pileup 
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/pileup/setDepth 1
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/pileup/setPileup 5.9 ns
 
 
 # DEADTIME
-/gate/digitizer/Singles/insert deadtime  
-/gate/digitizer/Singles/deadtime/setDeadTime 5.9 ns
-/gate/digitizer/Singles/deadtime/setMode paralysable
-/gate/digitizer/Singles/deadtime/chooseDTVolume module
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert deadtime  
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/deadtime/setDeadTime 5.9 ns
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/deadtime/setMode paralysable
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/deadtime/chooseDTVolume module
 
 
 # HIGH ENERGY CUT  
-/gate/digitizer/Singles/insert thresholder  
-/gate/digitizer/Singles/thresholder/setThreshold 0.44968 MeV
-/gate/digitizer/Singles/insert upholder  
-/gate/digitizer/Singles/upholder/setUphold 0.61320 MeV
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/insert energyFraming  
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/energyFraming/setMin 0.44968 MeV
+/gate/digitizerMgr/crystal/SinglesDigitizer/Singles/energyFraming/setMax 0.61320 MeV
 
 
 # COINCIDENCES SORTER
-/gate/digitizer/Coincidences/setInputName Singles 
-#/gate/digitizer/Coincidences/verbose 0
-/gate/digitizer/Coincidences/setWindow 2.0115 ns
-/gate/digitizer/Coincidences/minSectorDifference 5
-/gate/digitizer/Coincidences/MultiplesPolicy takeAllGoods
+/gate/digitizerMgr/CoincidenceSorter/Coincidences/setInputCollection Singles 
+#/gate/digitizerMgr/CoincidenceSorter/Coincidences/verbose 0
+/gate/digitizerMgr/CoincidenceSorter/Coincidences/setWindow 2.0115 ns
+/gate/digitizerMgr/CoincidenceSorter/Coincidences/minSectorDifference 5
+/gate/digitizerMgr/CoincidenceSorter/Coincidences/MultiplesPolicy takeAllGoods
 
 ##Uncomment for second method for coincidence sorting
-/gate/digitizer/Coincidences/allPulseOpenCoincGate true
+/gate/digitizerMgr/CoincidenceSorter/Coincidences/allDigiOpenCoincGate true
 
-/gate/digitizer/name Delay
-/gate/digitizer/insert coincidenceSorter
-/gate/digitizer/Delay/setInputName Singles
-/gate/digitizer/Delay/setWindow 2.0115 ns
-/gate/digitizer/Delay/setOffset 100.0 ns #... it should be 100 ns
-/gate/digitizer/Delay/minSectorDifference 5
-/gate/digitizer/Delay/MultiplesPolicy takeAllGoods
+/gate/digitizerMgr/name Delay
+/gate/digitizerMgr/insert CoincidenceSorter
+/gate/digitizerMgr/CoincidenceSorter/Delay/setInputCollection Singles
+/gate/digitizerMgr/CoincidenceSorter/Delay/setWindow 2.0115 ns
+/gate/digitizerMgr/CoincidenceSorter/Delay/setOffset 100.0 ns #... it should be 100 ns
+/gate/digitizerMgr/CoincidenceSorter/Delay/minSectorDifference 5
+/gate/digitizerMgr/CoincidenceSorter/Delay/MultiplesPolicy takeAllGoods
 
 ##Uncomment for second method for coincidence sorting
-/gate/digitizer/Delay/allPulseOpenCoincGate true
+/gate/digitizerMgr/CoincidenceSorter/Delay/allDigiOpenCoincGate true
 
