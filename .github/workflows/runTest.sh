@@ -82,6 +82,7 @@ source /etc/mybashrc
 echo 'export PATH=/software/gatetools/clustertools/:$PATH' >> /etc/mybashrc
 echo 'export PATH=/software/gate/bin:$PATH' >> /etc/mybashrc
 echo 'export PATH=/opt/rh/rh-python38/root/usr/local/bin/:$PATH' >> /etc/mybashrc
+echo 'export PATH=/software/gatetools/clustertools/:$PATH' >> /etc/mybashrc
 source /etc/mybashrc
 
 # Go to execute the test
