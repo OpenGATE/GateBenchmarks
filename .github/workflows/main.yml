@@ -39,11 +39,12 @@ jobs:
                         t26_CoinSorter, 
                         t27_Hits_2SD,
                         t28_Singles_2SD,
-                        t29_optical_digi]
+                        t29_optical_digi,
+                        t30_dna]
 
     steps:
     - name: Checkout github repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
           lfs: true
     - name: Checkout LFS objects
@@ -74,5 +75,5 @@ jobs:
     - name: Run the test in docker
       run: |
         ls $GITHUB_WORKSPACE
-        docker run --rm -e "TEST=${{ matrix.strategy_name }}" -v $GITHUB_WORKSPACE:/home tbaudier/gatebenchmarks:9.2 /home/.github/workflows/runTest.sh
+        docker run --rm -e "TEST=${{ matrix.strategy_name }}" -v $GITHUB_WORKSPACE:/home tbaudier/gatebenchmarks:9.3 /home/.github/workflows/runTest.sh
 
