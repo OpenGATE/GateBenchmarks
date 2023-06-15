@@ -1,0 +1,53 @@
+
+/control/doif {filter_id} > -1 /gate/actor/addActor KillActor myKillActor
+/control/doif {filter_id} > -1 /gate/actor/myKillActor/attachTo phantom
+#/control/doif {filter_id} > -1 /gate/actor/myKillActor/save output/kill.txt
+
+/control/doif {filter_id} == 0 /gate/actor/myKillActor/addFilter angleFilter
+/control/doif {filter_id} == 0 /gate/actor/myKillActor/angleFilter/setAngle 30
+/control/doif {filter_id} == 0 /gate/actor/myKillActor/angleFilter/setDirection 0 0 1
+
+/control/doif {filter_id} == 1 /gate/actor/myKillActor/addFilter angleFilter
+/control/doif {filter_id} == 1 /gate/actor/myKillActor/angleFilter/setAngle 30
+/control/doif {filter_id} == 1 /gate/actor/myKillActor/angleFilter/setDirection 0 0 1
+/control/doif {filter_id} == 1 /gate/actor/myKillActor/angleFilter/invert
+
+/control/doif {filter_id} == 2 /gate/actor/myKillActor/addFilter energyFilter
+/control/doif {filter_id} == 2 /gate/actor/myKillActor/energyFilter/setEmin 0.195 MeV
+/control/doif {filter_id} == 2 /gate/actor/myKillActor/energyFilter/setEmax 0.205 MeV
+
+/control/doif {filter_id} == 3 /gate/actor/myKillActor/addFilter energyFilter
+/control/doif {filter_id} == 3 /gate/actor/myKillActor/energyFilter/setEmin 0.195 MeV
+/control/doif {filter_id} == 3 /gate/actor/myKillActor/energyFilter/setEmax 0.205 MeV
+/control/doif {filter_id} == 3 /gate/actor/myKillActor/energyFilter/invert
+
+/control/doif {filter_id} == 4 /gate/actor/myKillActor/addFilter materialFilter
+/control/doif {filter_id} == 4 /gate/actor/myKillActor/materialFilter/addMaterial Air
+/control/doif {filter_id} == 4 /gate/phantom_part/setMaterial Air
+
+
+/control/doif {filter_id} == 5 /gate/actor/myKillActor/addFilter materialFilter
+/control/doif {filter_id} == 5 /gate/actor/myKillActor/materialFilter/addMaterial Air
+/control/doif {filter_id} == 5 /gate/actor/myKillActor/materialFilter/invert
+/control/doif {filter_id} == 5 /gate/phantom_part/setMaterial Air
+
+/control/doif {filter_id} == 6 /gate/actor/myKillActor/addFilter volumeFilter
+/control/doif {filter_id} == 6 /gate/actor/myKillActor/volumeFilter/addVolume phantom_part
+
+
+/control/doif {filter_id} == 7 /gate/actor/myKillActor/addFilter volumeFilter
+/control/doif {filter_id} == 7 /gate/actor/myKillActor/volumeFilter/addVolume phantom_part
+/control/doif {filter_id} == 7 /gate/actor/myKillActor/volumeFilter/invert
+
+# IDfilter is broken, so no test needed
+#/control/doif {filter_id} == 8 /gate/actor/myKillActor/addFilter IDFilter
+#/control/doif {filter_id} == 9 /gate/actor/myKillActor/addFilter IDFilter
+#/control/doif {filter_id} == 9 /gate/actor/myKillActor/IDFilter/invert
+
+/control/doif {filter_id} == 10 /gate/actor/myKillActor/addFilter particleFilter
+/control/doif {filter_id} == 10 /gate/actor/myKillActor/particleFilter/addParticle e-
+
+/control/doif {filter_id} == 11 /gate/actor/myKillActor/addFilter particleFilter
+/control/doif {filter_id} == 11 /gate/actor/myKillActor/particleFilter/addParticle e-
+/control/doif {filter_id} == 11 /gate/actor/myKillActor/particleFilter/invert
+
