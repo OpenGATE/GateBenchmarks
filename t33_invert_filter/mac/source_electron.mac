@@ -1,0 +1,14 @@
+/gate/source/addSource mySource gps
+/gate/source/mySource/gps/pos/type Point
+/gate/source/mySource/gps/particle e-
+/gate/source/mySource/gps/ene/type Mono
+/gate/source/mySource/gps/ene/mono 100 keV
+/gate/source/mySource/setActivity 1000. becquerel
+/gate/source/mySource/gps/pos/centre 0. 0. -5. cm
+/gate/source/mySource/gps/ang/type iso
+/gate/source/mySource/gps/ang/maxtheta 180 deg
+/gate/source/mySource/gps/ang/mintheta 135 deg
+/gate/source/mySource/gps/ang/minphi 0 deg
+/gate/source/mySource/gps/ang/maxphi 360 deg
+/gate/source/mySource/attachTo world
+/gate/source/mySource/visualize 100 red 

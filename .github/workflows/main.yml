@@ -42,7 +42,8 @@ jobs:
                         t29_optical_digi,
                         t30_dna,
                         t31_vpgTLE-tt,
-                        t32_isotopes]
+                        t32_isotopes,
+                        t33_invert_filter]
 
     steps:
     - name: Checkout github repo

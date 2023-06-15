@@ -1,0 +1,40 @@
+/control/verbose 1
+# basic geometry
+
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+
+/control/execute mac/geometry.mac
+
+/gate/random/setEngineName MersenneTwister
+#fixed seed for reproducibility
+#/gate/random/setEngineSeed 15498 
+/gate/random/setEngineSeed auto 
+/gate/random/verbose 0
+
+# physics
+/gate/physics/addPhysicsList emstandard_opt3
+/gate/physics/setDEDXBinning 500
+/gate/physics/setLambdaBinning 500
+/gate/physics/processList Enabled
+/gate/physics/processList Initialized
+
+#actors
+
+/control/execute mac/actor.mac
+
+/gate/run/initialize
+
+/control/execute mac/source.mac
+/control/if {filter_id} > 9 mac/source_electron.mac
+#/control/execute mac/source_electron.mac
+
+# output
+/control/execute mac/output.mac
+
+#/control/execute mac/vis.mac
+
+/gate/application/setTimeStart 0.0 s
+/gate/application/setTimeStop  1 s
+/gate/application/setTimeSlice 1 s
+
+/gate/application/startDAQ
