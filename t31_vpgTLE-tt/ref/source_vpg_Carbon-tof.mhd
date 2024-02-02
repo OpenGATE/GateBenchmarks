@@ -1,0 +1,16 @@
+ObjectType = Image
+NDims = 4
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = False
+TransformMatrix = 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+Offset = -17.5 -72.5 -17.5 0
+CenterOfRotation = 0 0 0 0
+ElementSpacing = 5 5 5 1
+HistoMin = 0
+HistoMax = 5
+TotalSum = 0.10556588858202721
+DimSize = 8 30 8 500
+AnatomicalOrientation = ????
+ElementType = MET_FLOAT
+ElementDataFile = source_vpg_Carbon-tof.raw
