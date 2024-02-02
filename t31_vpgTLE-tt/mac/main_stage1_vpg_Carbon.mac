@@ -1,0 +1,110 @@
+#=====================================================
+# PREAMBLE
+#=====================================================
+
+/control/alias StageID 1
+/control/alias Mode vpg
+/control/alias Element Carbon
+/control/alias NrPrim 1e3
+
+#=====================================================
+# GEOMETRY & PHYSICS
+#=====================================================
+
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+
+/gate/world/setMaterial            Vacuum
+/gate/world/geometry/setXLength    3 m
+/gate/world/geometry/setYLength    3 m
+/gate/world/geometry/setZLength    3 m
+
+/control/alias XmmBox 40
+/control/alias YmmBox 150
+/control/alias ZmmBox 40
+
+/control/alias mmVoxel 5
+
+/gate/world/daughters/name                patient
+/gate/world/daughters/insert              box
+/gate/patient/geometry/setXLength         {XmmBox} mm
+/gate/patient/geometry/setYLength         {YmmBox} mm
+/gate/patient/geometry/setZLength         {ZmmBox} mm
+/gate/patient/placement/setTranslation    0 0 0 cm
+/gate/patient/setMaterial                 {Element}
+
+/gate/physics/addPhysicsList QGSP_BIC_HP_EMY
+
+/gate/physics/Gamma/SetCutInRegion      world 1 km
+/gate/physics/Electron/SetCutInRegion   world 1 km
+/gate/physics/Proton/SetCutInRegion     world 1 km
+/gate/physics/Positron/SetCutInRegion   world 1 km
+
+/gate/physics/Gamma/SetCutInRegion      patient 1 mm
+/gate/physics/Proton/SetCutInRegion     patient 1 mm
+/gate/physics/Electron/SetCutInRegion   patient 1 mm
+/gate/physics/Positron/SetCutInRegion   patient 1 mm
+
+/gate/physics/SetMaxStepSizeInRegion patient 1 mm
+/gate/physics/ActivateStepLimiter proton
+/gate/physics/ActivateStepLimiter deuteron
+/gate/physics/ActivateStepLimiter triton
+/gate/physics/ActivateStepLimiter alpha
+/gate/physics/ActivateStepLimiter GenericIon
+
+#=====================================================
+# ACTORS
+#=====================================================
+
+/gate/actor/addActor               SimulationStatisticActor stat
+/gate/actor/stat/save              output/stat{StageID}_{Mode}_{Element}.txt
+
+/control/alias TimeBins 500
+
+/gate/actor/addActor                    PromptGammaTLEActor  pgtle
+/gate/actor/pgtle/attachTo    	        patient
+/gate/actor/pgtle/setInputDataFile      data/pgdb_20231027.root
+/gate/actor/pgtle/save                  output/source_{Mode}_{Element}.mhd
+/gate/actor/pgtle/setVoxelSize          {mmVoxel} {mmVoxel} {mmVoxel} mm
+/gate/actor/pgtle/setPosition           0 0 0 mm
+/gate/actor/pgtle/setSize               {XmmBox} {YmmBox} {ZmmBox} mm
+/gate/actor/pgtle/setTimeNbBins 	{TimeBins}
+
+/gate/actor/pgtle/enableDebugOutput	false
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+
+#=====================================================
+# SOURCE
+#=====================================================
+
+/gate/source/addSource mybeam gps
+/gate/source/mybeam/gps/particle     proton
+/gate/source/mybeam/gps/energytype   Mono
+/gate/source/mybeam/gps/ene/mono     130 MeV
+/gate/source/mybeam/gps/pos/type     Beam
+/gate/source/mybeam/gps/pos/shape    Circle
+/gate/source/mybeam/gps/pos/sigma_x  0 mm
+/gate/source/mybeam/gps/pos/sigma_y  0 mm
+/gate/source/mybeam/gps/ang/type     iso
+/gate/source/mybeam/gps/ang/sigma_x  0.00 rad
+/gate/source/mybeam/gps/ang/sigma_y  0.00 rad
+/gate/source/mybeam/gps/pos/centre   0 -300 0 mm
+/gate/source/mybeam/gps/direction    0 1 0
+/gate/source/mybeam/gps/time         0 ns
+
+#=====================================================
+# START BEAMS
+#=====================================================
+
+/gate/application/noGlobalOutput
+/gate/run/enableGlobalOutput false
+
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+/gate/application/setTotalNumberOfPrimaries {NrPrim}
+/gate/application/start
+
