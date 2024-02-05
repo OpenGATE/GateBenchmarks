@@ -1,0 +1,115 @@
+
+#=====================================================
+# GEOMETRY
+#=====================================================
+
+/control/alias ELEMENT Carbon
+/control/alias PMAX 200
+
+# -----------------------------------------------------
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+
+# -----------------------------------------------------
+# World
+/gate/world/geometry/setXLength 3 m
+/gate/world/geometry/setYLength 3 m
+/gate/world/geometry/setZLength 3 m
+/gate/world/setMaterial Vacuum
+
+# -----------------------------------------------------
+/control/alias ELEMENT Carbon
+
+# simple box
+/gate/world/daughters/name Box
+/gate/world/daughters/insert box
+/gate/Box/setMaterial {ELEMENT}
+/gate/Box/geometry/setXLength 70 cm
+/gate/Box/geometry/setYLength 70 cm
+/gate/Box/geometry/setZLength 70 cm
+/gate/Box/placement/setTranslation 0.0 0.0 0.0 cm
+/gate/Box/vis/setColor      blue
+/gate/Box/vis/setVisible    1
+
+#=====================================================
+# PHYSICS
+#=====================================================
+
+/gate/physics/addPhysicsList QGSP_BIC_HP_EMY
+
+/gate/physics/Gamma/SetCutInRegion      world 10 km
+/gate/physics/Electron/SetCutInRegion   world 10 km
+/gate/physics/Proton/SetCutInRegion     world 10 km
+/gate/physics/Positron/SetCutInRegion   world 10 km
+
+/gate/physics/Gamma/SetCutInRegion      Box 1 mm
+/gate/physics/Proton/SetCutInRegion     Box 1 mm
+/gate/physics/Electron/SetCutInRegion   Box 1 km
+/gate/physics/Positron/SetCutInRegion   Box 1 km
+
+# StepLimiter *required*
+/gate/physics/SetMaxStepSizeInRegion Box 1 mm
+/gate/physics/ActivateStepLimiter proton
+/gate/physics/ActivateStepLimiter deuteron
+/gate/physics/ActivateStepLimiter triton
+/gate/physics/ActivateStepLimiter alpha
+/gate/physics/ActivateStepLimiter GenericIon
+
+#/gate/physics/displayCuts
+
+#=====================================================
+# DETECTORS
+#=====================================================
+
+/gate/actor/addActor               SimulationStatisticActor stat
+/gate/actor/stat/save              output/db-{ELEMENT}-stat.txt
+/gate/actor/stat/saveEveryNSeconds 30
+
+## Set maximum proton energy (used in proton-monoE.mac too)
+/gate/actor/addActor                     PromptGammaStatisticActor  pgstat
+/gate/actor/pgstat/save                  output/db-{ELEMENT}.root
+/gate/actor/pgstat/attachTo    	         Box
+/gate/actor/pgstat/setProtonMaxEnergy    {PMAX} MeV
+/gate/actor/pgstat/setGammaMaxEnergy     10 MeV
+/gate/actor/pgstat/setProtonMinEnergy    0 MeV
+/gate/actor/pgstat/setGammaMinEnergy     0 MeV
+/gate/actor/pgstat/setProtonNbBins       500
+/gate/actor/pgstat/setGammaNbBins        250
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+
+#=====================================================
+# BEAMS
+#=====================================================
+
+/gate/source/addSource mybeam gps
+/gate/source/mybeam/gps/particle        proton
+/gate/source/mybeam/gps/direction       1 0 0
+
+/gate/source/mybeam/gps/pos/type        Beam
+/gate/source/mybeam/gps/pos/shape       Circle
+/gate/source/mybeam/gps/pos/centre      -40 0 0 cm
+/gate/source/mybeam/gps/pos/radius      4. mm
+/gate/source/mybeam/gps/pos/sigma_r     2 mm
+/gate/source/mybeam/gps/pos/rot1        0 1 0
+/gate/source/mybeam/gps/pos/rot2        0 0 1
+
+/gate/source/mybeam/gps/ene/type        Mono
+/gate/source/mybeam/gps/ene/mono        {PMAX} MeV
+
+#=====================================================
+# START BEAMS
+#=====================================================
+
+#/tracking/verbose 2
+
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+/gate/application/noGlobalOutput
+/gate/run/enableGlobalOutput false
+/gate/application/setTotalNumberOfPrimaries 1e3
+
+/gate/application/start

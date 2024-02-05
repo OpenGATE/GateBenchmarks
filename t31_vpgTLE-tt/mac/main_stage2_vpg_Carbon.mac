@@ -1,0 +1,108 @@
+#=====================================================
+# PREAMBLE
+#=====================================================
+
+/control/alias StageID 2
+/control/alias Mode vpg
+/control/alias Element Carbon
+/control/alias NrPrim 1e4
+
+#=====================================================
+# GEOMETRY & PHYSICS
+#=====================================================
+
+/gate/geometry/setMaterialDatabase data/GateMaterials.db
+
+/gate/world/setMaterial            Air{Element}
+/gate/world/geometry/setXLength    3 m
+/gate/world/geometry/setYLength    3 m
+/gate/world/geometry/setZLength    3 m
+
+/control/alias XmmBox 40
+/control/alias YmmBox 150
+/control/alias ZmmBox 40
+
+/control/alias mmVoxel 5
+
+/gate/world/daughters/name                patient
+/gate/world/daughters/insert              box
+/gate/patient/geometry/setXLength         {XmmBox} mm
+/gate/patient/geometry/setYLength         {YmmBox} mm
+/gate/patient/geometry/setZLength         {ZmmBox} mm
+/gate/patient/placement/setTranslation    0 0 0 cm
+/gate/patient/setMaterial                 {Element}
+
+/gate/physics/addPhysicsList QGSP_BIC_HP_EMY
+
+/gate/physics/Gamma/SetCutInRegion      world 1 km
+/gate/physics/Electron/SetCutInRegion   world 1 km
+/gate/physics/Proton/SetCutInRegion     world 1 km
+/gate/physics/Positron/SetCutInRegion   world 1 km
+
+/gate/physics/Gamma/SetCutInRegion      patient 1 mm
+/gate/physics/Proton/SetCutInRegion     patient 1 mm
+/gate/physics/Electron/SetCutInRegion   patient 1 mm
+/gate/physics/Positron/SetCutInRegion   patient 1 mm
+
+/gate/physics/SetMaxStepSizeInRegion patient 1 mm
+/gate/physics/ActivateStepLimiter proton
+/gate/physics/ActivateStepLimiter deuteron
+/gate/physics/ActivateStepLimiter triton
+/gate/physics/ActivateStepLimiter alpha
+/gate/physics/ActivateStepLimiter GenericIon
+
+#=====================================================
+# ACTORS
+#=====================================================
+
+/gate/actor/addActor               SimulationStatisticActor stat
+/gate/actor/stat/save              output/stat{StageID}_{Mode}_{Element}.txt
+
+/gate/world/daughters/name detector
+/gate/world/daughters/insert sphere
+/gate/detector/geometry/setRmin 550 mm
+/gate/detector/geometry/setRmax 555 mm
+/gate/detector/placement/setTranslation    0 0 0 cm
+/gate/detector/setMaterial Vacuum
+
+/gate/actor/addActor 		PhaseSpaceActor		GammaInDetector
+/gate/actor/GammaInDetector/save			output/detector_{Mode}_{Element}.root
+/gate/actor/GammaInDetector/attachTo			detector
+/gate/actor/GammaInDetector/addFilter			particleFilter
+/gate/actor/GammaInDetector/particleFilter/addParticle	gamma
+/gate/actor/GammaInDetector/addFilter	                IDFilter
+/gate/actor/GammaInDetector/IDFilter/selectID	        1
+/gate/actor/GammaInDetector/enableTime                  true
+/gate/actor/GammaInDetector/enableIonTime               true
+/gate/actor/GammaInDetector/enableTOut                  true
+/gate/actor/GammaInDetector/enableTProd                 true
+/gate/actor/GammaInDetector/enablePrimaryEnergy         true
+/gate/actor/GammaInDetector/enableEmissionPoint         true
+
+#=====================================================
+# INITIALISATION
+#=====================================================
+
+/gate/run/initialize
+
+#=====================================================
+# SOURCE
+#=====================================================
+
+/gate/source/addSource PGS    SourceOfPromptGamma
+/gate/source/PGS/setFilename  data/source_vpg_Carbon.mhd
+/gate/source/PGS/attachTo     patient
+/gate/source/PGS/setTof       true
+
+#=====================================================
+# START BEAMS
+#=====================================================
+
+/gate/application/noGlobalOutput
+/gate/run/enableGlobalOutput false
+
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+/gate/application/setTotalNumberOfPrimaries {NrPrim}
+/gate/application/start
+
