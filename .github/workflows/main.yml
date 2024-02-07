@@ -41,7 +41,8 @@ jobs:
                         t28_Singles_2SD,
                         t29_optical_digi,
                         t30_dna,
-                        t31_vpgTLE-tt]
+                        t31_vpgTLE-tt,
+                        t32_isotopes]
 
     steps:
     - name: Checkout github repo
