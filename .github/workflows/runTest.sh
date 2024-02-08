@@ -62,6 +62,9 @@ if [ "$TEST" = "t9_gaga_phsp" ] || [ "$TEST" = "t14_phsp_pairs" ]; then
     cd gaga-phsp
     pip3 install -e .
 fi
+if [ "$TEST" = "t31_vpgTLE-tt" ]; then
+    pip3 install hist
+fi
 
 # Compile master version of Gate
 cd /software/gate

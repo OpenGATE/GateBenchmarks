@@ -44,14 +44,17 @@ def analyse_all_folders(output_folders):
         output_folders.pop(output_folders.index('output'))
     output_folders.append('output')
     r = True
-    for folder in output_folders:
-        if not os.path.isdir(folder):
+    i = 1
+    while i < len(output_folders):
+        if not os.path.isdir(output_folders[i]):
+            i = i +1
             continue
-        r1 = analyse_one_folder(folder)
-        r2 = analyse_one_folder_2D(folder)
-        r3 = analyse_one_folder_mhd(folder)
+        r1 = analyse_one_folder(output_folders[i], output_folders[i-1])
+        r2 = analyse_one_folder_2D(output_folders[i], output_folders[i-1])
+        r3 = analyse_one_folder_mhd(output_folders[i], output_folders[i-1])
         if not r1 or not r2 or not r3:
             r = False
+        i = i+1
     return r
 
 
@@ -109,7 +112,7 @@ def compare_branch_mhd(f1, f2, tol):
     return r
 
 
-def analyse_one_folder(folder):
+def analyse_one_folder(folder, previous_folder):
     # read first phsp
     tree1 = uproot.open(f'{folder}/detector_vpg_Carbon.root')['PhaseSpace']
     tree1 = tree1.arrays(library="numpy")
@@ -117,7 +120,7 @@ def analyse_one_folder(folder):
     print(f'First (write) phsp {n1} {tree1.keys()}')
 
     # read second phsp
-    tree2 = uproot.open(f'ref/detector_vpg_Carbon.root')['PhaseSpace']
+    tree2 = uproot.open(f'{previous_folder}/detector_vpg_Carbon.root')['PhaseSpace']
     tree2 = tree2.arrays(library="numpy")
     n2 = len(tree2['X'])
     print(f'Second (read) phsp {n2} {tree2.keys()}')
@@ -130,13 +133,13 @@ def analyse_one_folder(folder):
         r = compare_branch(tree1, tree2, k, t) & r
     return r
 
-def analyse_one_folder_2D(folder):
+def analyse_one_folder_2D(folder, previous_folder):
     # read first phsp
     tree1 = uproot.open(f'{folder}/db-Carbon.root')['Carbon']
     print(f'First (write) phsp {tree1.keys()}')
 
     # read second phsp 
-    tree2 = uproot.open(f'ref/db-Carbon.root')['Carbon']
+    tree2 = uproot.open(f'{previous_folder}/db-Carbon.root')['Carbon']
     print(f'Second (read) phsp {tree2.keys()}')
 
     # compare some branches
@@ -148,14 +151,14 @@ def analyse_one_folder_2D(folder):
     return r
 
 
-def analyse_one_folder_mhd(folder):
+def analyse_one_folder_mhd(folder, previous_folder):
     # gi
     tol = 10
     f1 = os.path.join(folder, "source_vpg_Carbon.mhd")
-    f2 = os.path.join("ref", "source_vpg_Carbon.mhd")
+    f2 = os.path.join(previous_folder, "source_vpg_Carbon.mhd")
     r1 = compare_branch_mhd(f1,f2,tol)
     f1 = os.path.join(folder, "source_vpg_Carbon-tof.mhd")
-    f2 = os.path.join("ref", "source_vpg_Carbon-tof.mhd")
+    f2 = os.path.join(previous_folder, "source_vpg_Carbon-tof.mhd")
     r2 = compare_branch_mhd(f1,f2,tol)
 
     # return error if one is failed
