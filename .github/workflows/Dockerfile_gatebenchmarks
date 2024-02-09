@@ -54,7 +54,7 @@ RUN mkdir software/geant4 \
  && source /etc/mybashrc \
  && cd software/geant4 \
  && mkdir src bin install data \
- && git clone --branch v11.1.0 https://github.com/Geant4/geant4.git src \
+ && git clone --branch v11.2.0 https://github.com/Geant4/geant4.git src \
  && cd bin \
  && cmake ../src/ -DGEANT4_INSTALL_DATA=OFF \
                   -DGEANT4_INSTALL_DATADIR=/software/geant4/data \
@@ -76,8 +76,8 @@ RUN cd software/geant4 \
  && mv G4* data
 
 RUN cd software/geant4 \
- && wget https://cern.ch/geant4-data/datasets/G4EMLOW.8.2.tar.gz \
- && tar xzvf G4EMLOW.8.2.tar.gz \
+ && wget https://cern.ch/geant4-data/datasets/G4EMLOW.8.5.tar.gz \
+ && tar xzvf G4EMLOW.8.5.tar.gz \
  && rm -f G4*.tar.gz \
  && mv G4* data
 
@@ -103,10 +103,10 @@ RUN cd software/geant4 \
 
 RUN cd software/geant4 \
  && wget https://cern.ch/geant4-data/datasets/G4ABLA.3.1.tar.gz \
- && wget https://cern.ch/geant4-data/datasets/G4INCL.1.0.tar.gz \
+ && wget https://cern.ch/geant4-data/datasets/G4INCL.1.2.tar.gz \
  && wget https://cern.ch/geant4-data/datasets/G4ENSDFSTATE.2.3.tar.gz \
  && tar xzvf G4ABLA.3.1.tar.gz \
- && tar xzvf G4INCL.1.0.tar.gz \
+ && tar xzvf G4INCL.1.2.tar.gz \
  && tar xzvf G4ENSDFSTATE.2.3.tar.gz \
  && rm -f G4*.tar.gz \
  && mv G4* data
