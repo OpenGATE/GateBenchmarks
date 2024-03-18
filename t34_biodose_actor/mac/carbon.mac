@@ -1,0 +1,3 @@
+/control/alias particleName "carbon"
+/gate/application/setTotalNumberOfPrimaries 2000
+/control/execute mac/main.mac
