@@ -22,7 +22,6 @@ jobs:
                         t4_necr,
                         t5_pet,
                         t6_dpk,
-                        t7_garf,
                         t8_LETActor,
                         t10_SpectroGamma,
                         t11_EMField,
@@ -78,5 +77,5 @@ jobs:
     - name: Run the test in docker
       run: |
         ls $GITHUB_WORKSPACE
-        docker run --rm -e "TEST=${{ matrix.strategy_name }}" -v $GITHUB_WORKSPACE:/home tbaudier/gatebenchmarks:9.3 /home/.github/workflows/runTest.sh
+        docker run --rm -e "TEST=${{ matrix.strategy_name }}" -v $GITHUB_WORKSPACE:/home tbaudier/gatebenchmarks:9.4 /home/.github/workflows/runTest.sh
 

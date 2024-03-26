@@ -74,6 +74,9 @@ fi
 if [ ! -d /src ]; then
   git clone --branch ${COMMIT} https://github.com/OpenGATE/Gate.git /src
 fi
+cd /src
+git checkout geant4-11.2.1
+cd -
 cd bin
 cmake -DGATE_USE_TORCH=$GATE_USE_TORCH \
       -DTorch_DIR=$TORCH_DIR \

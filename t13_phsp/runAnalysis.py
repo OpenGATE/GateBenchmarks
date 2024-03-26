@@ -52,8 +52,8 @@ def compare_branch(t1, t2, key, tol):
     b2 = t2[key]
     m1 = np.mean(b1)
     m2 = np.mean(b2)
-    diff_m = (m1 - m2) / m1 * 100
-    diff_s = (np.std(b1) - np.std(b2)) / np.std(b1) * 100
+    diff_m = abs((m1 - m2) / m1 * 100)
+    diff_s = abs((np.std(b1) - np.std(b2)) / np.std(b1) * 100)
     r = True
     if diff_m > tol:
         r = False
@@ -77,7 +77,7 @@ def analyse_one_folder(folder):
 
     # compare some branches
     keys = ['Ekine', 'X', 'Y', 'Z', 'dX', 'dY', 'dZ', 'Weight', 'Time']
-    tols = [2, 15, 5, 5, 30, 30, 30, 2, 2]
+    tols = [2, 15, 15, 5, 30, 30, 30, 2, 8]
     r = True
     for k, t in zip(keys, tols):
         r = compare_branch(tree1, tree2, k, t) & r

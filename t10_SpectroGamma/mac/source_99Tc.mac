@@ -1,0 +1,7 @@
+/gate/source/addSource tc99m
+/gate/source/tc99m/gps/particle ion
+/gate/source/tc99m/gps/ion 43 99 0 0 
+/gate/source/tc99m/useDefaultHalfLife
+/gate/source/tc99m/gps/type Point
+/gate/source/tc99m/gps/angtype iso
+/gate/source/tc99m/gps/centre 0. 0. 0. cm 

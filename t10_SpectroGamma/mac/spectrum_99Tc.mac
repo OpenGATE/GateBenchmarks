@@ -1,0 +1,9 @@
+/gate/source/addSource 99Tc gps
+/gate/source/99Tc/gps/particle gamma
+/gate/source/99Tc/gps/energytype UserSpectrum
+/gate/source/99Tc/gps/setSpectrumFile data/99Tc.txt
+/gate/source/99Tc/setIntensity 100
+/gate/source/99Tc/gps/type Point
+/gate/source/99Tc/gps/angtype iso
+/gate/source/99Tc/gps/centre 0. 0. 0. cm
+
