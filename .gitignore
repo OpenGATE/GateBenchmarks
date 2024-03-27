@@ -21,6 +21,7 @@ t*_*/output/*raw
 t*_*/output/*root
 t*_*/output/*mhd
 t*_*/output/*txt
+t*_*/output/*.pdf
 t*_*/output/mac
 t*_*/output/data
 t*_*/output/run.log
