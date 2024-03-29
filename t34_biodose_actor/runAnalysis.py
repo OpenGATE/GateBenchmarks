@@ -2,14 +2,14 @@
 
 import click
 import numpy as np
-import SimpleITK as sitk
+import itk
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
 def load(mhd: str):
-	img = sitk.ReadImage(mhd)
-	data = np.array(sitk.GetArrayFromImage(img))
+	img = itk.imread(mhd)
+	data = itk.GetArrayFromImage(img)
 	return data[:, 0, 0]
 
 
