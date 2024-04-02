@@ -18,19 +18,23 @@ def load(mhd: str):
 @click.option('--figures', is_flag=True)
 @click.option('--show', is_flag=True)
 def analyse_click(output_folders, figures: bool, show: bool):
-	if figures:
-		mpl.use('tkagg')
+    # logger
+    gt.logging_conf(**kwargs)
+    # Run the analysis with the command line (click)
+    # the return code is 0 (fail) or 1 (success)
+    r = analyse_all_folders(output_folders)
+    print(f'Last test return is: {r}')
 
-	r = True
-	for output_folder in output_folders:
-		for particle_name in ["carbon", "proton"]:
-			cur_r = analyse_particle(output_folder, particle_name, figures, show)
-			if not cur_r:
-				print(f"Test failed for: {output_folder}, {particle_name}")
 
-		r = r and cur_r
-
-	print(f'Test result: {r}')
+def analyse_all_folders(output_folders):
+    r = True
+    for output_folder in output_folders:
+        for particle_name in ["carbon", "proton"]:
+            cur_r = analyse_particle(output_folder, particle_name, False, False)
+            if not cur_r:
+                print(f"Test failed for: {output_folder}, {particle_name}")
+        r = r and cur_r
+    return(r)
 
 
 def analyse_particle(output_folder, particle_name, figures, show):
