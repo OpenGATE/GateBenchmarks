@@ -29,6 +29,7 @@ mkdir /software/gatetools
 cd /software
 git clone https://github.com/OpenGATE/GateTools.git gatetools
 cd gatetools
+pip3 install itk==5.3.0
 pip3 install -e .
 pip3 install uproot uproot3 xxhash lz4 pandas
 
