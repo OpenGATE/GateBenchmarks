@@ -3,7 +3,6 @@
 set -e -x
 
 #yum updates
-yum install -y  libjpeg-devel
 if [ "$TEST" = "t15_optical" ] || [ "$TEST" = "t29_optical_digi" ]; then
    yum install -y  libxml2-devel
 fi

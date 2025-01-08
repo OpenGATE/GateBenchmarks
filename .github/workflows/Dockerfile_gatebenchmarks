@@ -24,7 +24,10 @@ RUN yum install -y  make \
                     python3-devel \
                     which \
                     openssl-devel \
-                    patch
+                    patch \
+                    findutils \
+                    procps \
+                    libjpeg-devel
 
 #create folder and install cmake
 RUN mkdir software \
