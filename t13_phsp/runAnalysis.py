@@ -40,6 +40,7 @@ def analyse_all_folders(output_folders):
     if 'output' in output_folders:
         output_folders.pop(output_folders.index('output'))
     output_folders.append('output')
+    print(output_folders)
     for folder in output_folders:
         if not os.path.isdir(folder):
             continue
@@ -52,14 +53,40 @@ def compare_branch(t1, t2, key, tol):
     b2 = t2[key]
     m1 = np.mean(b1)
     m2 = np.mean(b2)
+
+    if key=="X" or key=="Y" or key=="dX" or key=="dY":
+        #Linear Fits of histos
+        b1_sorted = np.sort(b1)
+        counts1, bin_edges1 = np.histogram(b1_sorted, bins=100)  # 50 bins, adjust as needed
+        bin_centers1 = (bin_edges1[:-1] + bin_edges1[1:]) / 2  # Compute bin centers
+        c1, m1= np.polyfit(bin_centers1, counts1, deg=1) # Slope and intercept
+        
+        b2_sorted = np.sort(b2)
+        counts2, bin_edges2 = np.histogram(b2_sorted, bins=100)  # 50 bins, adjust as needed
+        bin_centers2 = (bin_edges2[:-1] + bin_edges2[1:]) / 2  # Compute bin centers
+        c2, m2= np.polyfit(bin_centers2, counts2, deg=1) # Slope and intercept 
+        
+        
+    else:
+        m1 = np.mean(b1)
+        m2 = np.mean(b2)
+        c1 = np.std(b1)
+        c2 = np.std(b2)
+        
     diff_m = abs((m1 - m2) / m1 * 100)
-    diff_s = abs((np.std(b1) - np.std(b2)) / np.std(b1) * 100)
+    diff_s = abs((c1 - c2) / c1 * 100)
+    
     r = True
     if diff_m > tol:
         r = False
-    print(f'Branch {key} \t\t mean {m1:.2f} {m2:.2f} \t {diff_m:.2f}%  \t'
-          f' std {diff_s:.2f}% \t Check ? {r} (tol = {tol:.0f}%) ')
+    if key=="X" or key=="Y"or key=="dX" or key=="dY":
+        print(f'Branch {key} \t\t intercept {m1:.4f} {m2:.4f} \t {diff_m:.2f}%  \t'
+              f' slope {diff_s:.2f}% \t Check ? {r} (tol = {tol:.0f}%) ')
+    else:
+        print(f'Branch {key} \t\t mean {m1:.4f} {m2:.4f} \t {diff_m:.2f}%  \t'
+              f' std {diff_s:.2f}% \t Check ? {r} (tol = {tol:.0f}%) ') 
     return r
+
 
 
 def analyse_one_folder(folder):
