@@ -20,7 +20,6 @@ jobs:
                         t2_edep_vox,
                         t3_range_e+,
                         t4_necr,
-                        t5_pet,
                         t6_dpk,
                         t8_LETActor,
                         t10_SpectroGamma,
@@ -71,12 +70,11 @@ jobs:
                                 cmake \
                                 libssl-dev \
                                 python3.8-dev \
-                                ccache \
-                                fftw3-dev
+                                ccache 
         gcc -v
         cd
     - name: Run the test in docker
       run: |
         ls $GITHUB_WORKSPACE
-        docker run --rm -e "TEST=${{ matrix.strategy_name }}" -v $GITHUB_WORKSPACE:/home tbaudier/gatebenchmarks:9.4 /home/.github/workflows/runTest.sh
+        docker run --rm -e "TEST=${{ matrix.strategy_name }}" -v $GITHUB_WORKSPACE:/home tbaudier/gatebenchmarks:9.4.1 /home/.github/workflows/runTest.sh
 

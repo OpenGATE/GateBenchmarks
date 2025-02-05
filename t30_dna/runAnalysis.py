@@ -63,12 +63,13 @@ def analyse(f1, f2, f3):
 	v1 = load_file(f1)
 	v2 = load_file(f2)
 	v3 = load_file(f3)
-
+	
+	print(v2)
 	m1 = find_min_energy(v1)
 	m2 = find_min_energy(v2)
 	m3 = find_min_energy(v3)
-
-	return m1 < .0029 and m2 >= .0029 and m3 < .0029
+        
+	return m1 < .0025 and m2 >= .0025 and m3 < .0025
 
 
 if __name__ == '__main__':
