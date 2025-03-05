@@ -1,0 +1,13 @@
+ObjectType = Image
+NDims = 3
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = False
+TransformMatrix = 1 0 0 0 1 0 0 0 1
+Offset = 7.93654e-12 7.93654e-12 9.00902e-12
+CenterOfRotation = 0 0 0
+ElementSpacing = 2 2 2
+DimSize = 126 126 111
+AnatomicalOrientation = ???
+ElementType = MET_FLOAT
+ElementDataFile = dose-photon-RV2-Dose.raw
