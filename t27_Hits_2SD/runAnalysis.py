@@ -103,7 +103,7 @@ def compare_with_previous_version(filename_new, filename_old):
                     posZ_tmp=hitTree_tmp["posZ"]
                     time_tmp=hitTree_tmp["time"]
 
-                    hitTree2_tmp = uproot.open(file_tmp)['Hits_crystal2'].arrays(branches,library="numpy")
+                    hitTree2_tmp = file_old['Hits_crystal2'].arrays(branches,library="numpy")
                     edep2_tmp=hitTree2_tmp["edep"]
                     posX2_tmp=hitTree2_tmp["posX"]
                     posY2_tmp=hitTree2_tmp["posY"]
