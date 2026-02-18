@@ -8,17 +8,12 @@ if [ "$TEST" = "t15_optical" ] || [ "$TEST" = "t29_optical_digi" ]; then
 fi
 
 #update python
-yum install -y python39-pip.noarch
-rm /usr/bin/python3 /usr/bin/pip3
-ln -s /bin/python3.9 /usr/bin/python
-ln -s /bin/python3.9 /usr/bin/python3
 python3 -m pip install --upgrade pip
-ln -s /bin/pip3.9 /usr/bin/pip3
 which python3
 python3 --version
 
 #source /etc/mybashrc
-export PATH=/software/cmake-3.18.4-Linux-x86_64/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PATH=/software/cmake-3.31.11-Linux-x86_64/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 source /software/geant4/install/bin/geant4.sh
 source /software/root-cern/install/bin/thisroot.sh
 
@@ -27,7 +22,7 @@ mkdir /software/gatetools
 cd /software
 git clone https://github.com/OpenGATE/GateTools.git gatetools
 cd gatetools
-pip3 install itk==5.3.0
+pip3 install itk==5.4.5
 pip3 install -e .
 pip3 install uproot uproot3 xxhash lz4 pandas
 
@@ -54,7 +49,7 @@ if [ "$compile_torch" = true ] ; then
 fi
 if [ "$TEST" = "t9_gaga_phsp" ] || [ "$TEST" = "t14_phsp_pairs" ]; then
     #install gaga
-    pip3 install torch==1.10.0+cpu torchvision==0.11.1+cpu torchaudio==0.10.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
+    pip3 install torch==2.2.0+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
     cd /software
     mkdir gaga-phsp
     git clone https://github.com/dsarrut/gaga-phsp.git gaga-phsp
