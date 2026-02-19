@@ -115,7 +115,8 @@ def compare_branch_mhd(f1, f2, tol):
 def analyse_one_folder(folder, previous_folder):
     # read first phsp
     tree1 = uproot.open(f'{folder}/detector_vpg_Carbon.root')['PhaseSpace']
-    tree1 = tree1.arrays(library="numpy")
+    #tree1 = tree1.arrays(library="numpy")
+    tree1 = tree1.arrays(["AtomicNumber", "X", "Ekine", "Time", "IonTime"], library="np")
     n1 = len(tree1['X'])
     print(f'First (write) phsp {n1} {tree1.keys()}')
 
