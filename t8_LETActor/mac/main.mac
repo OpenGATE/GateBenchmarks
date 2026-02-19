@@ -31,7 +31,7 @@
 # PHYSICS
 #=====================================================
 
-/gate/physics/addPhysicsList FTFP_INCLXX_EMZ
+/gate/physics/addPhysicsList  QGSP_BIC_HP #FFTFP_INCLXX_EMZ
 #/control/execute mac/physicslist_HAD_std_6_2_2.mac
 
 /gate/physics/Gamma/SetCutInRegion      world 100 m
