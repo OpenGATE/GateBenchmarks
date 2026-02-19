@@ -30,19 +30,3 @@
 /gate/casper/vis/setColor                    blue
 /gate/casper/vis/forceWireframe
 /gate/casper/attachPhantomSD
-
-
-#/gate/casper/daughters/name                           fluorescent
-#/gate/casper/daughters/insert                         cylinder
-#/gate/fluorescent/geometry/setRmin                    0.0 cm 
-#/gate/fluorescent/geometry/setRmax                    0.75 mm
-#/gate/fluorescent/geometry/setHeight                  30. mm
-#/gate/fluorescent/placement/setTranslation            0. 0. 0. cm
-#/gate/fluorescent/placement/setRotationAxis           1 0 0
-#/gate/fluorescent/placement/setRotationAngle          -90 deg
-#/gate/fluorescent/setMaterial                         RhB
-#/gate/fluorescent/vis/setColor                        yellow
-#/gate/fluorescent/vis/forceSolid
-#/gate/fluorescent/attachPhantomSD
-
-
