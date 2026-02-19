@@ -20,18 +20,12 @@
 /gate/world/daughters/name                      OpticalSystem
 /gate/world/daughters/insert                    box
 
-#/gate/OpticalSystem/geometry/setXLength         10.5 cm
-#/gate/OpticalSystem/geometry/setYLength         10.5 cm
 /gate/OpticalSystem/geometry/setXLength         20. cm
 /gate/OpticalSystem/geometry/setYLength         40. cm
 /gate/OpticalSystem/geometry/setZLength         2.0 cm
 /gate/OpticalSystem/placement/setTranslation    0 0 3.0 cm
 /gate/OpticalSystem/setMaterial                 Air
 
-#/gate/OpticalSystem/repeaters/insert ring 
-#/gate/OpticalSystem/ring/setRepeatNumber 16
-#/gate/OpticalSystem/ring/setPoint1 0. 1. 0. mm 
-#/gate/OpticalSystem/ring/setPoint2 0. 0. 0. mm 
 
 # === crystal: pixels and an additionnal volume behind the pixels  ===
 /gate/OpticalSystem/daughters/name              crystal
@@ -45,30 +39,6 @@
 /gate/crystal/vis/forceSolid
 /gate/crystal/attachCrystalSD
 /gate/systems/OpticalSystem/crystal/attach      crystal
-
-
-# === pixels ===
-#/gate/crystal/daughters/name                    pixel
-#/gate/crystal/daughters/insert                  box
-#/gate/pixel/geometry/setXLength                 2.  cm
-#/gate/pixel/geometry/setYLength                 2.  cm
-#/gate/pixel/geometry/setXLength                 0.105  cm
-#/gate/pixel/geometry/setYLength                 0.105  cm
-#/gate/pixel/geometry/setZLength                 1 cm
-#/gate/pixel/setMaterial                         Air
-#/gate/pixel/placement/setTranslation            0 0 0 cm
-#/gate/pixel/vis/setColor                        red
-#/gate/pixel/repeaters/insert                    cubicArray
-#/gate/pixel/cubicArray/setRepeatNumberX         5
-#/gate/pixel/cubicArray/setRepeatNumberY         5
-#/gate/pixel/cubicArray/setRepeatNumberX         100
-#/gate/pixel/cubicArray/setRepeatNumberY         100
-#/gate/pixel/cubicArray/setRepeatNumberZ         1
-#/gate/pixel/cubicArray/setRepeatVector          2.1 2.1 0 cm
-#/gate/pixel/cubicArray/setRepeatVector          0.105 0.105 0 cm
-#/gate/pixel/vis/forceSolid           
-#/gate/pixel/attachCrystalSD
-#/gate/systems/OpticalSystem/pixel/attach        pixel
 
 
 # === additionnal volume behind pixels (ex: electronic board) ===

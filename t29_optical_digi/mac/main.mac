@@ -72,12 +72,8 @@
 #=====================================================
 #                  P H Y S I C S
 #=====================================================
-
-/gate/physics/addProcess OpticalAbsorption
-/gate/physics/addProcess OpticalRayleigh
-/gate/physics/addProcess OpticalBoundary
-/gate/physics/addProcess OpticalMie
-/gate/physics/addProcess OpticalWLS
+/gate/physics/addPhysicsList emlivermore
+/gate/physics/addPhysicsList optical
 
 /gate/physics/processList Enabled
 /gate/physics/processList Initialized
@@ -132,9 +128,7 @@
 
 # Choose between: JamesRandom Ranlux64 MersenneTwister
 /gate/random/setEngineName MersenneTwister
-#/gate/random/setEngineSeed default
 /gate/random/setEngineSeed auto
-#/gate/random/setEngineSeed 123456789
 /gate/random/verbose 1
 
 #=====================================================

@@ -221,6 +221,7 @@ not distinguish between 'original' photons and WLS photons. -->
 	<ve energy="3.21" value="4.18"/>-->
      </propertyvector>
      <propertyvector name="WLSCOMPONENT" energyunit="eV">
+        <ve energy="1.68"  value="0.00"/>
         <ve energy="1.770"  value="0.01"/>
         <ve energy="1.772"  value="0.01"/>
         <ve energy="1.775"  value="0.01"/>
