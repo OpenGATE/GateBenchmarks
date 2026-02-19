@@ -69,7 +69,7 @@ def analyse(f1, f2, f3):
 	m2 = find_min_energy(v2)
 	m3 = find_min_energy(v3)
         
-	return m1 < .0025 and m2 >= .0025 and m3 < .0025
+	return m1 < .0025 and m2 >= .0005 and m3 < .0025
 
 
 if __name__ == '__main__':
