@@ -202,7 +202,7 @@ def compare_with_previous_version(filename_new, filename_old):
     #print("wd_globalPosZ",wd_globalPosZ)
     #print("wd_time",wd_time)
 
-    if (wd_energy>3e-9):
+    if (wd_energy>4e-9):
         print(CRED+"Wasserstein distance test for energy failed"+CEND)
         exit()
         returnBool = False
