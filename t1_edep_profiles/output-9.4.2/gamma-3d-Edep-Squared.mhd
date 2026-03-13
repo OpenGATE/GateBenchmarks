@@ -1,0 +1,13 @@
+ObjectType = Image
+NDims = 3
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = False
+TransformMatrix = 1 0 0 0 1 0 0 0 1
+Offset = -95 -95 -195
+CenterOfRotation = 0 0 0
+ElementSpacing = 10 10 10
+DimSize = 20 20 40
+AnatomicalOrientation = ???
+ElementType = MET_FLOAT
+ElementDataFile = gamma-3d-Edep-Squared.raw
