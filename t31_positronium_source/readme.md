@@ -16,3 +16,27 @@ The test compares reference energy deposition distributions with ones generated 
 Null hypothesis is that two two distributions are identical with p-value threshold equals 0.05 (5%).
 
 Additionally, if data contains signals from other particles test fails because we do not expect them to be present for given macros.
+
+## How to run
+
+Run all four simulations (requires `Gate` on PATH):
+
+```bash
+bash runTest.sh
+```
+
+Analyse the output and validate against reference distributions:
+
+```bash
+python3 runAnalysis.py output
+```
+
+Or run both steps at once from the `GateBenchmarks/` root:
+
+```bash
+./runBenchmark.py -t t31_positronium_source
+```
+
+## Expected results
+
+`runAnalysis.py` prints `Last test return is: True` and writes `output.pdf` with six energy deposition histograms (one per gamma type per model). The script exits with a non-zero status if any KS test fails or if unexpected particles are detected in the output.
