@@ -7,8 +7,7 @@
 /gate/source/sourceA/gps/type Point
 /gate/source/sourceA/gps/pos/centre 0 0 0 cm
 /gate/source/sourceA/setActivity 1000 Bq
-# Definie which positronium decay use in the simulation
-# Definie which positronium decay use in the simulation
+# Define which positronium decay use in the simulation
 /gate/source/sourceA/setType Ps
 /gate/source/sourceA/setPositroniumFractions 1  
 /gate/source/sourceA/setPositroniumLifetimes 125 ps 
