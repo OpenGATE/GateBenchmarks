@@ -20,7 +20,7 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
                 required=True,
                 type=click.Path(exists=True, file_okay=True, dir_okay=True))
 @gt.add_options(gt.common_options)
-def analyse_click(output_folders, **kwargs):
+def analyse_command_line(output_folders, **kwargs):
   """
   Method called by runBenchmark script.
 
@@ -102,13 +102,14 @@ def get_edep_plot_data(tree, source_type, decay_type):
   edep_annihilation_recs = list()
   edep_prompt_recs = list()
   expected_entries = 0
+  # PositroniumSource marks all source gammas with sourceType == 1 regardless of species
   for index, gamma_type in enumerate(tree["gammaType"]):
-    if tree["sourceType"][index] == source_type and tree["decayType"][index] == decay_type:
+    if tree["sourceType"][index] == 1:
       expected_entries += 1
-    if gamma_type == GammaType.ANNIHILATIONGAMMA:
-      edep_annihilation_recs.append(tree["edep"][index])
-    elif gamma_type == GammaType.PROMPTGAMMA:
-      edep_prompt_recs.append(tree["edep"][index])
+      if gamma_type == GammaType.ANNIHILATIONGAMMA:
+        edep_annihilation_recs.append(tree["edep"][index])
+      elif gamma_type == GammaType.PROMPTGAMMA:
+        edep_prompt_recs.append(tree["edep"][index])
   return np.array(edep_annihilation_recs, dtype=np.float32), np.array(edep_prompt_recs, dtype=np.float32), expected_entries
 
 def perform_ks_test(edeps, gamma_type, source_type, decay_type, pvalue_threshold):
@@ -249,3 +250,6 @@ def analyse_one_folder(folder):
   plt.show()
 
   return True
+
+if __name__ == '__main__':
+  analyse_command_line()
