@@ -1,0 +1,20 @@
+#=====================================================
+# point source
+#=====================================================
+#/gate/source/verbose 5
+
+/gate/source/addSource sourceA PositroniumSource 
+/gate/source/sourceA/gps/type Point
+/gate/source/sourceA/gps/pos/centre 0 0 0 cm
+/gate/source/sourceA/setActivity 1000 Bq
+# Definie which positronium decay use in the simulation
+/gate/source/sourceA/setType Ps
+/gate/source/sourceA/setPositroniumFractions 1  
+/gate/source/sourceA/setPositroniumLifetimes 125 ps 
+/gate/source/sourceA/setDecayKinds k2Gamma 
+/gate/source/sourceA/setPromptPhotonProbabilites 0 
+/gate/source/sourceA/setPromptPhotonEnergies 0 MeV
+
+
+
+/gate/source/list
