@@ -34,7 +34,7 @@ python3 runAnalysis.py output
 Or run both steps at once from the `GateBenchmarks/` root:
 
 ```bash
-./runBenchmark.py -t t31_positronium_source
+./runBenchmark.py -t t35_positronium_source
 ```
 
 ## Expected results
