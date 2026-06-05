@@ -1,21 +1,31 @@
-# Benchmark for PositroniumSource based on the ExtendedVSource benchmark
+# Benchmark for PositroniumSource
 
-Runs 4 simulations for 4 different decays:
+`PositroniumSource` is the current implementation of positronium gamma emission in Gate, superseding the legacy `ExtendedVSource` (benchmarked in `t17_extended_source`).
+Key improvements over the legacy source:
 
-* pPs --> 2 gammas
-* pPs* --> 2 gammas + prompt gamma
-* oPs --> 3 gammas
-* oPs* --> 3gammas + prompt gamma
+* Configurable positronium fractions, lifetimes, and decay kinds per component via dedicated macro commands.
+* Support for oPs pick-off/quenching (a `k2Gamma` channel from an oPs component), which the legacy source did not model.
+* Optional positron range smearing.
+* Explicit `setPositronInteractions` command for precise ROOT-level tagging of each decay channel as `kParaPs`, `kOrthoPs`, or `kDirect`. When this command is omitted, `sourceType` in the ROOT output defaults to `1` (generic source gamma); use `setPositronInteractions` when per-species classification is needed in analysis.
 
-where pPs is para-positronium, oPs is ortho-positronium, prompt gamma is deexcitation gamma.
+## Simulated decays
 
-We simulate a point source with spherical detector.
+Runs 4 simulations for 4 different decay configurations:
 
-The test compares reference energy deposition distributions with ones generated during simulations and validates them by using the two-sample Kolmogorov-Smirnov test.
+* pPs → 2 gammas
+* pPs\* → 2 gammas + prompt gamma
+* oPs → 3 gammas
+* oPs\* → 3 gammas + prompt gamma
 
-Null hypothesis is that two two distributions are identical with p-value threshold equals 0.05 (5%).
+where pPs is para-positronium, oPs is ortho-positronium, and the prompt gamma is a deexcitation gamma emitted alongside the positronium decay.
 
-Additionally, if data contains signals from other particles test fails because we do not expect them to be present for given macros.
+A point source at the origin is surrounded by a spherical scintillator detector. Each run simulates 1,000,000 primaries.
+
+## Validation
+
+The test compares reference energy deposition distributions (stored in `data/`) with those generated during simulation, validated using the two-sample Kolmogorov–Smirnov test (p-value threshold 0.05).
+
+An additional check verifies that all recorded hits originate from the expected source gammas (`sourceType == 1`). The test fails if any KS test fails or if unexpected particles are detected.
 
 ## How to run
 
