@@ -1,4 +1,8 @@
-# Benchmark for ExtendedVSource
+# Benchmark for ExtendedVSource (legacy)
+
+> **Note:** `ExtendedVSource` is the legacy implementation of positronium gamma emission.
+> It has been superseded by `PositroniumSource`, which is tested in benchmark `t35_positronium_source`.
+> `ExtendedVSource` is retained for backward compatibility but is no longer actively developed.
 
 Runs 4 simulations for 4 different decays:
 
