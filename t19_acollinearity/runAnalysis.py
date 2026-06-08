@@ -58,20 +58,29 @@ def analyse_one_folder(output_folder):
     ax1 = f.add_subplot(221)
     f.tight_layout(pad = 5.0)
     ax1.set_title('BackToBack acollinearity')
-    a, b, c = plot_fit_histogram(180-BTB_aco_angle, ax1, with_text = True)
+    # a, b, c = plot_fit_histogram(180-BTB_aco_angle, ax1, with_text = True)
+    sigma = plot_fit_histogram(180-BTB_aco_angle, ax1, with_text = True)
+    fwhm = 2 * np.sqrt(2 * np.log(2)) * sigma
     plt.savefig("acoDistComparison.png")
     plt.close()
     print("folder: " + output_folder)
-    print('    amplitude: ' + str(round(a, 2)) + ' < 4.00 ')
-    print('    abs(mean): ' + str(abs(round(b, 2))) + ' < 0.02 ')
-    print('    sigma: ' + str(round(c, 2)) + ' < 0.25 ')
+    # print('    amplitude: ' + str(round(a, 2)) + ' < 4.00 ')
+    # print('    abs(mean): ' + str(abs(round(b, 2))) + ' < 0.02 ')
+    # print('    sigma: ' + str(round(c, 2)) + ' < 0.25 ')
+    print('    FWHM: ' + str(round(fwhm, 2)) + ' ~= 0.5 ')
+
     returnBool = True
-    if (abs(a) >= 4.00):
+
+    # if (abs(a) >= 4.00):
+    #    returnBool = False
+    # if (abs(b) >= 0.02):
+    #    returnBool = False
+    # if (abs(c) >= 0.25):
+    #    returnBool = False
+
+    if (abs((fwhm - 0.5) / 0.5) >= 0.1):  # allow 10% relative absolute error
        returnBool = False
-    if (abs(b) >= 0.02):
-       returnBool = False
-    if (abs(c) >= 0.25):
-       returnBool = False
+
     print('    ' + str(returnBool))
     return(returnBool)
 
@@ -87,22 +96,34 @@ def process_binary(filename):
 def gaus(x,a,m,sigma):
     return a*np.exp(-(x-m)**2/(2*sigma**2))
 
+# rayleigh distribution
+def rayleigh(x, sigma):
+    return x / sigma ** 2 * np.exp(-x ** 2 / (2 * sigma ** 2))
+
 def plot_fit_histogram(data,ax, with_text=True):
     counts, _, axes = ax.hist(data,density=True, bins=100)
     x = np.linspace(min(data), max(data), 100)
-    p0 = [3, 0, 0.5]
-    popt,pcov = curve_fit(gaus,x,counts,p0=p0)
-    ax.plot(x, gaus(x,popt[0],popt[1],popt[2]))
+    # p0 = [3, 0, 0.5]
+    # popt,pcov = curve_fit(gaus,x,counts,p0=p0)
+    # ax.plot(x, gaus(x,popt[0],popt[1],popt[2]))
+    # ax.set_xlabel('acollinearity [°]')
+    # ax.set_ylabel('frequency [AU]')
+    # textstr = '\n'.join((r'$a=%.2f$' % (popt[0], ), r'$\mu=%.2f$' % (popt[1], ), r'$\sigma=%.2f$' % (popt[2], )))
+
+    # Fit a Rayleigh distribution instead
+    popt, pcov = curve_fit(rayleigh,x,counts, p0=1, bounds=(0, np.inf))
+    ax.plot(x, rayleigh(x,*popt))
     ax.set_xlabel('acollinearity [°]')
     ax.set_ylabel('frequency [AU]')
-    textstr = '\n'.join((r'$a=%.2f$' % (popt[0], ), r'$\mu=%.2f$' % (popt[1], ), r'$\sigma=%.2f$' % (popt[2], )))
+    textstr = r'$\sigma=%.2f$' % (popt[0], )
 
     if with_text:
         props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
         ax.text(0.7, 0.95, textstr, transform=ax.transAxes, fontsize=14,
                 verticalalignment='top', bbox=props)
 
-    return popt[0], popt[1], popt[2]
+    # return popt[0], popt[1], popt[2]
+    return popt[0]
 
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
