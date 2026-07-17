@@ -85,6 +85,7 @@ source /etc/mybashrc
 cd /home/
 export LC_ALL=en_US.utf8
 export LANG=en_US.utf8
+pip3 install "scipy<1.18.0"
 pip3 install click colorama "numpy<2.0.0"
 OutputTest=$(python3 runBenchmark.py -t ${TEST})
 echo "$OutputTest"
