@@ -13,7 +13,7 @@
 /gate/source/sourceA/setPositroniumLifetimes 142 ns 
 /gate/source/sourceA/setDecayKinds k3Gamma 
 # Set enable emission of deexcitation gamma ( prompt gamma ) and its energy
-/gate/source/sourceA/setPromptPhotonProbabilites 1 
+/gate/source/sourceA/setPromptPhotonProbabilities 1 
 /gate/source/sourceA/setPromptPhotonEnergies 1000 keV
 
 
