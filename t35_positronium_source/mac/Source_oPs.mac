@@ -12,7 +12,7 @@
 /gate/source/sourceA/setPositroniumFractions 1  
 /gate/source/sourceA/setPositroniumLifetimes 142 ns 
 /gate/source/sourceA/setDecayKinds k3Gamma 
-/gate/source/sourceA/setPromptPhotonProbabilites 0 
+/gate/source/sourceA/setPromptPhotonProbabilities 0 
 /gate/source/sourceA/setPromptPhotonEnergies 0 MeV
 
 
